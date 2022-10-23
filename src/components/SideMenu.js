@@ -9,6 +9,7 @@ const SideMenu = ({text}) => {
         <li><a className="menu" href="#">Naprawy</a></li>
         <li><a className="menu" href="#">Klienci</a></li>
         <li><a className="menu" href="#">Statystyki</a></li>
+        <li><a className="menu" href="#">Użytkownicy</a></li>
       </ul>
     </div>
   )

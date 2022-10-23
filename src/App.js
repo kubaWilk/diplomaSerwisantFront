@@ -1,12 +1,12 @@
 import './App.css';
-import Dashboard from './components/Dashboard';
+import DashContainer from './components/DashContainer';
 import SideMenu from './components/SideMenu'
 
 function App() {
   return (
   <div id="wrapper">
     <SideMenu text="Serwisant PRO"/>
-    <Dashboard />
+    <DashContainer sectionName="Start"/>
   </div>  
   );
 }

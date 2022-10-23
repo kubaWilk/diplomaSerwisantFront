@@ -1,55 +1,14 @@
+import React from 'react'
+import DashButton from './DashButton'
+
 const Dashboard = () => {
   return (
-    <div id="dashboard">
-      <nav className="navbar">
-        <h1>Start</h1>
-        <ul>
-          <li><a href="#" className="btn">Wyloguj</a></li>
-        </ul>
-      </nav>
-
-      <div className="container">
-        <div className="dash-rectangle">
-          <h3><a className="menu" href="#">Przejrzyj naprawy</a></h3>
-        </div>
-
-        <div className="dash-rectangle">
-          <h3><a className="menu" href="#">Przejrzyj naprawy</a></h3>
-        </div>
-
-        <div className="dash-rectangle">
-          <h3><a className="menu" href="#">Przejrzyj naprawy</a></h3>
-        </div>
-
-        <div className="dash-rectangle">
-          <h3><a className="menu" href="#">Przejrzyj naprawy</a></h3>
-        </div>
-
-        <div className="dash-rectangle">
-          <h3><a className="menu" href="#">Przejrzyj naprawy</a></h3>
-        </div>
-
-        <div className="dash-rectangle">
-          <h3><a className="menu" href="#">Przejrzyj naprawy</a></h3>
-        </div>
-
-        <div className="dash-rectangle">
-          <h3><a className="menu" href="#">Przejrzyj naprawy</a></h3>
-        </div>
-
-        <div className="dash-rectangle">
-          <h3><a className="menu" href="#">Przejrzyj naprawy</a></h3>
-        </div>
-
-        <div className="dash-rectangle">
-          <h3><a className="menu" href="#">Przejrzyj naprawy</a></h3>
-        </div>
+    <div className="container">
+      <DashButton text="Nowa Naprawa" link="#"/>
+      <DashButton text="Przejrzyj Naprawy" link="#"/>
+      <DashButton text="Znajdź klientów" link="#"/>
+      <DashButton text="Statystyki" link="#"/>
       </div>
-
-      <footer className="footer">
-        <p>sraka made with love &copy; 2022</p>
-      </footer>
-    </div>
   )
 }
 

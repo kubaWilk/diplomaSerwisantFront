@@ -8,7 +8,7 @@
 }
 
 body{
-  color: #8d8d8d
+  color: #8d8d8d;
 }
 
 a{
@@ -20,15 +20,14 @@ li{
   list-style: none;
 }
 
-
-
 /* Utilities */
 .btn{
   background: #404040;
   padding: 15px;
   color: #fff;
-  border-radius: 5px;
+  text-transform: capitalize;
 }
+
 .btn:hover{
   background: #ff6f00;
 }
@@ -36,9 +35,14 @@ li{
 .menu{
   padding: 5px;
   text-transform: uppercase;
+  display: block;
 }
 
 .menu:hover{
+  color: #ff6f00;
+}
+
+.menu.active{
   color: #ff6f00;
 }
 
@@ -49,8 +53,8 @@ li{
 
 /* Side Menu */
 #side-menu{
-  min-height: 100vh;
-  min-width: 25vw;
+  width: 25vw;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -69,24 +73,21 @@ li{
 #side-menu ul{
   width: 80%;
 }
+
 #side-menu li{
   text-align: left;
   margin-top: 10px;
-  display: block;
 }
 
-
-#side-menu .menu.active{
-  display: block;
-  color: #ff6f00;
-}
 
 /* Dashboard */
 #dashboard{
+  width: 75vw;
+  height: 100vh;
   background: #f0f0f0;
-  min-width: 75vw;
-  min-height: 100vh;
-  
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 #dashboard .navbar{
@@ -101,6 +102,7 @@ li{
 
 #dashboard .footer{
   display: flex;
+  width: 100%;
   justify-content: flex-end;
 }
 
@@ -111,14 +113,17 @@ li{
 #dashboard .container{
   display: flex; 
   flex-wrap: wrap;
+  align-content: flex-start;
+  height: 90%;
 }
 
 .dash-rectangle{
   margin: 10px;
-  /* display: flex; */
-  /* align-items: center; */
   background: #fff;
-  border-radius: 5px;
+  border: 1px #bfbdbb solid;
   padding: 10px;
-  height: 4rem;
+}
+
+.dash-rectangle a{
+  text-align: center;
 }
