@@ -1,7 +1,7 @@
 import React from 'react'
-import DashButton from './DashButton'
+import DashButton from '../DashButton'
 
-const Dashboard = () => {
+const StartPage = () => {
   return (
     <div className="container">
       <DashButton text="Nowa Naprawa" link="#"/>
@@ -12,4 +12,4 @@ const Dashboard = () => {
   )
 }
 
-export default Dashboard
+export default StartPage

@@ -1,13 +1,17 @@
 import './App.css';
-import DashContainer from './components/DashContainer';
-import SideMenu from './components/SideMenu'
+import Dashboard from './components/layout/Dashboard';
+import SideMenu from './components/layout/SideMenu'
+import React, {useState} from 'react';
 
-function App() {
+
+function App() {  
+  const [sectionName, setSectionName] = useState('Start');
+
   return (
-  <div id="wrapper">
-    <SideMenu text="Serwisant PRO"/>
-    <DashContainer sectionName="Start"/>
-  </div>  
+      <div id="wrapper">
+        <SideMenu onLinkClick={setSectionName} text="Serwisant PRO" />
+        <Dashboard sectionName={sectionName} />
+      </div>  
   );
 }
 

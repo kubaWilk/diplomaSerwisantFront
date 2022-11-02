@@ -1,15 +1,15 @@
-import Dashboard from "./Dashboard"
+import { Outlet } from "react-router-dom"
 import Footer from "./Footer"
 import Navbar from "./Navbar"
 
-const DashContainer = ({sectionName}) => {
+const Dashboard = ({sectionName}) => {
   return (
     <div id="dashboard">
       <Navbar sectionName={sectionName}/>
-      <Dashboard />
+      <Outlet />
       <Footer />
     </div>
   )
 }
 
-export default DashContainer
+export default Dashboard
