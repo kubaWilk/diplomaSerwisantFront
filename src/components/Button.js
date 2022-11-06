@@ -1,6 +1,8 @@
-const Button = ({text, style, link}) => {
+import { Link } from "react-router-dom"
+
+const Button = ({text, style, link, onClick}) => {
   return (
-    <a href="{link}" className={style}>{text}</a>
+    <Link to={link} onClick={onClick} className={style}>{text}</Link>
   )
 }
 
