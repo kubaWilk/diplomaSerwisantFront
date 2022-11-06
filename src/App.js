@@ -14,13 +14,14 @@ const paths = {
   "/" : "start",
 }
 
+
 function App() {  
   const [sectionName, setSectionName] = useState('Start');
 
   const location = useLocation();
 
   const translatePathToName = (path, pahtsToTranslate) => {
-    for (const [key, value] of Object.entries(paths)) {
+    for (const [key, value] of Object.entries(pahtsToTranslate)) {
       if(path.includes(key)) return value;
     }
   }

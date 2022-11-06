@@ -20,6 +20,51 @@ const repairs = [
     userName: 'Jakub',
     userLastName: 'Wilk'
   },
+  {
+    id: 3,
+    repairStatus: 'W trakcie',
+    deviceType: 'Laptop',
+    deviceManufacturer: 'Asus',
+    deviceModel: 'jakiśtam',  
+    userName: 'Jakub',
+    userLastName: 'Wilk'
+  },
+  {
+    id: 4,
+    repairStatus: 'W trakcie',
+    deviceType: 'Laptop',
+    deviceManufacturer: 'Asus',
+    deviceModel: 'jakiśtam',  
+    userName: 'Jakub',
+    userLastName: 'Wilk'
+  },
+  {
+    id: 5,
+    repairStatus: 'W trakcie',
+    deviceType: 'Laptop',
+    deviceManufacturer: 'Asus',
+    deviceModel: 'jakiśtam',  
+    userName: 'Jakub',
+    userLastName: 'Wilk'
+  },
+  {
+    id: 6,
+    repairStatus: 'W trakcie',
+    deviceType: 'Laptop',
+    deviceManufacturer: 'Asus',
+    deviceModel: 'jakiśtam',  
+    userName: 'Jakub',
+    userLastName: 'Wilk'
+  },
+  {
+    id: 7,
+    repairStatus: 'W trakcie',
+    deviceType: 'Laptop',
+    deviceManufacturer: 'Asus',
+    deviceModel: 'jakiśtam',  
+    userName: 'Jakub',
+    userLastName: 'Wilk'
+  },
 ];
 
 const tableRows = repairs.map((repair) => {
