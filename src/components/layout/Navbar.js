@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import Button from '../Button'
+
 const Navbar = ({sectionName}) => {
   return (
     <nav className="navbar">

@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom"
+
 const DashButton = ({link, text}) => {
   return (
     <div className="dash-rectangle">
-      <h3><a className="" href={link}>{text}</a></h3>
+      <h3><Link to={link}>{text}</Link></h3>
     </div>
   )
 }

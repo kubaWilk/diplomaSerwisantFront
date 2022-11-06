@@ -2,17 +2,18 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
-import ErrorPage from './components/ErrorPage'
 import {
   createBrowserRouter,
   RouterProvider,
   Route,
 } from "react-router-dom";
-import StartPage from './components/layout/StartPage';
-import Repairs from './components/Repairs';
-import Customers from './components/Customers';
-import Statistics from './components/Statistics'
-import Users from './components/Users'
+import ErrorPage from './components/pages/ErrorPage'
+import StartPage from './components/pages/startPage/StartPage';
+import Repairs from './components/pages/repairs/Repairs';
+import NewRepair from './components/pages/repairs/NewRepair';
+import Customers from './components/pages/Customers';
+import Statistics from './components/pages/Statistics'
+import Users from './components/pages/Users'
 
 const router = createBrowserRouter([
   {
@@ -26,7 +27,16 @@ const router = createBrowserRouter([
       },
       {
         path: "/repairs",
-        element: <Repairs />,
+        children : [
+          {
+            path: "/repairs/add",
+            element: <NewRepair />
+          },
+          {
+            path: "/repairs/all",
+            element: <Repairs />
+          }
+        ]
       },
       {
         path: "/customers",
