@@ -20,6 +20,27 @@ li{
   list-style: none;
 }
 
+table{
+  width: 100%;
+  background: #fff;
+  color: black;
+  /* border-spacing: 0; */
+}
+
+th, td {
+  padding: 5px;
+  text-align: center;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse ;  
+}
+
+tr:nth-child(even){
+  background: #bfbdbb;
+}
+
 /* Utilities */
 .btn{
   background: #404040;
@@ -45,6 +66,17 @@ li{
 
 .menu.active{
   color: #ff6f00;
+}
+
+.dash-rectangle{
+  margin: 10px;
+  background: #fff;
+  border: 1px #bfbdbb solid;
+  padding: 10px;
+}
+
+.dash-rectangle a{
+  text-align: center;
 }
 
 /* Wrapper */
@@ -119,34 +151,15 @@ li{
   height: 90%;
 }
 
-.dash-rectangle{
-  margin: 10px;
-  background: #fff;
-  border: 1px #bfbdbb solid;
-  padding: 10px;
-}
-
-.dash-rectangle a{
-  text-align: center;
-}
-
-table{
+/* New Repair */
+.new-repair{
   width: 100%;
-  background: #fff;
-  color: black;
-  /* border-spacing: 0; */
+  display: flex;
 }
 
-th, td {
-  padding: 5px;
-  text-align: center;
+.new-repair-form{
+  display: flex;
+  flex-direction: column;
 }
 
-table, th, td {
-  border: 1px solid black;
-  border-collapse: collapse ;  
-}
 
-tr:nth-child(even){
-  background: #bfbdbb;
-}
