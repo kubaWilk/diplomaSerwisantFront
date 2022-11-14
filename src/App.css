@@ -44,10 +44,13 @@ tr:nth-child(even){
 /* Utilities */
 .btn{
   background: #404040;
+  margin: 5px;
   padding: 15px;
   color: #fff;
   text-transform: capitalize;
-  margin: 0 5px;
+  border: none;
+  display: block;
+  text-align: center;
 }
 
 .btn:hover{
@@ -87,7 +90,7 @@ tr:nth-child(even){
 /* Side Menu */
 #side-menu{
   width: 25vw;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -116,7 +119,7 @@ tr:nth-child(even){
 /* Dashboard */
 #dashboard{
   width: 75vw;
-  height: 100vh;
+  min-height: 100vh;
   background: #f0f0f0;
   display: flex;
   flex-direction: column;
@@ -132,6 +135,10 @@ tr:nth-child(even){
   border-bottom: 1px solid #bfbdbb;
   text-transform: uppercase;
   margin-bottom: 10px;
+}
+
+#dashboard .navbar ul{
+  display: flex;
 }
 
 #dashboard .footer{
@@ -152,14 +159,29 @@ tr:nth-child(even){
 }
 
 /* New Repair */
-.new-repair{
-  width: 100%;
-  display: flex;
-}
-
 .new-repair-form{
   display: flex;
   flex-direction: column;
+}
+
+.new-repair-form input{
+  border-radius: 5px;
+  border: 1px #ddd solid;
+  padding: 5px;
+  width: 100%;
+}
+
+.new-repair-form label{
+  font-size: 18px;
+  margin: 5px 0;
+}
+
+.form-wrapper{
+  width: 90%;
+  margin: auto;
+}
+
+.user-choice{
 }
 
 

@@ -10,6 +10,7 @@ const SideMenu = ({text}) => {
         <li><Link className="menu" to={''}>Start</Link></li>
         <li><Link className="menu" to={'/repairs/all'}>Naprawy</Link></li>
         <li><Link className="menu" to={'/customers'}>Klienci</Link></li>
+        <li><Link className="menu" to={'/devices'}>Sprzęt</Link></li>
         <li><Link className="menu" to={'/stats'}>Statystyki</Link></li>
         <li><Link className="menu" to={'/users'}>Użytkownicy</Link></li>
       </ul>

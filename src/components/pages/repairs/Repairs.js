@@ -1,5 +1,6 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom';
+import DashButton from '../startPage/DashButton';
 
 const repairs = [
   {
@@ -84,6 +85,7 @@ const tableRows = repairs.map((repair) => {
 const Repairs = () => {
   return (
     <div className="container">
+      <DashButton link="/repairs/add" text="Nowa Naprawa" />
       <table>
         <thead>
           <tr>
