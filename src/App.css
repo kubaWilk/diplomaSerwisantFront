@@ -181,7 +181,35 @@ tr:nth-child(even){
   margin: auto;
 }
 
-.user-choice{
+#login-page{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+#login-page .login-rect{
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 350px;
 }
 
 
+#login-page input, #login-page label, #login-page button{
+  display: block;
+}
+
+#login-page input,
+#login-page label{
+  padding: 5px;
+  margin: 5px;
+}
+
+#login-page input{
+  border: 1px #ddd solid;
+}
+
+#login-page .login-form{
+  display: flex;
+  flex-direction: column;
+}

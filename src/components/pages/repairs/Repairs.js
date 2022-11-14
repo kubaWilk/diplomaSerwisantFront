@@ -2,7 +2,7 @@ import React from 'react'
 import { Outlet } from 'react-router-dom';
 import DashButton from '../startPage/DashButton';
 
-const repairs = [
+const dummyRepairs = [
   {
     id: 1,
     repairStatus: 'W trakcie',
@@ -68,7 +68,7 @@ const repairs = [
   },
 ];
 
-const tableRows = repairs.map((repair) => {
+const tableRows = dummyRepairs.map((repair) => {
   return (
     <tr>
       <td>{repair.id}</td>
