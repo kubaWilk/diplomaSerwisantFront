@@ -1,76 +1,75 @@
-import React from 'react'
-import { Outlet } from 'react-router-dom';
-import DashButton from '../startPage/DashButton';
+import React from "react";
+import DashButton from "../startPage/DashButton";
 
 const dummyRepairs = [
   {
     id: 1,
-    repairStatus: 'W trakcie',
-    deviceType: 'Laptop',
-    deviceManufacturer: 'Lenovo',
-    deviceModel: 'Thinkpad L420',  
-    userName: 'Jakub',
-    userLastName: 'Wilk'
+    repairStatus: "W trakcie",
+    deviceType: "Laptop",
+    deviceManufacturer: "Lenovo",
+    deviceModel: "Thinkpad L420",
+    userName: "Jakub",
+    userLastName: "Wilk",
   },
   {
     id: 2,
-    repairStatus: 'W trakcie',
-    deviceType: 'Laptop',
-    deviceManufacturer: 'Asus',
-    deviceModel: 'jakiśtam',  
-    userName: 'Jakub',
-    userLastName: 'Wilk'
+    repairStatus: "W trakcie",
+    deviceType: "Laptop",
+    deviceManufacturer: "Asus",
+    deviceModel: "jakiśtam",
+    userName: "Jakub",
+    userLastName: "Wilk",
   },
   {
     id: 3,
-    repairStatus: 'W trakcie',
-    deviceType: 'Laptop',
-    deviceManufacturer: 'Asus',
-    deviceModel: 'jakiśtam',  
-    userName: 'Jakub',
-    userLastName: 'Wilk'
+    repairStatus: "W trakcie",
+    deviceType: "Laptop",
+    deviceManufacturer: "Asus",
+    deviceModel: "jakiśtam",
+    userName: "Jakub",
+    userLastName: "Wilk",
   },
   {
     id: 4,
-    repairStatus: 'W trakcie',
-    deviceType: 'Laptop',
-    deviceManufacturer: 'Asus',
-    deviceModel: 'jakiśtam',  
-    userName: 'Jakub',
-    userLastName: 'Wilk'
+    repairStatus: "W trakcie",
+    deviceType: "Laptop",
+    deviceManufacturer: "Asus",
+    deviceModel: "jakiśtam",
+    userName: "Jakub",
+    userLastName: "Wilk",
   },
   {
     id: 5,
-    repairStatus: 'W trakcie',
-    deviceType: 'Laptop',
-    deviceManufacturer: 'Asus',
-    deviceModel: 'jakiśtam',  
-    userName: 'Jakub',
-    userLastName: 'Wilk'
+    repairStatus: "W trakcie",
+    deviceType: "Laptop",
+    deviceManufacturer: "Asus",
+    deviceModel: "jakiśtam",
+    userName: "Jakub",
+    userLastName: "Wilk",
   },
   {
     id: 6,
-    repairStatus: 'W trakcie',
-    deviceType: 'Laptop',
-    deviceManufacturer: 'Asus',
-    deviceModel: 'jakiśtam',  
-    userName: 'Jakub',
-    userLastName: 'Wilk'
+    repairStatus: "W trakcie",
+    deviceType: "Laptop",
+    deviceManufacturer: "Asus",
+    deviceModel: "jakiśtam",
+    userName: "Jakub",
+    userLastName: "Wilk",
   },
   {
     id: 7,
-    repairStatus: 'W trakcie',
-    deviceType: 'Laptop',
-    deviceManufacturer: 'Asus',
-    deviceModel: 'jakiśtam',  
-    userName: 'Jakub',
-    userLastName: 'Wilk'
+    repairStatus: "W trakcie",
+    deviceType: "Laptop",
+    deviceManufacturer: "Asus",
+    deviceModel: "jakiśtam",
+    userName: "Jakub",
+    userLastName: "Wilk",
   },
 ];
 
 const tableRows = dummyRepairs.map((repair) => {
   return (
-    <tr>
+    <tr key={repair.id} onDoubleClick={console.log("dziala")}>
       <td>{repair.id}</td>
       <td>{repair.repairStatus}</td>
       <td>{repair.deviceType}</td>
@@ -79,7 +78,7 @@ const tableRows = dummyRepairs.map((repair) => {
       <td>{repair.userName}</td>
       <td>{repair.userLastName}</td>
     </tr>
-  )
+  );
 });
 
 const Repairs = () => {
@@ -98,12 +97,10 @@ const Repairs = () => {
             <th>Nazwisko zgłaszającego</th>
           </tr>
         </thead>
-        <tbody>
-          {tableRows}
-        </tbody>
+        <tbody>{tableRows}</tbody>
       </table>
     </div>
-  )
-}
+  );
+};
 
-export default Repairs
+export default Repairs;

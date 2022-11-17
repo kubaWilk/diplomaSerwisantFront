@@ -1,42 +1,39 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import {
-  createBrowserRouter,
-  RouterProvider,
-  Route,
-} from "react-router-dom";
-import ErrorPage from './components/pages/ErrorPage'
-import StartPage from './components/pages/startPage/StartPage';
-import Repairs from './components/pages/repairs/Repairs';
-import NewRepair from './components/pages/repairs/NewRepair';
-import Customers from './components/pages/Customers';
-import Statistics from './components/pages/Statistics'
-import Users from './components/pages/Users'
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import { createBrowserRouter, RouterProvider, Route } from "react-router-dom";
+import ErrorPage from "./components/pages/ErrorPage";
+import StartPage from "./components/pages/startPage/StartPage";
+import Repairs from "./components/pages/repairs/Repairs";
+import NewRepair from "./components/pages/repairs/NewRepair";
+import Customers from "./components/pages/Customers";
+import Statistics from "./components/pages/Statistics";
+import Users from "./components/pages/Users";
+import Devices from "./components/pages/Devices";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     errorElement: <ErrorPage />,
-    children : [
+    children: [
       {
         index: true,
         element: <StartPage />,
       },
       {
         path: "/repairs",
-        children : [
+        children: [
           {
             path: "/repairs/add",
-            element: <NewRepair />
+            element: <NewRepair />,
           },
           {
             path: "/repairs/all",
-            element: <Repairs />
-          }
-        ]
+            element: <Repairs />,
+          },
+        ],
       },
       {
         path: "/customers",
@@ -50,11 +47,15 @@ const router = createBrowserRouter([
         path: "/users",
         element: <Users />,
       },
+      {
+        path: "/devices",
+        element: <Devices />,
+      },
     ],
   },
 ]);
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <RouterProvider router={router} />
