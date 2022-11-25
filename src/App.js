@@ -1,58 +1,34 @@
 import "./App.css";
-import Dashboard from "./components/layout/Dashboard";
+import "./index.css";
+import React, { useContext, createContext, useEffect } from "react";
+import Navbar from "./components/layout/Navbar";
 import SideMenu from "./components/layout/SideMenu";
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import Login from "./components/pages/Login";
-
-//"/" path has to stay on the bottom, otherwise navbar will always show it, other paths should be added without "/"
-const paths = {
-  repairs: "naprawy",
-  customers: "klienci",
-  stats: "statystyki",
-  users: "użytkownicy",
-  "/": "start",
-};
+import Repairs from "./components/pages/Repairs/Repairs";
+import { Routes, Route } from "react-router-dom";
+import LoginState from "./context/Login/LoginState";
+import LoginContext from "./context/Login/LoginContext";
+import LoginPage from "./components/pages/Login/LoginPage";
+import { useState } from "react";
 
 function App() {
-  const [sectionName, setSectionName] = useState("Start");
-  const [isUserLoggedIn, setIsUserLoggedIn] = useState(false);
-  const [userInfo, setUserInfo] = useState({});
-  //TODO: keeping state of logged in user in localStorage i.e.
-
-  const location = useLocation();
-
-  const translatePathToName = (path, pahtsToTranslate) => {
-    for (const [key, value] of Object.entries(pahtsToTranslate)) {
-      if (path.includes(key)) return value;
-    }
-  };
-
-  React.useEffect(() => {
-    setSectionName(translatePathToName(location.pathname, paths));
-  }, [location]);
-
-  const onLogout = () => {
-    setIsUserLoggedIn(false);
-    setUserInfo = {};
-    console.log("should logout");
-  };
+  const [loginToggle, setLoginToggle] = useState(false);
 
   return (
-    <div className="app">
-      {isUserLoggedIn ? (
-        <div id="wrapper">
-          <SideMenu text="Serwisant PRO" />
-          <Dashboard
-            onLogout={onLogout}
-            userInfo={userInfo}
-            sectionName={sectionName}
-          />
+    <LoginState loginToggle={setLoginToggle}>
+      {loginToggle ? (
+        <div>
+          <Navbar />
+          <div className="flex">
+            <SideMenu />
+            <Routes>
+              <Route exact path="/repairs" element={<Repairs />} />
+            </Routes>
+          </div>
         </div>
       ) : (
-        <Login userToggle={setIsUserLoggedIn} userInfoSetter={setUserInfo} />
+        <LoginPage />
       )}
-    </div>
+    </LoginState>
   );
 }
 

@@ -1,27 +1,10 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "../Button";
-
-const Navbar = ({ sectionName, onLogout }) => {
-  const navigate = useNavigate();
-
+const Navbar = () => {
   return (
-    <nav className="navbar">
-      <h1>{sectionName}</h1>
-      <ul>
-        <li>
-          <Button text="Wróć" style="btn" onClick={() => navigate(-1)} />
-        </li>
-        <li>
-          <Button
-            text="Wyloguj"
-            style="btn"
-            link="/"
-            onClick={() => onLogout()}
-          />
-        </li>
-      </ul>
-    </nav>
+    <div className="flex w-full items-center justify-center h-16 border-b border-gray-400">
+      <div className="">
+        <h1 className="text-bold text-4xl">SerwisantPRO</h1>
+      </div>
+    </div>
   );
 };
 
