@@ -1,13 +1,16 @@
 import React, { useContext, useState } from "react";
-import LoginContext from "../../../context/Login/LoginContext";
+import AlertContext from "../../../context/Alert/AlertContext";
+import UserContext from "../../../context/Login/UserContext";
 
 const LoginForm = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
-  const LoginContextObj = useContext(LoginContext);
+  const LoginContextObj = useContext(UserContext);
+  const { message } = useContext(AlertContext);
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault();
     LoginContextObj.logInAUser(login, password);
   };
 
@@ -40,6 +43,7 @@ const LoginForm = () => {
           />
         </div>
 
+        <div className="mt-3 text-md font-bold text-red-600">{message}</div>
         <div className="mt-3">
           <button
             type="submit"

@@ -1,7 +1,9 @@
-import React, { useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+import UserContext from "../../context/Login/UserContext";
 
 const SideMenu = () => {
+  const { logout } = useContext(UserContext);
+
   return (
     <div className="w-1/4 h-[90vh] flex flex-col justify-between border-r border-gray-400">
       <div className="flex flex-col">
@@ -33,7 +35,10 @@ const SideMenu = () => {
                 <p className="text-xs">Administrator</p>
               </div>
             </div>
-            <button className="px-2 mt-2 md:m-0 py-[3px] border-2 border-black font-bold hover:text-white hover:bg-black duration-100">
+            <button
+              className="px-2 mt-2 md:m-0 py-[3px] border-2 border-black font-bold hover:text-white hover:bg-black duration-100"
+              onClick={logout}
+            >
               Wyloguj
             </button>
           </div>
