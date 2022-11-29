@@ -6,15 +6,15 @@ import SectionName from "../../layout/SectionName";
 
 const Repair = () => {
   const { id } = useParams();
-  const { isLoading, repair, fetchRepairById } = useContext(RepairsContext);
+  const { isRepairLoading, repair, fetchRepairById } =
+    useContext(RepairsContext);
+  const { customer, user, device } = repair;
 
   useEffect(() => {
     fetchRepairById(id);
   }, []);
 
-  if (isLoading) return <Loading />;
-
-  const { customer, user, device } = repair;
+  if (isRepairLoading) return <Loading />;
 
   return (
     <div className="repair-info flex w-full flex-col items-center justify-start">

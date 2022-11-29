@@ -7,6 +7,7 @@ import axios from "axios";
 const RepairsState = (props) => {
   const initialState = {
     isLoading: true,
+    isRepairLoading: true,
     allRepairs: {},
     repair: {},
   };
@@ -36,6 +37,7 @@ const RepairsState = (props) => {
       value={{
         allRepairs: state.allRepairs,
         isLoading: state.isLoading,
+        isRepairLoading: state.isRepairLoading,
         repair: state.repair,
         fetchRepairs,
         fetchRepairById,

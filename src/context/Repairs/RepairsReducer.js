@@ -5,14 +5,14 @@ const RepairsReducer = (state, action) => {
     case SET_REPAIRS:
       return {
         ...state,
-        isLoading: false,
         allRepairs: action.payload,
+        isLoading: false,
       };
     case SET_REPAIR:
       return {
         ...state,
-        isLoading: false,
         repair: action.payload,
+        isRepairLoading: false,
       };
     default:
       return { ...state };
