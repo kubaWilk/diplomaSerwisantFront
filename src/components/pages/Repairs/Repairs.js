@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { useContext, useEffect } from "react";
 import RepairsContext from "../../../context/Repairs/RepairsContext";
 import RepairItem from "./RepairItem";
+import SectionName from "../../layout/SectionName";
 
 const Repairs = () => {
   const { allRepairs, fetchRepairs, isLoading } = useContext(RepairsContext);
@@ -14,10 +15,8 @@ const Repairs = () => {
 
   return (
     <div className="flex flex-col w-full flex-start items-center">
-      <h1 className="mt-5 text-3xl uppercase">Naprawy</h1>
-      <div className="w-[90%] mt-3 mb-2 border-b border-black"></div>
-
-      <table className="w-[90%] text-center ">
+      <SectionName text="Naprawy" />
+      <table className="w-[90%] text-center repair-table">
         <thead>
           <tr>
             <th>ID</th>

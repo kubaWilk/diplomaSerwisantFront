@@ -13,3 +13,12 @@
 .screen-height {
   height: calc(100vh - 70px);
 }
+
+.repair-table {
+  @apply border;
+}
+
+.repair-table tr,
+td {
+  @apply border;
+}

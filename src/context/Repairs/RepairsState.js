@@ -1,13 +1,14 @@
 import { useEffect, useReducer } from "react";
 import RepairsContext from "./RepairsContext";
 import RepairsReducer from "./RepairsReducer";
-import { SET_REPAIRS } from "../types";
+import { SET_REPAIRS, SET_REPAIR } from "../types";
 import axios from "axios";
 
 const RepairsState = (props) => {
   const initialState = {
     isLoading: true,
     allRepairs: {},
+    repair: {},
   };
 
   const [state, dispatch] = useReducer(RepairsReducer, initialState);
@@ -21,12 +22,23 @@ const RepairsState = (props) => {
     });
   };
 
+  const fetchRepairById = async (id) => {
+    const repair = await axios.get(`/repairs/${id}`);
+
+    dispatch({
+      type: SET_REPAIR,
+      payload: repair.data,
+    });
+  };
+
   return (
     <RepairsContext.Provider
       value={{
         allRepairs: state.allRepairs,
         isLoading: state.isLoading,
+        repair: state.repair,
         fetchRepairs,
+        fetchRepairById,
       }}
     >
       {props.children}
