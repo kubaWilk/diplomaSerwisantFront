@@ -5,7 +5,7 @@ const LoginPage = () => {
   return (
     <div>
       {/* Main Container */}
-      <div className="container flex flex-col items-center justify-center h-screen">
+      <div className="flex flex-col items-center justify-center w-screen h-screen">
         {/* Logo Container */}
         <div>
           <h1 className="text-6xl font-bold">SerwisantPC</h1>

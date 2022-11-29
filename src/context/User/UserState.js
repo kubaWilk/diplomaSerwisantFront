@@ -1,7 +1,7 @@
 import React, { useContext, useReducer } from "react";
 import UserContext from "./UserContext";
 import UserReducer from "./UserReducer";
-import { IS_USER_LOGGED_IN, LOG_IN_USER, USER_LOGOUT } from "../types";
+import { LOG_IN_USER, USER_LOGOUT } from "../types";
 import { NO_ACCOUNT, WRONG_PASSWORD } from "../../errorCodes";
 import axios from "axios";
 import AlertContext from "../Alert/AlertContext";
@@ -9,18 +9,10 @@ import AlertContext from "../Alert/AlertContext";
 const UserState = (props) => {
   const initialState = {
     user: {},
-    isUserLoggedIn: false,
   };
 
   const [state, dispatch] = useReducer(UserReducer, initialState);
   const AlertContextObj = useContext(AlertContext);
-
-  const setIsUserLoggedIn = () => {
-    dispatch({
-      type: IS_USER_LOGGED_IN,
-      payload: props.loginToggle,
-    });
-  };
 
   const logInAUser = (login, password) => {
     fetchUser(login, password).then((a) => {
@@ -49,19 +41,27 @@ const UserState = (props) => {
     const res = axios.get("/users");
     const users = (await res).data;
 
+    let isPasswordWrong = false;
+    let doesAccountExist = true;
+
     for (let i = 0; i < users.length; i++) {
       const user = users[i];
 
       if (login === user.userName) {
         if (password === user.password) {
+          isPasswordWrong = false;
+          doesAccountExist = true;
           return user;
         } else {
-          return WRONG_PASSWORD;
+          isPasswordWrong = true;
         }
       } else {
-        return NO_ACCOUNT;
+        doesAccountExist = false;
       }
     }
+
+    if (isPasswordWrong) return WRONG_PASSWORD;
+    else if (!doesAccountExist) return NO_ACCOUNT;
   };
 
   const logout = () => {
@@ -71,12 +71,24 @@ const UserState = (props) => {
     props.loginToggle(false);
   };
 
+  const getRole = () => {
+    switch (state.user.role) {
+      case "admin":
+        return "Administrator";
+      case "user":
+        return "Serwisant";
+      case "customer":
+        return "Klient";
+      default:
+        return "Role";
+    }
+  };
   return (
     <UserContext.Provider
       value={{
-        isUserLoggedIn: state.isUserLoggedIn,
-        setIsUserLoggedIn,
+        user: state.user,
         logInAUser,
+        getRole,
         logout,
       }}
     >

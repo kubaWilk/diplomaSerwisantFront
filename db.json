@@ -4,7 +4,195 @@
       "id": "1",
       "userName": "admin",
       "password": "admin",
-      "role": "admin"
+      "role": "admin",
+      "firstName": "Jakub",
+      "lastName": "Wilk",
+      "phoneNumber": "654654654",
+      "street": "asdfasdf 64/1",
+      "city": "Zielona Góra",
+      "postCode": "00-000"
+    },
+    {
+      "id": "2",
+      "userName": "test",
+      "password": "test",
+      "role": "user",
+      "firstName": "Szymon",
+      "lastName": "Wilk",
+      "phoneNumber": "654654654",
+      "street": "asdfasdf 64/1",
+      "city": "Zielona Góra",
+      "postCode": "00-000"
+    },
+    {
+      "id": "3",
+      "userName": "test2",
+      "password": "test",
+      "role": "customer",
+      "firstName": "Jolanta",
+      "lastName": "Wilk",
+      "phoneNumber": "654654654",
+      "street": "asdfasdf 64/1",
+      "city": "Zielona Góra",
+      "postCode": "00-000"
+    }
+  ],
+  "repairs": [
+    {
+      "id": "1",
+      "status": "inProgress",
+      "device": {
+        "id": "1",
+        "type": "laptop",
+        "manufacturer": "Lenovo",
+        "model": "Thinkpad L420",
+        "sn": "12340987SDSAOH",
+        "stateAtArrival": "lekkie rysy"
+      },
+      "customer": {
+        "id": "3",
+        "firstName": "Jolanta",
+        "lastName": "Wilk",
+        "phoneNumber": "654654654",
+        "street": "asdfasdf 64/1",
+        "city": "Zielona Góra",
+        "postCode": "00-000"
+      },
+      "user": {
+        "id": "2",
+        "firstName": "Szymon",
+        "lastName": "Wilk"
+      }
+    },
+    {
+      "id": "1",
+      "status": "inProgress",
+      "device": {
+        "id": "1",
+        "type": "laptop",
+        "manufacturer": "Lenovo",
+        "model": "Thinkpad L420",
+        "sn": "12340987SDSAOH",
+        "stateAtArrival": "lekkie rysy"
+      },
+      "customer": {
+        "id": "3",
+        "firstName": "Jolanta",
+        "lastName": "Wilk",
+        "phoneNumber": "654654654",
+        "street": "asdfasdf 64/1",
+        "city": "Zielona Góra",
+        "postCode": "00-000"
+      },
+      "user": {
+        "id": "2",
+        "firstName": "Szymon",
+        "lastName": "Wilk"
+      }
+    },
+    {
+      "id": "1",
+      "status": "inProgress",
+      "device": {
+        "id": "1",
+        "type": "laptop",
+        "manufacturer": "Lenovo",
+        "model": "Thinkpad L420",
+        "sn": "12340987SDSAOH",
+        "stateAtArrival": "lekkie rysy"
+      },
+      "customer": {
+        "id": "3",
+        "firstName": "Jolanta",
+        "lastName": "Wilk",
+        "phoneNumber": "654654654",
+        "street": "asdfasdf 64/1",
+        "city": "Zielona Góra",
+        "postCode": "00-000"
+      },
+      "user": {
+        "id": "2",
+        "firstName": "Szymon",
+        "lastName": "Wilk"
+      }
+    },
+    {
+      "id": "1",
+      "status": "inProgress",
+      "device": {
+        "id": "1",
+        "type": "laptop",
+        "manufacturer": "Lenovo",
+        "model": "Thinkpad L420",
+        "sn": "12340987SDSAOH",
+        "stateAtArrival": "lekkie rysy"
+      },
+      "customer": {
+        "id": "3",
+        "firstName": "Jolanta",
+        "lastName": "Wilk",
+        "phoneNumber": "654654654",
+        "street": "asdfasdf 64/1",
+        "city": "Zielona Góra",
+        "postCode": "00-000"
+      },
+      "user": {
+        "id": "2",
+        "firstName": "Szymon",
+        "lastName": "Wilk"
+      }
+    },
+    {
+      "id": "1",
+      "status": "inProgress",
+      "device": {
+        "id": "1",
+        "type": "laptop",
+        "manufacturer": "Lenovo",
+        "model": "Thinkpad L420",
+        "sn": "12340987SDSAOH",
+        "stateAtArrival": "lekkie rysy"
+      },
+      "customer": {
+        "id": "3",
+        "firstName": "Jolanta",
+        "lastName": "Wilk",
+        "phoneNumber": "654654654",
+        "street": "asdfasdf 64/1",
+        "city": "Zielona Góra",
+        "postCode": "00-000"
+      },
+      "user": {
+        "id": "2",
+        "firstName": "Szymon",
+        "lastName": "Wilk"
+      }
+    },
+    {
+      "id": "1",
+      "status": "inProgress",
+      "device": {
+        "id": "1",
+        "type": "laptop",
+        "manufacturer": "Lenovo",
+        "model": "Thinkpad L420",
+        "sn": "12340987SDSAOH",
+        "stateAtArrival": "lekkie rysy"
+      },
+      "customer": {
+        "id": "3",
+        "firstName": "Jolanta",
+        "lastName": "Wilk",
+        "phoneNumber": "654654654",
+        "street": "asdfasdf 64/1",
+        "city": "Zielona Góra",
+        "postCode": "00-000"
+      },
+      "user": {
+        "id": "2",
+        "firstName": "Szymon",
+        "lastName": "Wilk"
+      }
     }
   ]
 }

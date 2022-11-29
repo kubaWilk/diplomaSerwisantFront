@@ -1,27 +1,54 @@
 import React, { useContext } from "react";
-import UserContext from "../../context/Login/UserContext";
+import { NavLink } from "react-router-dom";
+import UserContext from "../../context/User/UserContext";
 
 const SideMenu = () => {
-  const { logout } = useContext(UserContext);
+  const { logout, user, getRole } = useContext(UserContext);
 
   return (
-    <div className="w-1/4 h-[90vh] flex flex-col justify-between border-r border-gray-400">
+    <div className="w-80 flex flex-col justify-between border-r border-gray-400">
       <div className="flex flex-col">
-        <a href="#" className="ml-4 mt-4 border-b uppercase">
+        <NavLink
+          to="/"
+          className={({ isActive }) =>
+            isActive ? "nav-link-active" : "nav-link"
+          }
+          end
+        >
           Start
-        </a>
-        <a href="#" className="ml-4 mt-4 border-b uppercase">
+        </NavLink>
+        <NavLink
+          to="/repairs"
+          className={({ isActive }) =>
+            isActive ? "nav-link-active" : "nav-link"
+          }
+        >
           Naprawy
-        </a>
-        <a href="#" className="ml-4 mt-4 border-b uppercase">
+        </NavLink>
+        <NavLink
+          to="/customers"
+          className={({ isActive }) =>
+            isActive ? "nav-link-active" : "nav-link"
+          }
+        >
           Klienci
-        </a>
-        <a href="#" className="ml-4 mt-4 border-b uppercase">
+        </NavLink>
+        <NavLink
+          to="/devices"
+          className={({ isActive }) =>
+            isActive ? "nav-link-active" : "nav-link"
+          }
+        >
           Urządzenia
-        </a>
-        <a href="#" className="ml-4 mt-4 border-b uppercase">
+        </NavLink>
+        <NavLink
+          to="/admin-panel"
+          className={({ isActive }) =>
+            isActive ? "nav-link-active" : "nav-link"
+          }
+        >
           Panel Administratora
-        </a>
+        </NavLink>
       </div>
       <div>
         <div className="p-2 border-t border-black">
@@ -31,8 +58,8 @@ const SideMenu = () => {
                 Av
               </div>
               <div className="flex flex-col ml-2">
-                <h3 className="text-md">Jakub Wilk</h3>
-                <p className="text-xs">Administrator</p>
+                <h3 className="text-md">{`${user.firstName} ${user.lastName}`}</h3>
+                <p className="text-xs">{getRole()}</p>
               </div>
             </div>
             <button
