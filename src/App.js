@@ -13,6 +13,7 @@ import Home from "./components/pages/Home/Home";
 import Devices from "./components/pages/Devices/Devices";
 import AdminPanel from "./components/pages/AdminPanel/AdminPanel";
 import Repair from "./components/pages/Repairs/Repair";
+import AddRepair from "./components/pages/Repairs/Add/AddRepair";
 
 function App() {
   const [loginToggle, setLoginToggle] = useState(false);
@@ -26,9 +27,13 @@ function App() {
             <div className="flex screen-height">
               <SideMenu />
               <Routes>
+                {/* Main route */}
                 <Route exact path="/" element={<Home />} />
+                {/* Repairs Routes */}
                 <Route exact path="/repairs" element={<Repairs />} />
                 <Route exact path="/repairs/:id" element={<Repair />} />
+                <Route exact path="/repairs/new" element={<AddRepair />} />
+                {/* Users Routes */}
                 <Route exact path="/customers" element={<Customers />} />
                 <Route exact path="/devices" element={<Devices />} />
                 <Route exact path="/admin-panel" element={<AdminPanel />} />

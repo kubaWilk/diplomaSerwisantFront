@@ -1,9 +1,12 @@
 import React from "react";
+import SectionName from "../../layout/SectionName";
+import HomeButtons from "./HomeButtons";
 
 const Home = () => {
   return (
-    <div className="flex w-full justify-center">
-      <h1 className="mt-4 text-4xl text-black">Home</h1>
+    <div className="flex w-full flex-col justify-start items-center">
+      <SectionName text="Start" />
+      <HomeButtons />
     </div>
   );
 };
