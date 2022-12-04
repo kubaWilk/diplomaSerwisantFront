@@ -3,6 +3,7 @@ import { useContext, useEffect } from "react";
 import RepairsContext from "../../../context/Repairs/RepairsContext";
 import RepairItem from "./RepairItem";
 import SectionName from "../../layout/SectionName";
+import NavButtons from "./NavButtons";
 
 const Repairs = () => {
   const { allRepairs, fetchRepairs, isLoading } = useContext(RepairsContext);
@@ -16,6 +17,7 @@ const Repairs = () => {
   return (
     <div className="flex flex-col w-full flex-start items-center">
       <SectionName text="Naprawy" />
+      <NavButtons />
       <table className="w-[90%] text-center repair-table">
         <thead>
           <tr>
