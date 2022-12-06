@@ -32,6 +32,10 @@ const RepairsState = (props) => {
     });
   };
 
+  const addRepair = (customer, device, user, status) => {
+    alert("upload, ale z contextu");
+  };
+
   return (
     <RepairsContext.Provider
       value={{
@@ -41,6 +45,7 @@ const RepairsState = (props) => {
         repair: state.repair,
         fetchRepairs,
         fetchRepairById,
+        addRepair,
       }}
     >
       {props.children}

@@ -40,7 +40,7 @@
   "repairs": [
     {
       "id": "1",
-      "status": "inProgress",
+      "status": "W trakcie",
       "device": {
         "id": "1",
         "type": "laptop",
@@ -66,7 +66,7 @@
     },
     {
       "id": "2",
-      "status": "inProgress",
+      "status": "W trakcie",
       "device": {
         "id": "1",
         "type": "laptop",
@@ -92,7 +92,7 @@
     },
     {
       "id": "3",
-      "status": "inProgress",
+      "status": "W trakcie",
       "device": {
         "id": "1",
         "type": "laptop",
@@ -118,7 +118,7 @@
     },
     {
       "id": "4",
-      "status": "inProgress",
+      "status": "W trakcie",
       "device": {
         "id": "1",
         "type": "laptop",
@@ -144,7 +144,7 @@
     },
     {
       "id": "5",
-      "status": "inProgress",
+      "status": "W trakcie",
       "device": {
         "id": "1",
         "type": "laptop",
@@ -170,7 +170,7 @@
     },
     {
       "id": "6",
-      "status": "inProgress",
+      "status": "Czeka na klienta",
       "device": {
         "id": "1",
         "type": "laptop",
@@ -194,5 +194,11 @@
         "lastName": "Wilk"
       }
     }
+  ],
+  "repair-status": [
+    "inProgress",
+    "closed",
+    "waitingForSupplier",
+    "waitingForCustomer"
   ]
 }

@@ -3,11 +3,13 @@ import { useParams } from "react-router-dom";
 import RepairsContext from "../../../context/Repairs/RepairsContext";
 import Loading from "../../layout/Loading";
 import SectionName from "../../layout/SectionName";
+import { Link } from "react-router-dom";
 
 const Repair = () => {
   const { id } = useParams();
   const { isRepairLoading, repair, fetchRepairById } =
     useContext(RepairsContext);
+
   const { customer, user, device } = repair;
 
   useEffect(() => {
@@ -19,8 +21,22 @@ const Repair = () => {
   return (
     <div className="repair-info flex w-full flex-col items-center justify-start">
       <SectionName text={`Naprawa #${id}`} />
+      <div className="flex space-x-2">
+        <Link
+          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+          to={`/repairs/edit/${id}`}
+        >
+          Edytuj
+        </Link>
+        <Link
+          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+          to={"/"}
+        >
+          Usuń
+        </Link>
+      </div>
       <div className="flex space-x-4">
-        <div>
+        <div className="border-r-2 border-black p-2">
           <ul>
             <li>
               <strong>ID:</strong> {repair.id}
@@ -30,7 +46,7 @@ const Repair = () => {
             </li>
           </ul>
         </div>
-        <div>
+        <div className="border-r-2 border-black p-2">
           <ul>
             <li>
               <strong>Typ: </strong> {device.type}

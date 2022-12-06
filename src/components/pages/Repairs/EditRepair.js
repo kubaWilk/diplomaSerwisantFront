@@ -1,15 +1,49 @@
-import React from "react";
-import { useState, useContext } from "react";
-import RepairsContext from "../../../../context/Repairs/RepairsContext";
-import SectionName from "../../../layout/SectionName";
-import UploadFiles from "../../../layout/UploadFiles";
-import FormGroup from "./FormGroup";
-import UserContext from "../../../../context/User/UserContext";
+import React, { useContext, useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import SectionName from "../../layout/SectionName";
+import UploadFiles from "../../layout/UploadFiles";
+import Loading from "../../layout/Loading";
+import FormGroup from "./Add/FormGroup";
+import RepairsContext from "../../../context/Repairs/RepairsContext";
 
-const AddRepair = () => {
-  const { addRepair } = useContext(RepairsContext);
-  const { user } = useContext(UserContext);
+const EditRepair = () => {
+  const { id } = useParams();
+  const { isRepairLoading, repair, fetchRepairById } =
+    useContext(RepairsContext);
+  const { customer, user, device } = repair;
 
+  useEffect(() => {
+    fetchRepairById(id);
+
+    const fillForm = () => {
+      if (!isRepairLoading) {
+        //Fill Customer Data
+        setFirstName(customer.firstName);
+        setLastName(customer.lastName);
+        setPhoneNumber(customer.phoneNumber);
+        setStreet(customer.street);
+        setCity(customer.city);
+        setPostCode(customer.postCode);
+
+        //Fill Device Data
+        setManufacturer(device.manufacturer);
+        setModel(device.model);
+        setSerialNumber(device.sn);
+        setStateAtArrival(device.stateAtArrival);
+
+        setRepairStatus(repair.status);
+      }
+    };
+
+    fillForm();
+  }, []);
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    alert("upload");
+  };
+
+  //   Form state
   // Customer state
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -29,27 +63,13 @@ const AddRepair = () => {
 
   //Repair Status State
   const [repairStatus, setRepairStatus] = useState("W trakcie");
+  //End of Form State
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    alert("upload");
-
-    const customer = {
-      firstName,
-      lastName,
-      phoneNumber,
-      street,
-      city,
-      postCode,
-    };
-    const device = { manufacturer, model, serialNumber, stateAtArrival };
-
-    addRepair(customer, device, user, repairStatus);
-  };
+  if (isRepairLoading) return <Loading />;
 
   return (
     <div className="flex flex-col w-full items-center">
-      <SectionName text="Nowa naprawa" />
+      <SectionName text={`Edycja naprawy #${id}`} />
 
       <form className="flex w-full flex-col items-center" onSubmit={onSubmit}>
         <div className="flex m-2 w-full justify-center space-x-2 items-center">
@@ -155,11 +175,11 @@ const AddRepair = () => {
           type="submit"
           className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 px-20"
         >
-          Dodaj naprawę
+          Zapisz
         </button>
       </form>
     </div>
   );
 };
 
-export default AddRepair;
+export default EditRepair;

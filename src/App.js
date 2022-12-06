@@ -14,6 +14,7 @@ import Devices from "./components/pages/Devices/Devices";
 import AdminPanel from "./components/pages/AdminPanel/AdminPanel";
 import Repair from "./components/pages/Repairs/Repair";
 import AddRepair from "./components/pages/Repairs/Add/AddRepair";
+import EditRepair from "./components/pages/Repairs/EditRepair";
 
 function App() {
   const [loginToggle, setLoginToggle] = useState(false);
@@ -32,6 +33,11 @@ function App() {
                 {/* Repairs Routes */}
                 <Route exact path="/repairs" element={<Repairs />} />
                 <Route exact path="/repairs/:id" element={<Repair />} />
+                <Route
+                  exact
+                  path="/repairs/edit/:id"
+                  element={<EditRepair />}
+                />
                 <Route exact path="/repairs/new" element={<AddRepair />} />
                 {/* Users Routes */}
                 <Route exact path="/customers" element={<Customers />} />
