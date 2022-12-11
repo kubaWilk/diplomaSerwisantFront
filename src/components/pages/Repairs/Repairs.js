@@ -25,7 +25,6 @@ const Repairs = () => {
             <tr>
               <th>ID</th>
               <th>Status naprawy</th>
-              <th>Typ urządzenia</th>
               <th>Producent</th>
               <th>Model</th>
               <th>Imię</th>

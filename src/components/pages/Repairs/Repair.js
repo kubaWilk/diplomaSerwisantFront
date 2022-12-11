@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const Repair = () => {
   const { id } = useParams();
 
-  const { isLoading, repair, fetchRepairById } =
+  const { isLoading, repair, fetchRepairById, removeRepair } =
     useContext(SingleRepairContext);
 
   const { customer, user, device } = repair;
@@ -32,12 +32,16 @@ const Repair = () => {
         </Link>
         <Link
           className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-          to={"/"}
+          to={"/repairs"}
+          onClick={(e) => {
+            removeRepair(id);
+            alert("Naprawa usunięta");
+          }}
         >
           Usuń
         </Link>
       </div>
-      {/*<div className="flex space-x-4">
+      <div className="flex space-x-4">
         <div className="border-r-2 border-black p-2">
           <ul>
             <li>
@@ -48,7 +52,7 @@ const Repair = () => {
             </li>
           </ul>
         </div>
-         <div className="border-r-2 border-black p-2">
+        <div className="border-r-2 border-black p-2">
           <ul>
             <li>
               <strong>Typ: </strong> {device.type}
@@ -91,7 +95,7 @@ const Repair = () => {
             </li>
           </ul>
         </div>
-      </div> */}
+      </div>
     </div>
   );
 };

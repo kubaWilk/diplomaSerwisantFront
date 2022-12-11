@@ -21,12 +21,32 @@ const SingleRepairState = (props) => {
     });
   };
 
-  const postRepair = (customer, device, user, status) => {
-    alert("upload, ale z contextu");
+  const postRepair = (id, customer, device, user, status) => {
+    axios
+      .post(`/repairs/${id}`, {
+        id: id,
+        status: status,
+        device: device,
+        customer: customer,
+        user: user,
+      })
+      .catch((e) => console.log(e));
   };
 
-  const patchRepair = (customer, device, user, status) => {
-    alert("upload, ale z contextu");
+  const putRepair = (id, customer, device, user, status) => {
+    axios
+      .put(`/repairs/${id}`, {
+        id: id,
+        status: status,
+        device: device,
+        customer: customer,
+        user: user,
+      })
+      .catch((e) => console.log(e));
+  };
+
+  const removeRepair = (id) => {
+    axios.delete(`/repairs/${id}`).catch((e) => console.log(e));
   };
 
   return (
@@ -35,8 +55,9 @@ const SingleRepairState = (props) => {
         repair: state.repair,
         isLoading: state.isLoading,
         postRepair,
-        patchRepair,
+        putRepair,
         fetchRepairById,
+        removeRepair,
       }}
     >
       {props.children}

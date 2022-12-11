@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import SectionName from "../../layout/SectionName";
 import UploadFiles from "../../layout/UploadFiles";
 import Loading from "../../layout/Loading";
@@ -8,9 +8,11 @@ import SingleRepairContext from "../../../context/SingleRepair/SingleRepairConte
 
 const EditRepair = () => {
   const { id } = useParams();
-  const { isRepairLoading, repair, fetchRepairById } =
+  const { isRepairLoading, repair, fetchRepairById, putRepair, removeRepair } =
     useContext(SingleRepairContext);
   const { customer, user, device } = repair;
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchRepairById(id);
@@ -38,11 +40,6 @@ const EditRepair = () => {
     fillForm();
   }, []);
 
-  const onSubmit = (e) => {
-    e.preventDefault();
-    alert("upload");
-  };
-
   //   Form state
   // Customer state
   const [firstName, setFirstName] = useState("");
@@ -64,6 +61,32 @@ const EditRepair = () => {
   //Repair Status State
   const [repairStatus, setRepairStatus] = useState("W trakcie");
   //End of Form State
+
+  const onSubmit = (e) => {
+    e.preventDefault();
+    putRepair(
+      id,
+      {
+        id: customer.id,
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        street: street,
+        city: city,
+        postCode: postCode,
+      },
+      {
+        id: device.id,
+        manufacturer: manufacturer,
+        model: model,
+        serialNumber: serialNumber,
+        stateAtArrival: stateAtArrival,
+      },
+      user,
+      repairStatus
+    );
+    navigate("/repairs");
+  };
 
   if (isRepairLoading) return <Loading />;
 

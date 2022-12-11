@@ -14,7 +14,6 @@ const RepairItem = ({ item }) => {
     >
       <td>{item.id}</td>
       <td>{item.status}</td>
-      <td>{item.device.type}</td>
       <td>{item.device.manufacturer}</td>
       <td>{item.device.model}</td>
       <td>{item.customer.firstName}</td>
