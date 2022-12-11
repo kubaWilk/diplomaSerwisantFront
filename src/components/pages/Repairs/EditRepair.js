@@ -4,12 +4,12 @@ import SectionName from "../../layout/SectionName";
 import UploadFiles from "../../layout/UploadFiles";
 import Loading from "../../layout/Loading";
 import FormGroup from "./Add/FormGroup";
-import RepairsContext from "../../../context/Repairs/RepairsContext";
+import SingleRepairContext from "../../../context/SingleRepair/SingleRepairContext";
 
 const EditRepair = () => {
   const { id } = useParams();
   const { isRepairLoading, repair, fetchRepairById } =
-    useContext(RepairsContext);
+    useContext(SingleRepairContext);
   const { customer, user, device } = repair;
 
   useEffect(() => {

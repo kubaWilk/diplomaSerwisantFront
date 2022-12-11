@@ -1,4 +1,4 @@
-import { SET_REPAIRS, SET_REPAIR } from "../types";
+import { SET_REPAIRS } from "../types";
 
 const RepairsReducer = (state, action) => {
   switch (action.type) {
@@ -7,12 +7,6 @@ const RepairsReducer = (state, action) => {
         ...state,
         allRepairs: action.payload,
         isLoading: false,
-      };
-    case SET_REPAIR:
-      return {
-        ...state,
-        repair: action.payload,
-        isRepairLoading: false,
       };
     default:
       return { ...state };

@@ -1,22 +1,24 @@
 import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import RepairsContext from "../../../context/Repairs/RepairsContext";
+import SingleRepairContext from "../../../context/SingleRepair/SingleRepairContext";
 import Loading from "../../layout/Loading";
 import SectionName from "../../layout/SectionName";
 import { Link } from "react-router-dom";
 
 const Repair = () => {
   const { id } = useParams();
-  const { isRepairLoading, repair, fetchRepairById } =
-    useContext(RepairsContext);
+
+  const { isLoading, repair, fetchRepairById } =
+    useContext(SingleRepairContext);
 
   const { customer, user, device } = repair;
 
   useEffect(() => {
+    console.log(isLoading);
     fetchRepairById(id);
   }, []);
 
-  if (isRepairLoading) return <Loading />;
+  if (isLoading) return <Loading />;
 
   return (
     <div className="repair-info flex w-full flex-col items-center justify-start">
@@ -35,7 +37,7 @@ const Repair = () => {
           Usuń
         </Link>
       </div>
-      <div className="flex space-x-4">
+      {/*<div className="flex space-x-4">
         <div className="border-r-2 border-black p-2">
           <ul>
             <li>
@@ -46,7 +48,7 @@ const Repair = () => {
             </li>
           </ul>
         </div>
-        <div className="border-r-2 border-black p-2">
+         <div className="border-r-2 border-black p-2">
           <ul>
             <li>
               <strong>Typ: </strong> {device.type}
@@ -89,7 +91,7 @@ const Repair = () => {
             </li>
           </ul>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
