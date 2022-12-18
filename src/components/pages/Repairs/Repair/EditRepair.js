@@ -1,10 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import SectionName from "../../layout/SectionName";
-import UploadFiles from "../../layout/UploadFiles";
-import Loading from "../../layout/Loading";
-import FormGroup from "./Add/FormGroup";
-import SingleRepairContext from "../../../context/SingleRepair/SingleRepairContext";
+import SectionName from "../../../layout/SectionName";
+import UploadFiles from "../../../layout/UploadFiles";
+import Loading from "../../../layout/Loading";
+import FormGroup from "../Add/FormGroup";
+import SingleRepairContext from "../../../../context/SingleRepair/SingleRepairContext";
 
 const EditRepair = () => {
   const { id } = useParams();

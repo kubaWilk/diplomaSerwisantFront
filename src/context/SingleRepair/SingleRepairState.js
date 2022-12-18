@@ -21,10 +21,9 @@ const SingleRepairState = (props) => {
     });
   };
 
-  const postRepair = (id, customer, device, user, status) => {
+  const postRepair = (customer, device, user, status) => {
     axios
-      .post(`/repairs/${id}`, {
-        id: id,
+      .post(`/repairs`, {
         status: status,
         device: device,
         customer: customer,

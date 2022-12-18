@@ -1,8 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import SingleRepairContext from "../../../context/SingleRepair/SingleRepairContext";
-import Loading from "../../layout/Loading";
-import SectionName from "../../layout/SectionName";
+import SingleRepairContext from "../../../../context/SingleRepair/SingleRepairContext";
+import Loading from "../../../layout/Loading";
+import SectionName from "../../../layout/SectionName";
 import { Link } from "react-router-dom";
 
 const Repair = () => {
@@ -21,7 +21,7 @@ const Repair = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="repair-info flex w-full flex-col items-center justify-start">
+    <div className="flex w-full flex-col items-center justify-start">
       <SectionName text={`Naprawa #${id}`} />
       <div className="flex space-x-2">
         <Link
@@ -40,9 +40,15 @@ const Repair = () => {
         >
           Usuń
         </Link>
+        <Link
+          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+          to={`/repairs/${id}/notes`}
+        >
+          Notatki
+        </Link>
       </div>
-      <div className="flex space-x-4">
-        <div className="border-r-2 border-black p-2">
+      <div className="flex w-[90%] h-full flex-col ">
+        <div className="border-b-2 border-gray-200 border-dotted p-2">
           <ul>
             <li>
               <strong>ID:</strong> {repair.id}
@@ -52,7 +58,7 @@ const Repair = () => {
             </li>
           </ul>
         </div>
-        <div className="border-r-2 border-black p-2">
+        <div className="border-b-2 border-gray-200 border-dotted p-2">
           <ul>
             <li>
               <strong>Typ: </strong> {device.type}
@@ -71,7 +77,7 @@ const Repair = () => {
             </li>
           </ul>
         </div>
-        <div>
+        <div className="p-2">
           <ul>
             <li>
               <strong>Imię: </strong>

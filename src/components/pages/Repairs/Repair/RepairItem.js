@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const RepairItem = ({ item }) => {
   const navigate = useNavigate();
@@ -9,7 +10,7 @@ const RepairItem = ({ item }) => {
     <tr
       className="even:bg-gray-100 hover:bg-gray-400"
       onDoubleClick={() => {
-        navigate(item.id);
+        navigate(`/repairs/${item.id}`);
       }}
     >
       <td>{item.id}</td>

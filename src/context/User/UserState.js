@@ -5,6 +5,7 @@ import { LOG_IN_USER, USER_LOGOUT } from "../types";
 import { NO_ACCOUNT, WRONG_PASSWORD } from "../../errorCodes";
 import axios from "axios";
 import AlertContext from "../Alert/AlertContext";
+import Session from "react-session-api";
 
 const UserState = (props) => {
   const initialState = {
@@ -25,6 +26,8 @@ const UserState = (props) => {
           break;
         default:
           //have no idea how to resolve it better
+          sessionStorage.setItem("user", JSON.stringify(a));
+
           dispatch({
             type: LOG_IN_USER,
             payload: a,
@@ -32,6 +35,17 @@ const UserState = (props) => {
           props.loginToggle(true);
       }
     });
+  };
+
+  const checkSession = () => {
+    const user = JSON.parse(sessionStorage.getItem("user"));
+    if (user !== null) {
+      dispatch({
+        type: LOG_IN_USER,
+        payload: user,
+      });
+      props.loginToggle(true);
+    }
   };
 
   const fetchUser = async (login, password) => {
@@ -65,6 +79,7 @@ const UserState = (props) => {
   };
 
   const logout = () => {
+    sessionStorage.removeItem("user");
     dispatch({
       type: USER_LOGOUT,
     });
@@ -88,6 +103,7 @@ const UserState = (props) => {
       value={{
         user: state.user,
         logInAUser,
+        checkSession,
         getRole,
         logout,
       }}

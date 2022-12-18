@@ -6,14 +6,15 @@ import Repairs from "./components/pages/Repairs/Repairs";
 import { Routes, Route } from "react-router-dom";
 import UserState from "./context/User/UserState";
 import LoginPage from "./components/pages/Login/LoginPage";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Customers from "./components/pages/Customers/Customers";
 import Home from "./components/pages/Home/Home";
 import Devices from "./components/pages/Devices/Devices";
 import AdminPanel from "./components/pages/AdminPanel/AdminPanel";
-import Repair from "./components/pages/Repairs/Repair";
+import Repair from "./components/pages/Repairs/Repair/Repair";
 import AddRepair from "./components/pages/Repairs/Add/AddRepair";
-import EditRepair from "./components/pages/Repairs/EditRepair";
+import EditRepair from "./components/pages/Repairs/Repair/EditRepair";
+import Notes from "./components/pages/Repairs/Repair/Notes";
 
 function App() {
   const [loginToggle, setLoginToggle] = useState(false);
@@ -31,6 +32,7 @@ function App() {
               {/* Repairs Routes */}
               <Route exact path="/repairs" element={<Repairs />} />
               <Route exact path="/repairs/:id" element={<Repair />} />
+              <Route exact path="/repairs/:id/notes" element={<Notes />} />
               <Route exact path="/repairs/edit/:id" element={<EditRepair />} />
               <Route exact path="/repairs/new" element={<AddRepair />} />
               {/* Users Routes */}

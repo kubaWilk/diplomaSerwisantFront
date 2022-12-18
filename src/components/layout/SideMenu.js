@@ -54,8 +54,8 @@ const SideMenu = () => {
         <div className="p-2 border-t border-black">
           <div className="flex justify-between flex-col md:flex-row">
             <div className="flex">
-              <div className="flex justify-center items-center w-[40px] h-[40px] rounded-full border border-black">
-                Av
+              <div className="flex justify-center items-center w-[40px] h-[40px] rounded-full border-2 border-black">
+                JW
               </div>
               <div className="flex flex-col ml-2">
                 <h3 className="text-md">{`${user.firstName} ${user.lastName}`}</h3>

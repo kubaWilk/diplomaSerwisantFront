@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import UserContext from "../../../context/User/UserContext";
 import Alert from "../../layout/Alert";
 
@@ -7,6 +7,11 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
 
   const UserContextObj = useContext(UserContext);
+  const { checkSession } = UserContextObj;
+
+  useEffect(() => {
+    checkSession();
+  }, []);
 
   const onSubmit = (e) => {
     e.preventDefault();

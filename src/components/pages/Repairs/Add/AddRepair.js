@@ -1,14 +1,16 @@
 import React from "react";
 import { useState, useContext } from "react";
-import RepairsContext from "../../../../context/Repairs/RepairsContext";
 import SectionName from "../../../layout/SectionName";
 import UploadFiles from "../../../layout/UploadFiles";
 import FormGroup from "./FormGroup";
 import UserContext from "../../../../context/User/UserContext";
+import SingleRepairContext from "../../../../context/SingleRepair/SingleRepairContext";
+import { useNavigate } from "react-router-dom";
 
 const AddRepair = () => {
-  const { addRepair } = useContext(RepairsContext);
+  const { postRepair } = useContext(SingleRepairContext);
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
 
   // Customer state
   const [firstName, setFirstName] = useState("");
@@ -32,19 +34,26 @@ const AddRepair = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    alert("upload");
 
-    const customer = {
-      firstName,
-      lastName,
-      phoneNumber,
-      street,
-      city,
-      postCode,
-    };
-    const device = { manufacturer, model, serialNumber, stateAtArrival };
-
-    addRepair(customer, device, user, repairStatus);
+    postRepair(
+      {
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        street: street,
+        city: city,
+        postCode: postCode,
+      },
+      {
+        manufacturer: manufacturer,
+        model: model,
+        serialNumber: serialNumber,
+        stateAtArrival: stateAtArrival,
+      },
+      user,
+      repairStatus
+    );
+    navigate("/repairs");
   };
 
   return (
