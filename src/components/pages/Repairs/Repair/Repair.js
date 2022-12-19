@@ -1,17 +1,18 @@
-import React, { useContext, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import SingleRepairContext from "../../../../context/SingleRepair/SingleRepairContext";
 import Loading from "../../../layout/Loading";
 import SectionName from "../../../layout/SectionName";
 import { Link } from "react-router-dom";
+import Dialog from "../../../layout/Dialog";
 
 const Repair = () => {
   const { id } = useParams();
-
   const { isLoading, repair, fetchRepairById, removeRepair } =
     useContext(SingleRepairContext);
-
   const { customer, user, device } = repair;
+  const navigate = useNavigate();
+  const [deleteDialogToggle, setDeleteDialogToggle] = useState(false);
 
   useEffect(() => {
     console.log(isLoading);
@@ -22,6 +23,16 @@ const Repair = () => {
 
   return (
     <div className="flex w-full flex-col items-center justify-start">
+      {deleteDialogToggle && (
+        <Dialog
+          prompt={`Czy chcesz usunąć naprawę nr ${repair.id}`}
+          onApprove={() => {
+            removeRepair(id);
+            navigate(-1);
+          }}
+          onCancel={() => setDeleteDialogToggle(false)}
+        />
+      )}
       <SectionName text={`Naprawa #${id}`} />
       <div className="flex space-x-2">
         <Link
@@ -30,16 +41,15 @@ const Repair = () => {
         >
           Edytuj
         </Link>
-        <Link
+        <button
           className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-          to={"/repairs"}
           onClick={(e) => {
-            removeRepair(id);
-            alert("Naprawa usunięta");
+            // removeRepair(id);
+            setDeleteDialogToggle(true);
           }}
         >
           Usuń
-        </Link>
+        </button>
         <Link
           className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
           to={`/repairs/${id}/notes`}
