@@ -123,27 +123,35 @@
   "notes": [
     {
       "id": 1,
-      "repairsID": 1,
+      "repairID": 1,
       "message": "blaa bla bla blab ",
       "createdAt": "23-12-2022 5:12",
       "createdBy": "Jakub Wilk",
       "visibility": "public"
     },
     {
+      "id": 2,
+      "repairID": 1,
+      "message": "blaa bla bla blab ",
+      "createdAt": "23-09-2022 17:34",
+      "createdBy": "Klient",
+      "visibility": "public"
+    },
+    {
       "id": 3,
-      "repairsID": 1,
+      "repairID": 1,
       "message": "blaa bla bla blab ",
       "createdAt": "23-12-2022 5:12",
       "createdBy": "Klient",
       "visibility": "public"
     },
     {
-      "id": 5,
-      "repairsID": 1,
-      "message": "231231blaa bla bla blab ",
-      "createdAt": "23-12-2022 12:54",
-      "createdBy": "Twoja Stara",
-      "visibility": "public"
+      "repairID": 3,
+      "message": "wserdfgsdfghsdfgsdfg",
+      "createdAt": "19-12-2022 00:59",
+      "createdBy": "Jakub Wilk",
+      "visibility": "public",
+      "id": 6
     }
   ]
 }

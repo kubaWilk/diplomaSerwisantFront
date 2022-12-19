@@ -6,11 +6,13 @@ import SectionName from "../../../layout/SectionName";
 import NoteItem from "./NoteItem";
 import Loading from "../../../layout/Loading";
 import { Link } from "react-router-dom";
+import AddNoteModal from "./AddNoteModal";
 
 const Notes = () => {
   const { id } = useParams();
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalToggle, setModalToggle] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +26,17 @@ const Notes = () => {
     getNotes();
   }, []);
 
+  useEffect(() => {
+    const getNotes = async () => {
+      const res = await axios.get("/notes");
+
+      setNotes(res.data);
+      setIsLoading(false);
+    };
+
+    getNotes();
+  }, [modalToggle]);
+
   const removeNote = (note) => {
     axios.delete(`/notes/${note.id}`);
     setNotes(notes.filter((e) => e !== note));
@@ -32,7 +45,7 @@ const Notes = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="w-full h-full flex-col content-between">
+    <div className="w-full h-full flex flex-col justify-between relative">
       <div className="flex w-full flex-col items-center justify-start">
         <SectionName text={`Naprawa #${id}`} />
         <h2 className="uppercase text-xl">Notatki</h2>
@@ -41,11 +54,17 @@ const Notes = () => {
         </Link>
         <div className="flex flex-col w-full items-center space-y-2 mt-3">
           {notes.map((note) => (
-            <NoteItem key={note.id} note={note} onXClick={removeNote} />
+            <NoteItem key={note.id} note={note} onDelete={removeNote} />
           ))}
         </div>
       </div>
-      <div>test</div>
+      <div className="absolute bottom-10 right-10">
+        <i
+          onClick={() => setModalToggle(true)}
+          className="fa-solid fa-circle-plus fa-2x cursor-pointer"
+        ></i>
+      </div>
+      {modalToggle && <AddNoteModal closeToggle={setModalToggle} />}
     </div>
   );
 };
