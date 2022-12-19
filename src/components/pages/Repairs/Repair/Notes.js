@@ -15,26 +15,20 @@ const Notes = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [addNoteDialogToggle, setAddNoteDialogToggle] = useState(false);
   const navigate = useNavigate();
+  const apiCall = `/notes?repairID=${id}`;
+
+  const getNotes = async () => {
+    const res = await axios.get(apiCall);
+
+    setNotes(res.data);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const getNotes = async () => {
-      const res = await axios.get("/notes");
-
-      setNotes(res.data);
-      setIsLoading(false);
-    };
-
     getNotes();
   }, []);
 
   useEffect(() => {
-    const getNotes = async () => {
-      const res = await axios.get("/notes");
-
-      setNotes(res.data);
-      setIsLoading(false);
-    };
-
     getNotes();
   }, [addNoteDialogToggle]);
 
