@@ -122,14 +122,6 @@
   ],
   "notes": [
     {
-      "id": 1,
-      "repairID": 1,
-      "message": "blaa bla bla blab ",
-      "createdAt": "23-12-2022 5:12",
-      "createdBy": "Jakub Wilk",
-      "visibility": "public"
-    },
-    {
       "id": 2,
       "repairID": 1,
       "message": "blaa bla bla blab ",
@@ -147,11 +139,11 @@
     },
     {
       "repairID": 3,
-      "message": "wserdfgsdfghsdfgsdfg",
-      "createdAt": "19-12-2022 00:59",
+      "message": "asdfasdfasdfasdfasdf",
+      "createdAt": "19-12-2022 01:55",
       "createdBy": "Jakub Wilk",
       "visibility": "public",
-      "id": 6
+      "id": 5
     }
   ]
 }

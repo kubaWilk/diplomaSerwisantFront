@@ -7,12 +7,13 @@ import NoteItem from "./NoteItem";
 import Loading from "../../../layout/Loading";
 import { Link } from "react-router-dom";
 import AddNoteModal from "./AddNoteModal";
+import Dialog from "../../../layout/Dialog";
 
 const Notes = () => {
   const { id } = useParams();
   const [notes, setNotes] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [modalToggle, setModalToggle] = useState(false);
+  const [addNoteDialogToggle, setAddNoteDialogToggle] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,7 +36,7 @@ const Notes = () => {
     };
 
     getNotes();
-  }, [modalToggle]);
+  }, [addNoteDialogToggle]);
 
   const removeNote = (note) => {
     axios.delete(`/notes/${note.id}`);
@@ -60,11 +61,13 @@ const Notes = () => {
       </div>
       <div className="absolute bottom-10 right-10">
         <i
-          onClick={() => setModalToggle(true)}
+          onClick={() => setAddNoteDialogToggle(true)}
           className="fa-solid fa-circle-plus fa-2x cursor-pointer"
         ></i>
       </div>
-      {modalToggle && <AddNoteModal closeToggle={setModalToggle} />}
+      {addNoteDialogToggle && (
+        <AddNoteModal closeToggle={setAddNoteDialogToggle} />
+      )}
     </div>
   );
 };

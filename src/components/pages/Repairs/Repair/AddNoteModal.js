@@ -64,13 +64,13 @@ const AddNoteModal = ({ closeToggle }) => {
               <div className="flex space-x-2 justify-center w-full">
                 <button
                   type="submit"
-                  className="font-bold uppercase border-2 px-2 m-2 border-black"
+                  className="font-bold uppercase border-2 px-2 m-2 border-black hover:text-white hover:bg-black duration-200"
                 >
                   Dodaj
                 </button>
                 <button
                   onClick={() => closeToggle(false)}
-                  className="font-bold uppercase border-2 px-2 m-2 border-black"
+                  className="font-bold uppercase border-2 px-2 m-2 border-red-500 hover:text-white hover:bg-red-500 duration-200"
                 >
                   Anuluj
                 </button>
