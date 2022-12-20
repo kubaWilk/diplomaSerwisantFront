@@ -7,7 +7,7 @@ import NoteItem from "./NoteItem";
 import Loading from "../../../layout/Loading";
 import { Link } from "react-router-dom";
 import AddNoteModal from "./AddNoteModal";
-import Dialog from "../../../layout/Dialog";
+import AddButton from "../../../layout/AddButton";
 
 const Notes = () => {
   const { id } = useParams();
@@ -53,12 +53,7 @@ const Notes = () => {
           ))}
         </div>
       </div>
-      <div className="absolute bottom-10 right-10">
-        <i
-          onClick={() => setAddNoteDialogToggle(true)}
-          className="fa-solid fa-circle-plus fa-2x cursor-pointer"
-        ></i>
-      </div>
+      <AddButton onClick={() => setAddNoteDialogToggle(true)} />
       {addNoteDialogToggle && (
         <AddNoteModal closeToggle={setAddNoteDialogToggle} />
       )}

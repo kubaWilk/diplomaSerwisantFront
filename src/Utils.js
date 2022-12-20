@@ -9,4 +9,13 @@ const getDateString = (date) => {
   return `${day}-${month}-${year} ${hours}:${minutes}`;
 };
 
-export { getDateString };
+const translateCostTypes = (type, namesObj) => {
+  const keys = Object.keys(namesObj);
+  const values = Object.values(namesObj);
+
+  for (let i = 0; i < keys.length; i++) {
+    if (keys[i] === type) return values[i];
+  }
+};
+
+export { getDateString, translateCostTypes };

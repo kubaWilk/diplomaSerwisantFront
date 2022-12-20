@@ -56,6 +56,12 @@ const Repair = () => {
         >
           Notatki
         </Link>
+        <Link
+          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+          to={`/repairs/${id}/cost`}
+        >
+          Kosztorys
+        </Link>
       </div>
       <div className="flex w-[90%] h-full flex-col ">
         <div className="border-b-2 border-gray-200 border-dotted p-2">

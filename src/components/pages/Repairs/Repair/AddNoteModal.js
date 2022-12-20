@@ -11,7 +11,8 @@ const AddNoteModal = ({ closeToggle }) => {
   const { id } = useParams();
   const { user } = useContext(UserContext);
 
-  const onSubmit = () => {
+  const onSubmit = (e) => {
+    e.preventDefault();
     axios.post("/notes", {
       repairID: Number(id),
       message: noteMsg,

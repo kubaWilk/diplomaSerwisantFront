@@ -15,6 +15,7 @@ import Repair from "./components/pages/Repairs/Repair/Repair";
 import AddRepair from "./components/pages/Repairs/Add/AddRepair";
 import EditRepair from "./components/pages/Repairs/Repair/EditRepair";
 import Notes from "./components/pages/Repairs/Repair/Notes";
+import Cost from "./components/pages/Repairs/Repair/Cost/Cost";
 
 function App() {
   const [loginToggle, setLoginToggle] = useState(false);
@@ -33,6 +34,7 @@ function App() {
               <Route exact path="/repairs" element={<Repairs />} />
               <Route exact path="/repairs/:id" element={<Repair />} />
               <Route exact path="/repairs/:id/notes" element={<Notes />} />
+              <Route exact path="/repairs/:id/cost" element={<Cost />} />
               <Route exact path="/repairs/edit/:id" element={<EditRepair />} />
               <Route exact path="/repairs/new" element={<AddRepair />} />
               {/* Users Routes */}

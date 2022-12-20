@@ -155,11 +155,41 @@
     },
     {
       "repairID": 2,
-      "message": "fgjfghjkghjkyhgjk",
-      "createdAt": "19-12-2022 02:20",
+      "message": "asdfasdfasdfasdf",
+      "createdAt": "20-12-2022 10:36",
       "createdBy": "Jakub Wilk",
       "visibility": "public",
-      "id": 7
+      "id": 8
+    }
+  ],
+  "costs": [
+    {
+      "id": 1,
+      "repairID": 2,
+      "type": "service",
+      "name": "Wymiana części",
+      "price": "100"
+    },
+    {
+      "id": 2,
+      "repairID": 2,
+      "type": "part",
+      "name": "Ramka matrycy",
+      "price": "100.21"
+    },
+    {
+      "id": 3,
+      "repairID": 2,
+      "type": "service",
+      "name": "Czyszczenie układu chłodzenia",
+      "price": "100.20"
+    },
+    {
+      "repairID": "3",
+      "type": "part",
+      "name": "Ramka matrycy",
+      "price": "50",
+      "id": 6
     }
   ]
 }

@@ -6,7 +6,7 @@ const SideMenu = () => {
   const { logout, user, getRole } = useContext(UserContext);
 
   return (
-    <div className="w-80 flex flex-col justify-between border-r border-gray-400">
+    <div className="min-w-[25%] flex flex-col justify-between border-r border-gray-400 reltive">
       <div className="flex flex-col">
         <NavLink
           to="/"
