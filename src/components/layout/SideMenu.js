@@ -6,7 +6,7 @@ const SideMenu = () => {
   const { logout, user, getRole } = useContext(UserContext);
 
   return (
-    <div className="min-w-[25%] flex flex-col justify-between border-r border-gray-400 reltive">
+    <div className="min-w-[250px] flex flex-col justify-between border-r relative border-gray-400">
       <div className="flex flex-col">
         <NavLink
           to="/"
@@ -51,7 +51,7 @@ const SideMenu = () => {
         </NavLink>
       </div>
       <div>
-        <div className="p-2 border-t border-black">
+        <div className="p-2 border-t border-blackmd:absolute bottom-0 left-0">
           <div className="flex justify-between flex-col md:flex-row">
             <div className="flex">
               <div className="flex justify-center items-center w-[40px] h-[40px] rounded-full border-2 border-black">
