@@ -8,7 +8,7 @@ const RepairItem = ({ item }) => {
 
   return (
     <tr
-      className="even:bg-gray-100 hover:bg-gray-400"
+      className="odd:bg-gray-100 hover:bg-gray-300"
       onDoubleClick={() => {
         navigate(`/repairs/${item.id}`);
       }}
