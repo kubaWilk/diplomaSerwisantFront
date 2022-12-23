@@ -22,12 +22,19 @@ const RepairsState = (props) => {
     });
   };
 
+  const searchRepairs = async (apiString) => {
+    const repairs = await axios.get(`/repairs/${apiString}`);
+
+    console.log(repairs.data);
+  };
+
   return (
     <RepairsContext.Provider
       value={{
         allRepairs: state.allRepairs,
         isLoading: state.isLoading,
         fetchRepairs,
+        searchRepairs,
       }}
     >
       {props.children}

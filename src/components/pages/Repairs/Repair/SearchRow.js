@@ -12,18 +12,15 @@ const SearchRow = ({ searchCall }) => {
   const [lastName, setLastName] = useState("");
 
   const onKeyDown = (e) => {
-    let apiCall = "?";
-
     if (e.key === "Enter") {
-      if (id !== "") apiCall = apiCall + `id=${id}`;
-      if (status !== "") apiCall = apiCall + `&status=${status}`;
-      if (manufacturer !== "")
-        apiCall = apiCall + `&manufacturer=${manufacturer}`;
-      if (model !== "") apiCall = apiCall + `&model=${model}`;
-      if (firstName !== "") apiCall = apiCall + `&firstName=${firstName}`;
-      if (lastName !== "") apiCall = apiCall + `&lastName=${lastName}`;
-
-      searchCall(apiCall);
+      searchCall({
+        id: id,
+        status: status,
+        manufacturer: manufacturer,
+        model: model,
+        firstName: firstName,
+        lastName: lastName,
+      });
     }
   };
 

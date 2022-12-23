@@ -7,7 +7,8 @@ import NavButtons from "./NavButtons";
 import SearchRow from "./Repair/SearchRow";
 
 const Repairs = () => {
-  const { allRepairs, fetchRepairs, isLoading } = useContext(RepairsContext);
+  const { allRepairs, fetchRepairs, searchRepairs, isLoading } =
+    useContext(RepairsContext);
   //that state is only to have a useEffect dependency
   const [searchApiCall, setSearchApiCall] = useState("");
 
@@ -17,13 +18,14 @@ const Repairs = () => {
 
   useEffect(() => {
     if (searchApiCall === "") return;
-    alert(searchApiCall);
+    searchRepairs(searchApiCall);
   }, [searchApiCall]);
 
   if (isLoading) return <div>Loading</div>;
 
-  const searchCall = (apiCall) => {
-    setSearchApiCall(apiCall);
+  const prepareApiCall = (apiCall) => {
+    console.log(apiCall);
+    // setSearchApiCall(apiCall);
   };
 
   return (
@@ -42,7 +44,7 @@ const Repairs = () => {
           </tr>
         </thead>
         <tbody>
-          <SearchRow searchCall={searchCall} />
+          <SearchRow searchCall={prepareApiCall} />
           {allRepairs.map((item) => (
             <RepairItem key={item.id} item={item} />
           ))}
