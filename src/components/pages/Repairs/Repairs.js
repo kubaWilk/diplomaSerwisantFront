@@ -37,7 +37,6 @@ const Repairs = () => {
     });
 
     setSearchApiCall(tempApiString);
-    // console.log(tempApiString);
   };
 
   return (

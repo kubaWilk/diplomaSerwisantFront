@@ -7,7 +7,7 @@ import { Routes, Route } from "react-router-dom";
 import UserState from "./context/User/UserState";
 import LoginPage from "./components/pages/Login/LoginPage";
 import { useEffect, useState } from "react";
-import Customers from "./components/pages/Customers/Customers";
+import Users from "./components/pages/Users/Users";
 import Home from "./components/pages/Home/Home";
 import Devices from "./components/pages/Devices/Devices";
 import AdminPanel from "./components/pages/AdminPanel/AdminPanel";
@@ -38,7 +38,7 @@ function App() {
               <Route exact path="/repairs/edit/:id" element={<EditRepair />} />
               <Route exact path="/repairs/new" element={<AddRepair />} />
               {/* Users Routes */}
-              <Route exact path="/customers" element={<Customers />} />
+              <Route exact path="/users" element={<Users />} />
               <Route exact path="/devices" element={<Devices />} />
               <Route exact path="/admin-panel" element={<AdminPanel />} />
             </Routes>

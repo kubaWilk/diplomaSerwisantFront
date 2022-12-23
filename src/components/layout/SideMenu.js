@@ -26,12 +26,12 @@ const SideMenu = () => {
           Naprawy
         </NavLink>
         <NavLink
-          to="/customers"
+          to="/users"
           className={({ isActive }) =>
             isActive ? "nav-link-active" : "nav-link"
           }
         >
-          Klienci
+          Użytkownicy
         </NavLink>
         <NavLink
           to="/devices"
