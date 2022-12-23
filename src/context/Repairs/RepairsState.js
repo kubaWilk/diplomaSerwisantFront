@@ -25,7 +25,10 @@ const RepairsState = (props) => {
   const searchRepairs = async (apiString) => {
     const repairs = await axios.get(`/repairs/${apiString}`);
 
-    console.log(repairs.data);
+    dispatch({
+      type: SET_REPAIRS,
+      payload: repairs.data,
+    });
   };
 
   return (

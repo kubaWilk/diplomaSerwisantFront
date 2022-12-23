@@ -16,10 +16,10 @@ const SearchRow = ({ searchCall }) => {
       searchCall({
         id: id,
         status: status,
-        manufacturer: manufacturer,
-        model: model,
-        firstName: firstName,
-        lastName: lastName,
+        "device.manufacturer": manufacturer,
+        "device.model": model,
+        "customer.firstName": firstName,
+        "customer.lastName": lastName,
       });
     }
   };

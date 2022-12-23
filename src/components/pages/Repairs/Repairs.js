@@ -24,8 +24,20 @@ const Repairs = () => {
   if (isLoading) return <div>Loading</div>;
 
   const prepareApiCall = (apiCall) => {
-    console.log(apiCall);
-    // setSearchApiCall(apiCall);
+    let tempApiString = "?";
+    const objKeys = Object.keys(apiCall);
+    const objVals = Object.values(apiCall);
+
+    objKeys.forEach((e, i) => {
+      if (objVals[i] !== "" && tempApiString === "?") {
+        tempApiString = tempApiString + `${e}=${objVals[i]}`;
+      } else if (objVals[i] !== "") {
+        tempApiString = tempApiString + `&${e}=${objVals[i]}`;
+      }
+    });
+
+    setSearchApiCall(tempApiString);
+    // console.log(tempApiString);
   };
 
   return (
