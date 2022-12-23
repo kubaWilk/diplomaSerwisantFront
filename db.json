@@ -1,0 +1,195 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "userName": "admin",
+      "password": "admin",
+      "role": "admin",
+      "firstName": "Jakub",
+      "lastName": "Wilk",
+      "phoneNumber": "654654654",
+      "street": "asdfasdf 64/1",
+      "city": "Zielona Góra",
+      "postCode": "00-000"
+    },
+    {
+      "id": 2,
+      "userName": "test",
+      "password": "test",
+      "role": "user",
+      "firstName": "Szymon",
+      "lastName": "Wilk",
+      "phoneNumber": "654654654",
+      "street": "asdfasdf 64/1",
+      "city": "Zielona Góra",
+      "postCode": "00-000"
+    },
+    {
+      "id": 3,
+      "userName": "test2",
+      "password": "test",
+      "role": "customer",
+      "firstName": "Jolanta",
+      "lastName": "Wilk",
+      "phoneNumber": "654654654",
+      "street": "asdfasdf 64/1",
+      "city": "Zielona Góra",
+      "postCode": "00-000"
+    }
+  ],
+  "repairs": [
+    {
+      "id": 2,
+      "status": "W trakcie",
+      "device": {
+        "id": 1,
+        "type": "laptop",
+        "manufacturer": "Lenovo",
+        "model": "Thinkpad L420",
+        "sn": "12340987SDSAOH",
+        "stateAtArrival": "lekkie rysy"
+      },
+      "customer": {
+        "id": 3,
+        "firstName": "Jolanta",
+        "lastName": "Wilk",
+        "phoneNumber": "654654654",
+        "street": "asdfasdf 64/1",
+        "city": "Zielona Góra",
+        "postCode": "00-000"
+      },
+      "user": {
+        "id": 2,
+        "firstName": "Szymon",
+        "lastName": "Wilk"
+      }
+    },
+    {
+      "id": 3,
+      "status": "W trakcie",
+      "device": {
+        "id": 1,
+        "manufacturer": "Lenovo",
+        "model": "Thinkpad L420",
+        "serialNumber": "12340987SDSAOH",
+        "stateAtArrival": "kremówka"
+      },
+      "customer": {
+        "id": 3,
+        "firstName": "Jolanta",
+        "lastName": "Wilk",
+        "phoneNumber": "654654654",
+        "street": "asdfasdf 64/1",
+        "city": "Zielona Góra",
+        "postCode": "00-000"
+      },
+      "user": {
+        "id": 2,
+        "firstName": "Szymon",
+        "lastName": "Wilk"
+      }
+    },
+    {
+      "id": 4,
+      "status": "W trakcie",
+      "device": {
+        "id": 1,
+        "manufacturer": "Lenovo",
+        "model": "Thinkpad L420",
+        "stateAtArrival": "uwalone kremówkami"
+      },
+      "customer": {
+        "id": 3,
+        "firstName": "andrzej",
+        "lastName": "Wilk",
+        "phoneNumber": "654654654",
+        "street": "asdfasdf 64/1",
+        "city": "Zielona Góra",
+        "postCode": "00-000"
+      },
+      "user": {
+        "id": 2,
+        "firstName": "Szymon",
+        "lastName": "Wilk"
+      }
+    }
+  ],
+  "repair-status": [
+    "inProgress",
+    "closed",
+    "waitingForSupplier",
+    "waitingForCustomer"
+  ],
+  "notes": [
+    {
+      "id": 2,
+      "repairID": 1,
+      "message": "blaa bla bla blab ",
+      "createdAt": "23-09-2022 17:34",
+      "createdBy": "Klient",
+      "visibility": "public"
+    },
+    {
+      "id": 3,
+      "repairID": 1,
+      "message": "blaa bla bla blab ",
+      "createdAt": "23-12-2022 5:12",
+      "createdBy": "Klient",
+      "visibility": "public"
+    },
+    {
+      "repairID": 3,
+      "message": "asdfasdfasdfasdfasdf",
+      "createdAt": "19-12-2022 01:55",
+      "createdBy": "Jakub Wilk",
+      "visibility": "public",
+      "id": 5
+    },
+    {
+      "repairID": 4,
+      "message": "coś tam test",
+      "createdAt": "19-12-2022 02:17",
+      "createdBy": "Jakub Wilk",
+      "visibility": "public",
+      "id": 6
+    },
+    {
+      "repairID": 2,
+      "message": "asdfasdfasdfasdf",
+      "createdAt": "20-12-2022 10:36",
+      "createdBy": "Jakub Wilk",
+      "visibility": "public",
+      "id": 8
+    }
+  ],
+  "costs": [
+    {
+      "id": 1,
+      "repairID": 2,
+      "type": "service",
+      "name": "Wymiana części",
+      "price": "100"
+    },
+    {
+      "id": 2,
+      "repairID": 2,
+      "type": "part",
+      "name": "Ramka matrycy",
+      "price": "100.21"
+    },
+    {
+      "id": 3,
+      "repairID": 2,
+      "type": "service",
+      "name": "Czyszczenie układu chłodzenia",
+      "price": "100.20"
+    },
+    {
+      "repairID": "3",
+      "type": "part",
+      "name": "Ramka matrycy",
+      "price": "50",
+      "id": 6
+    }
+  ]
+}

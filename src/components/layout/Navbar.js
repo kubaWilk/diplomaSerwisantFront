@@ -1,28 +1,21 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import Button from "../Button";
+import PropTypes from "prop-types";
 
-const Navbar = ({ sectionName, onLogout }) => {
-  const navigate = useNavigate();
-
+const Navbar = ({ logo }) => {
   return (
-    <nav className="navbar">
-      <h1>{sectionName}</h1>
-      <ul>
-        <li>
-          <Button text="Wróć" style="btn" onClick={() => navigate(-1)} />
-        </li>
-        <li>
-          <Button
-            text="Wyloguj"
-            style="btn"
-            link="/"
-            onClick={() => onLogout()}
-          />
-        </li>
-      </ul>
-    </nav>
+    <div className="flex min-h-[70px] w-full items-center justify-center border-b border-gray-400">
+      <div className="">
+        <h1 className="font-bold text-4xl m-1">{logo}</h1>
+      </div>
+    </div>
   );
+};
+
+Navbar.propTypes = {
+  logo: PropTypes.string.isRequired,
+};
+
+Navbar.defaultProps = {
+  logo: "SerwisantPC",
 };
 
 export default Navbar;
