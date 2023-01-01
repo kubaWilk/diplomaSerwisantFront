@@ -1,10 +1,10 @@
 import React from "react";
 import { useContext, useEffect, useState, Fragment } from "react";
 import RepairsContext from "../../../context/Repairs/RepairsContext";
-import RepairItem from "./Repair/RepairItem";
+import RepairItem from "./RepairItem";
 import SectionName from "../../layout/SectionName";
 import NavButtons from "./NavButtons";
-import SearchRow from "./Repair/SearchRow";
+import RepairsSearchRow from "./RepairsSearchRow";
 import Loading from "../../layout/Loading";
 
 const Repairs = ({ filterId }) => {
@@ -26,12 +26,6 @@ const Repairs = ({ filterId }) => {
     searchRepairs(searchApiCall);
   }, [searchApiCall]);
 
-  const filterById = () => {
-    if (filterId === -1) return;
-  };
-
-  if (isLoading) return <Loading />;
-
   const prepareApiCall = (apiCall) => {
     let tempApiString = "?";
     const objKeys = Object.keys(apiCall);
@@ -47,6 +41,8 @@ const Repairs = ({ filterId }) => {
 
     setSearchApiCall(tempApiString);
   };
+
+  if (isLoading) return <Loading />;
 
   return (
     <div className="flex flex-col w-full flex-start items-center">
@@ -68,7 +64,7 @@ const Repairs = ({ filterId }) => {
           </tr>
         </thead>
         <tbody>
-          <SearchRow searchCall={prepareApiCall} />
+          <RepairsSearchRow searchCall={prepareApiCall} />
           {filterId === -1
             ? allRepairs.map((item) => <RepairItem key={item.id} item={item} />)
             : allRepairs

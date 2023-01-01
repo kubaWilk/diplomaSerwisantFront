@@ -2,6 +2,7 @@ import React, { useContext, useEffect } from "react";
 import UsersContext from "../../../context/Users/UsersContext";
 import Loading from "../../layout/Loading";
 import SectionName from "../../layout/SectionName";
+import UserSearchRow from "./UserSearchRow";
 import UsersItem from "./UsersItem";
 
 const Users = ({ displayOnlyCustomers }) => {
@@ -10,6 +11,7 @@ const Users = ({ displayOnlyCustomers }) => {
 
   useEffect(() => {
     displayOnlyCustomers ? fetchCustomers() : fetchUsers();
+    //eslint-disable-next-line
   }, []);
 
   if (isLoading) return <Loading />;
@@ -32,6 +34,7 @@ const Users = ({ displayOnlyCustomers }) => {
             <th>Nr kontaktowy</th>
           </tr>
         </thead>
+        <UserSearchRow />
         <tbody>
           {users.map((e) => (
             <UsersItem key={e.id} item={e} />

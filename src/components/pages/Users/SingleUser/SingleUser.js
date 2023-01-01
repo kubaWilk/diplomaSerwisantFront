@@ -4,11 +4,13 @@ import SectionName from "../../../layout/SectionName";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loading from "../../../layout/Loading";
+import Dialog from "../../../layout/Dialog";
 
 const SingleUser = () => {
   const { id } = useParams();
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [deleteModalToggle, setDeleteModalToggle] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -20,7 +22,12 @@ const SingleUser = () => {
     };
 
     fetchUser();
+    //eslint-disable-next-line
   }, []);
+
+  const deleteUser = async () => {
+    axios.delete(`/users/${id}`).catch((e) => console.log(e));
+  };
 
   if (isLoading) return <Loading />;
 
@@ -52,12 +59,26 @@ const SingleUser = () => {
         >
           Edytuj
         </Link>
-        <Link
+        <button
           className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-          to={`/user/${id}`}
+          onClick={() => {
+            setDeleteModalToggle(true);
+          }}
         >
           Usuń
-        </Link>
+        </button>
+        {deleteModalToggle && (
+          <Dialog
+            prompt="Czy chcesz usunąć tego użytkownika? Spowoduje to usunięcie powiązanych napraw i urządzeń!"
+            onApprove={() => {
+              deleteUser();
+              setDeleteModalToggle(false);
+            }}
+            onCancel={() => {
+              setDeleteModalToggle(false);
+            }}
+          />
+        )}
       </div>
       <Outlet />
     </div>

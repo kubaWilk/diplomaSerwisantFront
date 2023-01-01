@@ -26,10 +26,12 @@ const Notes = () => {
 
   useEffect(() => {
     getNotes();
+    //eslint-disable-next-line
   }, []);
 
   useEffect(() => {
     getNotes();
+    //eslint-disable-next-line
   }, [addNoteDialogToggle]);
 
   const removeNote = (note) => {
@@ -40,8 +42,8 @@ const Notes = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="w-full h-full flex flex-col justify-between relative">
-      <div className="flex w-full flex-col items-center justify-start">
+    <div className="w-full h-full flex flex-col justify-between">
+      <div className="flex w-full h-full flex-col items-center justify-start">
         <SectionName text={`Naprawa #${id}`} />
         <h2 className="uppercase text-xl">Notatki</h2>
         <Link className="text-sm" onClick={() => navigate(-1)}>

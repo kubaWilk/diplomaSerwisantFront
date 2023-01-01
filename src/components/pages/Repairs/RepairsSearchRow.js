@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const SearchRow = ({ searchCall }) => {
+const RepairsSearchRow = ({ searchCall }) => {
   const inputStyle = "border border-black w-full px-1 rounded-sm";
   const tdStyle = "px-2";
   //state
@@ -90,4 +90,4 @@ const SearchRow = ({ searchCall }) => {
   );
 };
 
-export default SearchRow;
+export default RepairsSearchRow;

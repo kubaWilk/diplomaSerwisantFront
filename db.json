@@ -189,5 +189,25 @@
       "price": "50",
       "id": 6
     }
+  ],
+  "devices": [
+    {
+      "id": 1,
+      "manufacturer": "Lenovo",
+      "model": "Thinkpad L420",
+      "serialNumber": "12340987SDSAOH",
+      "stateAtArrival": "lekkie rysy",
+      "owner": "Jolanta Wilk",
+      "ownerID": 3
+    },
+    {
+      "id": 2,
+      "manufacturer": "Asus",
+      "model": "Zenbook 2137",
+      "serialNumber": "12340987SDSAOH",
+      "stateAtArrival": "lekkie rysy",
+      "owner": "Andrzej Wilk",
+      "ownerID": 4
+    }
   ]
 }

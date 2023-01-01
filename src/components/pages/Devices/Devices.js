@@ -1,9 +1,12 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
+import SectionName from "../../layout/SectionName";
 
 const Devices = () => {
   return (
-    <div className="flex w-full justify-center">
-      <h1 className="mt-4 text-4xl text-black">Urządzenia</h1>
+    <div className="flex w-full flex-col justify-start items-center">
+      <SectionName text="Urządzenia" />
+      <Outlet />
     </div>
   );
 };

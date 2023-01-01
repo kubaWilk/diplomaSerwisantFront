@@ -5,9 +5,10 @@
   "workbench.colorTheme": "Visual Studio Dark",
   "workbench.editor.decorations.colors": true,
   "workbench.preferredDarkColorTheme": "Visual Studio Dark",
-  "workbench.iconTheme": "vs-minimal",
+  "workbench.iconTheme": "vscode-icons",
   "workbench.statusBar.visible": true,
   "workbench.tips.enabled": false,
   "workbench.view.alwaysShowHeaderActions": false,
-  "breadcrumbs.enabled": true
+  "breadcrumbs.enabled": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode"
 }
