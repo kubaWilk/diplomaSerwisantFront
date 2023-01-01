@@ -43,10 +43,9 @@
       "status": "W trakcie",
       "device": {
         "id": 1,
-        "type": "laptop",
         "manufacturer": "Lenovo",
         "model": "Thinkpad L420",
-        "sn": "12340987SDSAOH",
+        "serialNumber": "12340987SDSAOH",
         "stateAtArrival": "lekkie rysy"
       },
       "customer": {
@@ -71,7 +70,6 @@
         "id": 1,
         "manufacturer": "Lenovo",
         "model": "Thinkpad L420",
-        "serialNumber": "12340987SDSAOH",
         "stateAtArrival": "kremówka"
       },
       "customer": {
@@ -99,7 +97,7 @@
         "stateAtArrival": "uwalone kremówkami"
       },
       "customer": {
-        "id": 3,
+        "id": 4,
         "firstName": "andrzej",
         "lastName": "Wilk",
         "phoneNumber": "654654654",
@@ -146,20 +144,20 @@
       "id": 5
     },
     {
-      "repairID": 4,
-      "message": "coś tam test",
-      "createdAt": "19-12-2022 02:17",
-      "createdBy": "Jakub Wilk",
-      "visibility": "public",
-      "id": 6
-    },
-    {
       "repairID": 2,
       "message": "asdfasdfasdfasdf",
       "createdAt": "20-12-2022 10:36",
       "createdBy": "Jakub Wilk",
       "visibility": "public",
       "id": 8
+    },
+    {
+      "repairID": 2,
+      "message": "fgvhfdghfghjk",
+      "createdAt": "29-12-2022 20:24",
+      "createdBy": "Jakub Wilk",
+      "visibility": "public",
+      "id": 9
     }
   ],
   "costs": [

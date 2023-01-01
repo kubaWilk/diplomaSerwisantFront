@@ -1,19 +1,24 @@
 import React from "react";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, Fragment } from "react";
 import RepairsContext from "../../../context/Repairs/RepairsContext";
 import RepairItem from "./Repair/RepairItem";
 import SectionName from "../../layout/SectionName";
 import NavButtons from "./NavButtons";
 import SearchRow from "./Repair/SearchRow";
+import Loading from "../../layout/Loading";
 
-const Repairs = () => {
+const Repairs = ({ filterId }) => {
   const { allRepairs, fetchRepairs, searchRepairs, isLoading } =
     useContext(RepairsContext);
   //that state is only to have a useEffect dependency
   const [searchApiCall, setSearchApiCall] = useState("");
 
   useEffect(() => {
-    fetchRepairs();
+    const test = async () => {
+      await fetchRepairs();
+    };
+
+    test();
   }, []);
 
   useEffect(() => {
@@ -21,7 +26,11 @@ const Repairs = () => {
     searchRepairs(searchApiCall);
   }, [searchApiCall]);
 
-  if (isLoading) return <div>Loading</div>;
+  const filterById = () => {
+    if (filterId === -1) return;
+  };
+
+  if (isLoading) return <Loading />;
 
   const prepareApiCall = (apiCall) => {
     let tempApiString = "?";
@@ -41,8 +50,12 @@ const Repairs = () => {
 
   return (
     <div className="flex flex-col w-full flex-start items-center">
-      <SectionName text="Naprawy" />
-      <NavButtons />
+      {filterId === -1 && (
+        <Fragment>
+          <SectionName text="Naprawy" />
+          <NavButtons />
+        </Fragment>
+      )}
       <table className="w-[90%] text-center repair-table">
         <thead>
           <tr>
@@ -56,13 +69,19 @@ const Repairs = () => {
         </thead>
         <tbody>
           <SearchRow searchCall={prepareApiCall} />
-          {allRepairs.map((item) => (
-            <RepairItem key={item.id} item={item} />
-          ))}
+          {filterId === -1
+            ? allRepairs.map((item) => <RepairItem key={item.id} item={item} />)
+            : allRepairs
+                .filter((repair) => repair.customer.id === filterId)
+                .map((repair) => <RepairItem key={repair.id} item={repair} />)}
         </tbody>
       </table>
     </div>
   );
+};
+
+Repairs.defaultProps = {
+  filterId: -1,
 };
 
 export default Repairs;

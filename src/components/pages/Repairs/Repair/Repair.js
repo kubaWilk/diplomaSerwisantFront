@@ -15,7 +15,6 @@ const Repair = () => {
   const [deleteDialogToggle, setDeleteDialogToggle] = useState(false);
 
   useEffect(() => {
-    console.log(isLoading);
     fetchRepairById(id);
   }, []);
 

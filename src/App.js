@@ -16,6 +16,11 @@ import AddRepair from "./components/pages/Repairs/Add/AddRepair";
 import EditRepair from "./components/pages/Repairs/Repair/EditRepair";
 import Notes from "./components/pages/Repairs/Repair/Notes";
 import Cost from "./components/pages/Repairs/Repair/Cost/Cost";
+import SingleUser from "./components/pages/Users/SingleUser/SingleUser";
+import UserSummary from "./components/pages/Users/SingleUser/UserSummary";
+import UserRepairs from "./components/pages/Users/SingleUser/UserRepairs";
+import UserDevices from "./components/pages/Users/SingleUser/UserDevices";
+import EditUser from "./components/pages/Users/SingleUser/EditUser";
 
 function App() {
   const [loginToggle, setLoginToggle] = useState(false);
@@ -29,7 +34,7 @@ function App() {
             <SideMenu />
             <Routes>
               {/* Main route */}
-              <Route exact path="/" element={<Home />} />
+              <Route index element={<Home />} />
               {/* Repairs Routes */}
               <Route exact path="/repairs" element={<Repairs />} />
               <Route exact path="/repairs/:id" element={<Repair />} />
@@ -39,6 +44,21 @@ function App() {
               <Route exact path="/repairs/new" element={<AddRepair />} />
               {/* Users Routes */}
               <Route exact path="/users" element={<Users />} />
+              <Route exact path="/user/" element={<SingleUser />}>
+                <Route exact path="/user/:id" element={<UserSummary />} />
+                <Route
+                  exact
+                  path="/user/:id/repairs"
+                  element={<UserRepairs />}
+                />
+                <Route
+                  exact
+                  path="/user/:id/devices"
+                  element={<UserDevices />}
+                />
+                <Route exact path="/user/:id/edit" element={<EditUser />} />
+              </Route>
+
               <Route exact path="/devices" element={<Devices />} />
               <Route exact path="/admin-panel" element={<AdminPanel />} />
             </Routes>

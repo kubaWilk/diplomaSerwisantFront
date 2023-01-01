@@ -5,7 +5,6 @@ import { LOG_IN_USER, USER_LOGOUT } from "../types";
 import { NO_ACCOUNT, WRONG_PASSWORD } from "../../errorCodes";
 import axios from "axios";
 import AlertContext from "../Alert/AlertContext";
-import Session from "react-session-api";
 
 const UserState = (props) => {
   const initialState = {
