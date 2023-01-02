@@ -28,7 +28,9 @@ const AddCostModal = ({ closeToggle }) => {
   };
 
   const dataCheck = () => {
-    const priceRegex = new RegExp("^[0-9]*$");
+    // const priceRegex = new RegExp("^[0-9]*$");
+    //prettier-ignore
+    const priceRegex = new RegExp("(\[0-9]+(\.\[0-9]{1,2})?)");
 
     if ((costName === null) | (costName === "")) {
       setAlert("Nazwa nie może być pusta!");

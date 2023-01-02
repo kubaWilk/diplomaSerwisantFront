@@ -5,25 +5,31 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import Loading from "../../../layout/Loading";
 import Dialog from "../../../layout/Dialog";
+import EditUser from "./EditUser";
 
 const SingleUser = () => {
   const { id } = useParams();
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [deleteModalToggle, setDeleteModalToggle] = useState(false);
+  const [editToggle, setEditToggle] = useState(false);
+
+  const fetchUser = async () => {
+    const res = await axios.get(`/users/${id}`);
+
+    setUser(res.data);
+    setIsLoading(false);
+  };
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = await axios.get(`/users/${id}`);
-
-      setUser(res.data);
-      setIsLoading(false);
-      console.log(user);
-    };
-
     fetchUser();
     //eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    fetchUser();
+    //eslint-disable-next-line
+  }, [editToggle]);
 
   const deleteUser = async () => {
     axios.delete(`/users/${id}`).catch((e) => console.log(e));
@@ -53,12 +59,13 @@ const SingleUser = () => {
         >
           Urządzenia
         </Link>
-        <Link
+        <button
+          onClick={() => setEditToggle(true)}
           className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-          to={`/user/${id}/edit`}
         >
           Edytuj
-        </Link>
+        </button>
+        {editToggle && <EditUser toggle={setEditToggle} userData={user} />}
         <button
           className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
           onClick={() => {

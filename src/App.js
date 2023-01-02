@@ -51,6 +51,7 @@ function App() {
                 <Route
                   exact
                   path="/user/:id/repairs"
+                  key="/user/:id/repairs"
                   element={<UserRepairs />}
                 />
                 <Route
@@ -58,7 +59,6 @@ function App() {
                   path="/user/:id/devices"
                   element={<DevicesTable />}
                 />
-                <Route exact path="/user/:id/edit" element={<EditUser />} />
               </Route>
 
               <Route exact path="/devices" element={<Devices />}>
