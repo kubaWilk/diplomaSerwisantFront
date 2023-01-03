@@ -19,8 +19,7 @@ import Cost from "./components/pages/Repairs/Repair/Cost/Cost";
 import SingleUser from "./components/pages/Users/SingleUser/SingleUser";
 import UserSummary from "./components/pages/Users/SingleUser/UserSummary";
 import UserRepairs from "./components/pages/Users/SingleUser/UserRepairs";
-import UserDevices from "./components/pages/Users/SingleUser/UserDevices";
-import EditUser from "./components/pages/Users/SingleUser/EditUser";
+import EditUserModal from "./components/pages/Users/SingleUser/EditUserModal";
 import SingleDevice from "./components/pages/Devices/SingleDevice/SingleDevice";
 import DevicesTable from "./components/pages/Devices/DevicesTable";
 
@@ -46,18 +45,22 @@ function App() {
               <Route exact path="/repairs/new" element={<AddRepair />} />
               {/* Users Routes */}
               <Route exact path="/users" element={<Users />} />
-              <Route exact path="/user/" element={<SingleUser />}>
+              <Route exact path="/user" element={<SingleUser />}>
                 <Route exact path="/user/:id" element={<UserSummary />} />
                 <Route
                   exact
                   path="/user/:id/repairs"
-                  key="/user/:id/repairs"
                   element={<UserRepairs />}
                 />
                 <Route
                   exact
                   path="/user/:id/devices"
                   element={<DevicesTable />}
+                />
+                <Route
+                  exact
+                  path="/user/:id/edit"
+                  element={<EditUserModal />}
                 />
               </Route>
 

@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from "react";
 import { Link, Outlet } from "react-router-dom";
 import SectionName from "../../../layout/SectionName";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import axios from "axios";
 import Loading from "../../../layout/Loading";
 import Dialog from "../../../layout/Dialog";
-import EditUser from "./EditUser";
+import EditUserModal from "./EditUserModal";
 
 const SingleUser = () => {
   const { id } = useParams();
+  const location = useLocation();
   const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
   const [deleteModalToggle, setDeleteModalToggle] = useState(false);
@@ -59,13 +60,19 @@ const SingleUser = () => {
         >
           Urządzenia
         </Link>
-        <button
+        <Link
+          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+          to={`/user/${id}/edit`}
+        >
+          Edytuj
+        </Link>
+        {/* <button
           onClick={() => setEditToggle(true)}
           className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
         >
           Edytuj
-        </button>
-        {editToggle && <EditUser toggle={setEditToggle} userData={user} />}
+        </button> */}
+        {editToggle && <EditUserModal toggle={setEditToggle} userData={user} />}
         <button
           className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
           onClick={() => {
@@ -87,7 +94,7 @@ const SingleUser = () => {
           />
         )}
       </div>
-      <Outlet />
+      <Outlet key={location.pathname} />
     </div>
   );
 };
