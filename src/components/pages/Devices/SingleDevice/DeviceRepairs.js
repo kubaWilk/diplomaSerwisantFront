@@ -2,9 +2,9 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import Repairs from "../../Repairs/Repairs";
 
-const UserRepairs = () => {
+const DeviceRepairs = () => {
   const { id } = useParams();
-  return <Repairs filterUserId={Number.parseInt(id)} />;
+  return <Repairs filterDeviceID={Number.parseInt(id)} />;
 };
 
-export default UserRepairs;
+export default DeviceRepairs;

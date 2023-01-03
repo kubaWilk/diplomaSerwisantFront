@@ -7,7 +7,7 @@ import NavButtons from "./NavButtons";
 import RepairsSearchRow from "./RepairsSearchRow";
 import Loading from "../../layout/Loading";
 
-const Repairs = ({ filterId }) => {
+const Repairs = ({ filterUserId, filterDeviceID }) => {
   const { allRepairs, fetchRepairs, searchRepairs, isLoading } =
     useContext(RepairsContext);
   //that state is only to have a useEffect dependency
@@ -42,11 +42,48 @@ const Repairs = ({ filterId }) => {
     setSearchApiCall(tempApiString);
   };
 
+  const checkUseCase = () => {
+    if (filterUserId === -1 && filterDeviceID === -1)
+      return useCases.allRepairs;
+    else if (filterUserId !== -1 && filterDeviceID === -1)
+      return useCases.userReparis;
+    else if (filterUserId === -1 && filterDeviceID !== -1)
+      return useCases.deviceRepairs;
+    else return useCases.invalid;
+  };
+
+  const renderUseCase = () => {
+    switch (checkUseCase()) {
+      case useCases.allRepairs: {
+        return allRepairs.map((item) => (
+          <RepairItem key={item.id} item={item} />
+        ));
+      }
+      case useCases.userReparis: {
+        return allRepairs
+          .filter((repair) => repair.customer.id === filterUserId)
+          .map((repair) => <RepairItem key={repair.id} item={repair} />);
+      }
+      case useCases.deviceRepairs: {
+        return allRepairs
+          .filter((repair) => repair.device.id === filterDeviceID)
+          .map((repair) => <RepairItem key={repair.id} item={repair} />);
+      }
+    }
+  };
+
+  const useCases = {
+    allRepairs: "allRepairs",
+    userReparis: "userRepairs",
+    deviceRepairs: "deviceRepairs",
+    invalid: "invalid",
+  };
+
   if (isLoading) return <Loading />;
 
   return (
     <div className="flex flex-col w-full flex-start items-center">
-      {filterId === -1 && (
+      {filterUserId === -1 && filterDeviceID === -1 && (
         <Fragment>
           <SectionName text="Naprawy" />
           <NavButtons />
@@ -65,11 +102,10 @@ const Repairs = ({ filterId }) => {
         </thead>
         <tbody>
           <RepairsSearchRow searchCall={prepareApiCall} />
-          {filterId === -1
-            ? allRepairs.map((item) => <RepairItem key={item.id} item={item} />)
-            : allRepairs
-                .filter((repair) => repair.customer.id === filterId)
-                .map((repair) => <RepairItem key={repair.id} item={repair} />)}
+          {console.log(
+            `filterUserID: ${filterUserId} filterDeviceID: ${filterDeviceID} useCase: ${checkUseCase()}`
+          )}
+          {renderUseCase()}
         </tbody>
       </table>
     </div>
@@ -77,7 +113,8 @@ const Repairs = ({ filterId }) => {
 };
 
 Repairs.defaultProps = {
-  filterId: -1,
+  filterUserId: -1,
+  filterDeviceID: -1,
 };
 
 export default Repairs;
