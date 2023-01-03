@@ -22,6 +22,7 @@ import UserRepairs from "./components/pages/Users/SingleUser/UserRepairs";
 import EditUserModal from "./components/pages/Users/SingleUser/EditUserModal";
 import SingleDevice from "./components/pages/Devices/SingleDevice/SingleDevice";
 import DevicesTable from "./components/pages/Devices/DevicesTable";
+import DeviceSummary from "./components/pages/Devices/SingleDevice/DeviceSummary";
 
 function App() {
   const [loginToggle, setLoginToggle] = useState(false);
@@ -66,7 +67,13 @@ function App() {
 
               <Route exact path="/devices" element={<Devices />}>
                 <Route exact path="/devices" element={<DevicesTable />} />
-                <Route exact path="/devices/:id" element={<SingleDevice />} />
+                <Route exact path="/devices/:id" element={<SingleDevice />}>
+                  <Route
+                    exact
+                    path="/devices/:id/summary"
+                    element={<DeviceSummary />}
+                  />
+                </Route>
               </Route>
 
               <Route exact path="/admin-panel" element={<AdminPanel />} />

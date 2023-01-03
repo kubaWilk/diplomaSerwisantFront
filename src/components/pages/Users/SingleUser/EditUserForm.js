@@ -49,7 +49,7 @@ const EditUserForm = ({ userData }) => {
       setAlert("Nieprawidłowe miasto");
     else {
       const postUser = {
-        // ...userData,
+        ...userData,
         id: Number.parseInt(id),
         firstName: firstName,
         lastName: lastName,
