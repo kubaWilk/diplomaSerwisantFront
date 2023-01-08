@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Link, Outlet } from "react-router-dom";
 import SectionName from "../../../layout/SectionName";
 import { useParams, useLocation } from "react-router-dom";
@@ -6,6 +6,7 @@ import axios from "axios";
 import Loading from "../../../layout/Loading";
 import Dialog from "../../../layout/Dialog";
 import EditUserModal from "./EditUserModal";
+import UserContext from "../../../../context/User/UserContext";
 
 const SingleUser = () => {
   const { id } = useParams();
@@ -14,6 +15,8 @@ const SingleUser = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [deleteModalToggle, setDeleteModalToggle] = useState(false);
   const [editToggle, setEditToggle] = useState(false);
+
+  const { isAdmin } = useContext(UserContext);
 
   const fetchUser = async () => {
     const res = await axios.get(`/users/${id}`);
@@ -73,14 +76,16 @@ const SingleUser = () => {
           Edytuj
         </button> */}
         {editToggle && <EditUserModal toggle={setEditToggle} userData={user} />}
-        <button
-          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-          onClick={() => {
-            setDeleteModalToggle(true);
-          }}
-        >
-          Usuń
-        </button>
+        {isAdmin() && (
+          <button
+            className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+            onClick={() => {
+              setDeleteModalToggle(true);
+            }}
+          >
+            Usuń
+          </button>
+        )}
         {deleteModalToggle && (
           <Dialog
             prompt="Czy chcesz usunąć tego użytkownika? Spowoduje to usunięcie powiązanych napraw i urządzeń!"

@@ -9,7 +9,7 @@ const AddNoteModal = ({ closeToggle }) => {
   const [noteMsg, setNoteMsg] = useState("");
   const [noteType, setNoteType] = useState("public");
   const { id } = useParams();
-  const { user } = useContext(UserContext);
+  const { user, isCustomer } = useContext(UserContext);
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -39,29 +39,31 @@ const AddNoteModal = ({ closeToggle }) => {
                 className="border-2 rounded-md p-1 w-[20rem]"
                 onChange={(e) => setNoteMsg(e.target.value)}
               />
-              <div
-                className="flex space-x-2 justify-center"
-                onChange={(e) => setNoteType(e.target.value)}
-              >
-                <label htmlFor="public">
-                  <input
-                    type="radio"
-                    value="public"
-                    name="public"
-                    checked={noteType === "public"}
-                  />
-                  Publiczna
-                </label>
-                <label htmlFor="private">
-                  <input
-                    type="radio"
-                    value="private"
-                    name="private"
-                    checked={noteType === "private"}
-                  />{" "}
-                  Wewnętrzna
-                </label>
-              </div>
+              {!isCustomer() && (
+                <div
+                  className="flex space-x-2 justify-center"
+                  onChange={(e) => setNoteType(e.target.value)}
+                >
+                  <label htmlFor="public">
+                    <input
+                      type="radio"
+                      value="public"
+                      name="public"
+                      checked={noteType === "public"}
+                    />
+                    Publiczna
+                  </label>
+                  <label htmlFor="private">
+                    <input
+                      type="radio"
+                      value="private"
+                      name="private"
+                      checked={noteType === "private"}
+                    />{" "}
+                    Wewnętrzna
+                  </label>
+                </div>
+              )}
               <div className="flex space-x-2 justify-center w-full">
                 <button
                   type="submit"

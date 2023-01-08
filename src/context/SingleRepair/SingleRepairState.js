@@ -44,13 +44,15 @@ const SingleRepairState = (props) => {
       .catch((e) => console.log(e));
   };
 
-  const costAccept = (id) => {
+  const postCostAccept = (id) => {
+    //TODO: Check if bug (no repair state after refresh) persists after API's implemented
     axios
       .put(`/repairs/${id}`, {
         ...state.repair,
         costAccepted: true,
       })
-      .catch((e) => console.log(e));
+      .catch((e) => console.log(e))
+      .finally(fetchRepairById(id));
   };
 
   const removeRepair = (id) => {
@@ -65,7 +67,7 @@ const SingleRepairState = (props) => {
         postRepair,
         putRepair,
         fetchRepairById,
-        costAccept,
+        postCostAccept,
         removeRepair,
       }}
     >

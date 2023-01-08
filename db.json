@@ -41,7 +41,6 @@
     {
       "id": 2,
       "status": "W trakcie",
-      "costAccepted": false,
       "device": {
         "id": 1,
         "manufacturer": "Lenovo",
@@ -161,6 +160,14 @@
       "createdBy": "Jakub Wilk",
       "visibility": "public",
       "id": 9
+    },
+    {
+      "repairID": 2,
+      "message": "to jest wewnętrzna notatka\n",
+      "createdAt": "8-1-2023 19:03",
+      "createdBy": "Jakub Wilk",
+      "visibility": "private",
+      "id": 10
     }
   ],
   "costs": [

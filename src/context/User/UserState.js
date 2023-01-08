@@ -99,7 +99,6 @@ const UserState = (props) => {
   };
 
   const isCustomer = () => state.user.role === "customer";
-  const isUser = () => state.user.role === "user";
   const isAdmin = () => state.user.role === "admin";
 
   return (
@@ -111,7 +110,6 @@ const UserState = (props) => {
         getRole,
         logout,
         isCustomer,
-        isUser,
         isAdmin,
       }}
     >

@@ -1,8 +1,12 @@
 import React, { useState } from "react";
+import { useContext } from "react";
+import UserContext from "../../../../../context/User/UserContext";
 import { translateCostTypes } from "../../../../../Utils";
 import Dialog from "../../../../layout/Dialog";
 
 const CostItem = ({ cost, onRemove }) => {
+  const { isCustomer } = useContext(UserContext);
+
   const costTypesToNames = {
     service: "Usługa",
     part: "Część",
@@ -26,12 +30,14 @@ const CostItem = ({ cost, onRemove }) => {
       <div className="flex flex-col items-start w-full">
         <div className="flex w-full justify-between items-center relative">
           <div className="flex flex-col">
-            <div className="absolute top-0 right-1">
-              <i
-                onClick={() => setDeleteCostToggle(true)}
-                className="fa-regular fa-trash-can text-black cursor-pointer"
-              ></i>
-            </div>
+            {!isCustomer() && (
+              <div className="absolute top-0 right-1">
+                <i
+                  onClick={() => setDeleteCostToggle(true)}
+                  className="fa-regular fa-trash-can text-black cursor-pointer"
+                ></i>
+              </div>
+            )}
             <div>
               <p>
                 <strong>Typ: </strong>

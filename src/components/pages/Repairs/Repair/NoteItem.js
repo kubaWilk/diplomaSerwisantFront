@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+import React, { Fragment, useState } from "react";
+import { useContext } from "react";
+import UserContext from "../../../../context/User/UserContext";
 import Dialog from "../../../layout/Dialog";
 
 const NoteItem = ({ note, onDelete }) => {
   const { message, createdAt, createdBy } = note;
   const [deleteDialogToggle, setDeleteDialogToggle] = useState(false);
+  const { isCustomer } = useContext(UserContext);
+
+  const isNotePublic = () => {
+    return note.visibility === "public";
+  };
+
+  const publicStyles =
+    "w-[80%] rounded-md min-height-[20px] p-2 border-2 border-black relative";
+  const privateStyles =
+    "w-[80%] rounded-md min-height-[20px] p-2 border-2 border-black relative bg-gray-300";
+
+  if (isCustomer() && !isNotePublic()) return <></>;
 
   return (
-    <div className="w-[80%] rounded-md min-height-[20px] p-2 border-2 border-black relative">
+    <div className={isNotePublic() ? publicStyles : privateStyles}>
       {deleteDialogToggle && (
         <Dialog
           prompt="Czy chcesz usunąć notatkę?"
@@ -17,20 +31,23 @@ const NoteItem = ({ note, onDelete }) => {
           onCancel={() => setDeleteDialogToggle(false)}
         />
       )}
-      <div
-        className="top-0 right-1 absolute cursor-pointer"
-        onClick={() => {
-          setDeleteDialogToggle(true);
-        }}
-      >
-        <i className="fa-regular fa-trash-can text-black"></i>
-      </div>
+      {!isCustomer() && (
+        <div
+          className="top-0 right-1 absolute cursor-pointer"
+          onClick={() => {
+            setDeleteDialogToggle(true);
+          }}
+        >
+          <i className="fa-regular fa-trash-can text-black"></i>
+        </div>
+      )}
       <p>{message}</p>
       <div className="w-full border-b border-black border-dotted my-1"></div>
-      <div className="flex">
+      <div className="flex justify-between">
         <p className="text-sm">
           Dodana: {createdAt} przez {createdBy}{" "}
         </p>
+        {!isNotePublic() && <p className="text-sm uppercase">wewnętrzna</p>}
       </div>
     </div>
   );

@@ -1,10 +1,13 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { useContext } from "react";
 import { useParams, Link, Outlet, useNavigate } from "react-router-dom";
+import UserContext from "../../../../context/User/UserContext";
 import Dialog from "../../../layout/Dialog";
 
 const SingleDevice = () => {
   const { id } = useParams();
+  const { isAdmin, isCustomer } = useContext(UserContext);
   const navigate = useNavigate();
   const [deleteModalToggle, setDeleteModalToggle] = useState(false);
 
@@ -29,15 +32,19 @@ const SingleDevice = () => {
         <Link className="button" to={`/devices/${id}/repairs`}>
           Powiązane naprawy
         </Link>
-        <button
-          onClick={(e) => navigate(`/devices/${id}/edit`)}
-          className="button"
-        >
-          Edytuj
-        </button>
-        <button onClick={() => setDeleteModalToggle(true)} className="button">
-          Usuń
-        </button>
+        {!isCustomer() && (
+          <button
+            onClick={(e) => navigate(`/devices/${id}/edit`)}
+            className="button"
+          >
+            Edytuj
+          </button>
+        )}
+        {isAdmin() && (
+          <button onClick={() => setDeleteModalToggle(true)} className="button">
+            Usuń
+          </button>
+        )}
         {deleteModalToggle && (
           <Dialog
             prompt="Czy chcesz usunąć urządzenie? Spowoduje to usuniecie powiązanych z nim napraw."

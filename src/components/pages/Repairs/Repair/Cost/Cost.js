@@ -9,14 +9,16 @@ import AddCostModal from "./AddCostModal";
 import Dialog from "../../../../layout/Dialog";
 import { useContext } from "react";
 import SingleRepairContext from "../../../../../context/SingleRepair/SingleRepairContext";
+import UserContext from "../../../../../context/User/UserContext";
 
 const Cost = () => {
   const { id } = useParams();
-  const { repair, costAccept: fetchCostAccepted } =
+  const { repair, fetchRepairById, postCostAccept } =
     useContext(SingleRepairContext);
   const { costAccepted } = repair;
   const apiCall = `/costs?repairID=${id}`;
   const navigate = useNavigate();
+  const { isCustomer } = useContext(UserContext);
   //state
   const [costs, setCosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +34,7 @@ const Cost = () => {
   };
 
   useEffect(() => {
+    fetchRepairById(id);
     getCosts();
   }, []);
 
@@ -54,7 +57,7 @@ const Cost = () => {
   };
 
   const submitAcceptCost = () => {
-    fetchCostAccepted(id);
+    postCostAccept(id);
     setApproveCostModalToggle(false);
   };
 
@@ -84,12 +87,14 @@ const Cost = () => {
         <p className="text-2xl uppercase font-bold absolute bottom-10 left-10">
           Łącznie: {summedPrice} zł
         </p>
-        <button
-          onClick={() => setApproveCostModalToggle(true)}
-          className="button"
-        >
-          Zaakceptuj koszt
-        </button>
+        {!costAccepted && isCustomer() && (
+          <button
+            onClick={() => setApproveCostModalToggle(true)}
+            className="button"
+          >
+            Zaakceptuj koszt
+          </button>
+        )}
         {approveCostModalToggle && (
           <Dialog
             prompt="Czy chcesz zaakceptować kosztorys naprawy? Decyzja jest nieodwracalna i zobowiązuje do zapłaty za naprawę."
@@ -97,7 +102,7 @@ const Cost = () => {
             onCancel={() => setApproveCostModalToggle(false)}
           />
         )}
-        <AddButton onClick={() => setAddCostToggle(true)} />
+        {!isCustomer() && <AddButton onClick={() => setAddCostToggle(true)} />}
       </div>
     </div>
   );
