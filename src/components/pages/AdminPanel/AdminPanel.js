@@ -1,9 +1,18 @@
 import React from "react";
+import { Link, Outlet } from "react-router-dom";
+import SectionName from "../../layout/SectionName";
 
 const AdminPanel = () => {
   return (
-    <div className="flex w-full justify-center">
-      <h1 className="mt-4 text-4xl text-black">Panel administratora</h1>
+    <div className="flex flex-col items-center justify-start w-full">
+      <SectionName text="Panel administratora" />
+      <div className="flex space-x-2">
+        <Link className="button" to="/admin-panel/users">
+          Zarządzaj użytkownikami
+        </Link>
+        <Link className="button">Statystyki</Link>
+      </div>
+      <Outlet />
     </div>
   );
 };

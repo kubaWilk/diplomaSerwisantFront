@@ -6,9 +6,15 @@ import CostItem from "./CostItem";
 import axios from "axios";
 import Loading from "../../../../layout/Loading";
 import AddCostModal from "./AddCostModal";
+import Dialog from "../../../../layout/Dialog";
+import { useContext } from "react";
+import SingleRepairContext from "../../../../../context/SingleRepair/SingleRepairContext";
 
 const Cost = () => {
   const { id } = useParams();
+  const { repair, costAccept: fetchCostAccepted } =
+    useContext(SingleRepairContext);
+  const { costAccepted } = repair;
   const apiCall = `/costs?repairID=${id}`;
   const navigate = useNavigate();
   //state
@@ -16,6 +22,7 @@ const Cost = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [summedPrice, setSummedPrice] = useState(0);
   const [addCostToggle, setAddCostToggle] = useState(false);
+  const [approveCostModalToggle, setApproveCostModalToggle] = useState(false);
 
   const getCosts = async () => {
     const res = await axios.get(apiCall);
@@ -46,6 +53,11 @@ const Cost = () => {
     setCosts(costs.filter((e) => e !== cost));
   };
 
+  const submitAcceptCost = () => {
+    fetchCostAccepted(id);
+    setApproveCostModalToggle(false);
+  };
+
   if (isLoading) return <Loading />;
 
   return (
@@ -53,6 +65,15 @@ const Cost = () => {
       {addCostToggle && <AddCostModal closeToggle={setAddCostToggle} />}
       <SectionName text={`Naprawa #${id}`} />
       <h2 className="uppercase text-xl">Kosztorys</h2>
+      <div className="flex space-x-2">
+        <p>Status:</p>
+        {costAccepted ? (
+          <p className="text-green-400">zaakceptowany przez klienta</p>
+        ) : (
+          <p className="text-red-600">niezaakceptowany</p>
+        )}
+      </div>
+
       <Link className="text-sm" onClick={() => navigate(-1)}>
         Powrót
       </Link>
@@ -61,8 +82,21 @@ const Cost = () => {
           <CostItem key={item.id} cost={item} onRemove={removeCostItem} />
         ))}
         <p className="text-2xl uppercase font-bold absolute bottom-10 left-10">
-          Łącznie: {summedPrice}zł
+          Łącznie: {summedPrice} zł
         </p>
+        <button
+          onClick={() => setApproveCostModalToggle(true)}
+          className="button"
+        >
+          Zaakceptuj koszt
+        </button>
+        {approveCostModalToggle && (
+          <Dialog
+            prompt="Czy chcesz zaakceptować kosztorys naprawy? Decyzja jest nieodwracalna i zobowiązuje do zapłaty za naprawę."
+            onApprove={() => submitAcceptCost()}
+            onCancel={() => setApproveCostModalToggle(false)}
+          />
+        )}
         <AddButton onClick={() => setAddCostToggle(true)} />
       </div>
     </div>

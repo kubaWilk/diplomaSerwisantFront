@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 
-const UserSearchRow = ({ searchCall }) => {
+const UserSearchRow = ({ searchCall, displayCust }) => {
   const [userID, setUserID] = useState("");
+  const [userRole, setUserRole] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [city, setCity] = useState("");
@@ -36,6 +37,20 @@ const UserSearchRow = ({ searchCall }) => {
           placeholder="ID"
         />
       </td>
+
+      {!displayCust && (
+        <td className={tdStyle}>
+          <input
+            type="text"
+            onKeyDown={(e) => onKeyDown(e)}
+            value={userRole}
+            onChange={(e) => setUserRole(e.target.value)}
+            className={inputStyle}
+            placeholder="Rola"
+          />
+        </td>
+      )}
+
       <td className={tdStyle}>
         <input
           type="text"

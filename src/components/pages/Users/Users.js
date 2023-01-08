@@ -17,16 +17,17 @@ const Users = ({ displayOnlyCustomers }) => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="flex flex-col w-full flex-start items-center">
-      {displayOnlyCustomers ? (
-        <SectionName text="Klienci" />
-      ) : (
-        <SectionName text="Użytkownicy" />
-      )}
+    <div className="flex flex-col items-center justify-start w-full">
+      {displayOnlyCustomers && <SectionName text="Klienci" />}
+
+      <p className="text-xs">
+        Aby zobaczyć szczegóły, kliknij podwójnie na wybranej pozycji w tabeli
+      </p>
       <table className="w-[90%] text-center repair-table">
         <thead>
           <tr>
             <th>ID</th>
+            {!displayOnlyCustomers && <th>Rola</th>}
             <th>Imię</th>
             <th>Nazwisko</th>
             <th>Miejscowość</th>
@@ -34,10 +35,10 @@ const Users = ({ displayOnlyCustomers }) => {
             <th>Nr kontaktowy</th>
           </tr>
         </thead>
-        <UserSearchRow />
+        <UserSearchRow displayCust={displayOnlyCustomers} />
         <tbody>
           {users.map((e) => (
-            <UsersItem key={e.id} item={e} />
+            <UsersItem key={e.id} displayCust={displayOnlyCustomers} item={e} />
           ))}
         </tbody>
       </table>

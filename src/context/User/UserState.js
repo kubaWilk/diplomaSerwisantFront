@@ -97,6 +97,11 @@ const UserState = (props) => {
         return "Role";
     }
   };
+
+  const isCustomer = () => state.user.role === "customer";
+  const isUser = () => state.user.role === "user";
+  const isAdmin = () => state.user.role === "admin";
+
   return (
     <UserContext.Provider
       value={{
@@ -105,6 +110,9 @@ const UserState = (props) => {
         checkSession,
         getRole,
         logout,
+        isCustomer,
+        isUser,
+        isAdmin,
       }}
     >
       {props.children}

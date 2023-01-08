@@ -41,6 +41,7 @@
     {
       "id": 2,
       "status": "W trakcie",
+      "costAccepted": false,
       "device": {
         "id": 1,
         "manufacturer": "Lenovo",
@@ -65,6 +66,7 @@
     {
       "id": 3,
       "status": "W trakcie",
+      "costAccepted": false,
       "device": {
         "id": 1,
         "manufacturer": "Lenovo",
@@ -89,6 +91,7 @@
     {
       "id": 4,
       "status": "W trakcie",
+      "costAccepted": false,
       "device": {
         "id": 1,
         "manufacturer": "Lenovo",
@@ -115,7 +118,8 @@
     "inProgress",
     "closed",
     "waitingForSupplier",
-    "waitingForCustomer"
+    "waitingForCustomer",
+    "costAccepted"
   ],
   "notes": [
     {
@@ -165,35 +169,40 @@
       "repairID": 2,
       "type": "service",
       "name": "Wymiana części",
-      "price": "100"
+      "price": "100",
+      "accepted": "false"
     },
     {
       "id": 2,
       "repairID": 2,
       "type": "part",
       "name": "Ramka matrycy",
-      "price": "100.21"
+      "price": "100.21",
+      "accepted": "false"
     },
     {
       "id": 3,
       "repairID": 2,
       "type": "service",
       "name": "Czyszczenie układu chłodzenia",
-      "price": "100.20"
+      "price": "100.20",
+      "accepted": "false"
     },
     {
       "repairID": "3",
       "type": "part",
       "name": "Ramka matrycy",
       "price": "50",
-      "id": 6
+      "id": 6,
+      "accepted": "false"
     },
     {
       "repairID": "3",
       "type": "service",
       "name": "asdf",
       "price": "123.2",
-      "id": 7
+      "id": 7,
+      "accepted": "false"
     }
   ],
   "devices": [

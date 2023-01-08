@@ -89,6 +89,9 @@ const Repairs = ({ filterUserId, filterDeviceID }) => {
           <NavButtons />
         </Fragment>
       )}
+      <p className="text-xs">
+        Aby zobaczyć szczegóły naprawy kliknij podwójnie na pozycji w tabeli
+      </p>
       <table className="w-[90%] text-center repair-table">
         <thead>
           <tr>

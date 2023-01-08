@@ -1,10 +1,10 @@
 import React, { useContext } from "react";
 import { NavLink } from "react-router-dom";
 import UserContext from "../../context/User/UserContext";
+import UserBar from "./UserBar";
 
 const SideMenu = () => {
-  const { logout, user, getRole } = useContext(UserContext);
-
+  const { isCustomer } = useContext(UserContext);
   return (
     <div className="min-w-[250px] md:h-screen flex flex-col justify-between border-r relative border-gray-400">
       <div className="flex flex-col">
@@ -25,14 +25,16 @@ const SideMenu = () => {
         >
           Naprawy
         </NavLink>
-        <NavLink
-          to="/users"
-          className={({ isActive }) =>
-            isActive ? "nav-link-active" : "nav-link"
-          }
-        >
-          Klienci
-        </NavLink>
+        {isCustomer && (
+          <NavLink
+            to="/users"
+            className={({ isActive }) =>
+              isActive ? "nav-link-active" : "nav-link"
+            }
+          >
+            Klienci
+          </NavLink>
+        )}
         <NavLink
           to="/devices"
           className={({ isActive }) =>
@@ -51,25 +53,7 @@ const SideMenu = () => {
         </NavLink>
       </div>
       <div>
-        <div className="p-2 border-t border-blackmd:absolute bottom-0 left-0">
-          <div className="flex justify-between flex-col md:flex-row">
-            <div className="flex">
-              <div className="flex justify-center items-center w-[40px] h-[40px] rounded-full border-2 border-black">
-                JW
-              </div>
-              <div className="flex flex-col ml-2">
-                <h3 className="text-md">{`${user.firstName} ${user.lastName}`}</h3>
-                <p className="text-xs">{getRole()}</p>
-              </div>
-            </div>
-            <button
-              className="px-2 mt-2 md:m-0 py-[3px] border-2 border-black font-bold hover:text-white hover:bg-black duration-100"
-              onClick={logout}
-            >
-              Wyloguj
-            </button>
-          </div>
-        </div>
+        <UserBar />
       </div>
     </div>
   );

@@ -44,6 +44,15 @@ const SingleRepairState = (props) => {
       .catch((e) => console.log(e));
   };
 
+  const costAccept = (id) => {
+    axios
+      .put(`/repairs/${id}`, {
+        ...state.repair,
+        costAccepted: true,
+      })
+      .catch((e) => console.log(e));
+  };
+
   const removeRepair = (id) => {
     axios.delete(`/repairs/${id}`).catch((e) => console.log(e));
   };
@@ -56,6 +65,7 @@ const SingleRepairState = (props) => {
         postRepair,
         putRepair,
         fetchRepairById,
+        costAccept,
         removeRepair,
       }}
     >

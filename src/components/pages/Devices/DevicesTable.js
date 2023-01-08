@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import Loading from "../../layout/Loading";
 import DevicesSearchRow from "./DevicesSearchRow";
@@ -30,21 +30,26 @@ const DevicesTable = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <table className="text-center repair-table w-[90%]">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Producent</th>
-          <th>Model</th>
-          <th>Nr seryjny:</th>
-          <th>Właściciel</th>
-        </tr>
-      </thead>
-      <DevicesSearchRow />
-      {allDevices.map((device) => (
-        <DeviceItem item={device} />
-      ))}
-    </table>
+    <Fragment>
+      <p className="text-xs">
+        Aby zobaczyć szczegóły, kliknij podwójnie na wybranej pozycji w tabeli
+      </p>
+      <table className="text-center repair-table w-[90%]">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Producent</th>
+            <th>Model</th>
+            <th>Nr seryjny:</th>
+            <th>Właściciel</th>
+          </tr>
+        </thead>
+        <DevicesSearchRow />
+        {allDevices.map((device) => (
+          <DeviceItem item={device} />
+        ))}
+      </table>
+    </Fragment>
   );
 };
 

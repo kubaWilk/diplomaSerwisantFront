@@ -23,28 +23,19 @@ const SingleDevice = () => {
   return (
     <div className="flex flex-col items-center justify-start w-full">
       <div className="flex space-x-2">
-        <Link
-          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-          to={`/devices/${id}/summary`}
-        >
+        <Link className="button" to={`/devices/${id}/summary`}>
           Podsumowanie
         </Link>
-        <Link
-          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-          to={`/devices/${id}/repairs`}
-        >
+        <Link className="button" to={`/devices/${id}/repairs`}>
           Powiązane naprawy
         </Link>
         <button
           onClick={(e) => navigate(`/devices/${id}/edit`)}
-          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+          className="button"
         >
           Edytuj
         </button>
-        <button
-          onClick={() => setDeleteModalToggle(true)}
-          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-        >
+        <button onClick={() => setDeleteModalToggle(true)} className="button">
           Usuń
         </button>
         {deleteModalToggle && (

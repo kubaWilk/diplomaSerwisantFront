@@ -6,6 +6,7 @@ const CostItem = ({ cost, onRemove }) => {
   const costTypesToNames = {
     service: "Usługa",
     part: "Część",
+    servicePart: "Częśc + usługa",
   };
 
   const [deleteCostToggle, setDeleteCostToggle] = useState(false);
@@ -42,7 +43,7 @@ const CostItem = ({ cost, onRemove }) => {
             </div>
           </div>
           <div className="flex mr-2 min-w-[10vw]">
-            <p className="font-bold text-lg uppercase">{cost.price}zł</p>
+            <p className="font-bold text-lg uppercase">{cost.price} zł</p>
           </div>
         </div>
         <div className="border border-gray-200 border-dotted w-full"></div>

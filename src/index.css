@@ -27,3 +27,11 @@ td {
 .form-group {
   @apply flex flex-col items-center w-full p-2 rounded-lg;
 }
+
+.button {
+  @apply text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4;
+}
+
+.button-lg {
+  @apply p-10 text-2xl text-black border-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200;
+}
