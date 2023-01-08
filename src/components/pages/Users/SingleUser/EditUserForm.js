@@ -14,7 +14,7 @@ const EditUserForm = ({ userData }) => {
   const [city, setCity] = useState(userData.city);
 
   const { setAlert } = useContext(AlertContext);
-  const { id } = useParams();
+  // const { id } = useParams();
 
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ const EditUserForm = ({ userData }) => {
     "border-2 border-gray-400 outline-black rounded-md p-1 px-5";
 
   const onSubmit = (e) => {
-    // e.preventDefault();
+    e.preventDefault();
 
     //prettier-ignore
     const phoneNumberRegex = new RegExp("^[\+]?([0-9]{2})?([0-9]{9,12})$");
@@ -50,7 +50,7 @@ const EditUserForm = ({ userData }) => {
     else {
       const postUser = {
         ...userData,
-        id: Number.parseInt(id),
+        id: Number.parseInt(userData.id),
         firstName: firstName,
         lastName: lastName,
         phoneNumber: phoneNumber,
@@ -59,7 +59,7 @@ const EditUserForm = ({ userData }) => {
         postCode: postCode,
       };
       axios
-        .put(`/users/${id}`, postUser)
+        .put(`/users/${userData.id}`, postUser)
         .catch((e) => console.log(e))
         .finally(navigate(-1));
     }

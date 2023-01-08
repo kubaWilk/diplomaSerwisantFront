@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import EditUserForm from "./EditUserForm";
 import Loading from "../../../layout/Loading";
 import { useParams } from "react-router-dom";
 import axios from "axios";
+import UserContext from "../../../../context/User/UserContext";
 
 const EditUserModal = () => {
+  const { user } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState({});
   const { id } = useParams();
@@ -16,7 +18,9 @@ const EditUserModal = () => {
       setIsLoading(false);
     };
 
-    fetchUser();
+    if (id === undefined) {
+      setUserData(user);
+    } else fetchUser();
     //eslint-disable-next-line
   }, []);
 
