@@ -77,6 +77,14 @@ const UserState = (props) => {
     else if (!doesAccountExist) return NO_ACCOUNT;
   };
 
+  const updateUserById = async (id) => {
+    const res = await axios.get(`/users/${id}`);
+    dispatch({
+      type: LOG_IN_USER,
+      payload: res.data,
+    });
+  };
+
   const logout = () => {
     sessionStorage.removeItem("user");
     dispatch({
@@ -106,6 +114,7 @@ const UserState = (props) => {
       value={{
         user: state.user,
         logInAUser,
+        updateUserById,
         checkSession,
         getRole,
         logout,

@@ -67,7 +67,13 @@ function App() {
                   element={<EditUserModal />}
                 />
               </Route>
-              <Route exact path="/user/self/about" element={<UserPanel />} />
+              <Route exact path="/user/self/about" element={<UserPanel />}>
+                <Route
+                  exact
+                  path="/user/self/about/edit"
+                  element={<EditUserModal />}
+                />
+              </Route>
 
               <Route exact path="/devices" element={<Devices />}>
                 <Route exact path="/devices" element={<DevicesTable />} />

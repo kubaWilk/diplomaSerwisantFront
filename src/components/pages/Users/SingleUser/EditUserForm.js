@@ -4,6 +4,7 @@ import AlertContext from "../../../../context/Alert/AlertContext";
 import Alert from "../../../layout/Alert";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import UserContext from "../../../../context/User/UserContext";
 
 const EditUserForm = ({ userData }) => {
   const [firstName, setFirstName] = useState(userData.firstName);
@@ -14,6 +15,7 @@ const EditUserForm = ({ userData }) => {
   const [city, setCity] = useState(userData.city);
 
   const { setAlert } = useContext(AlertContext);
+  const { updateUserById } = useContext(UserContext);
   // const { id } = useParams();
 
   const navigate = useNavigate();
@@ -61,7 +63,10 @@ const EditUserForm = ({ userData }) => {
       axios
         .put(`/users/${userData.id}`, postUser)
         .catch((e) => console.log(e))
-        .finally(navigate(-1));
+        .finally(() => {
+          updateUserById(userData.id);
+          navigate(-1);
+        });
     }
   };
   return (

@@ -20,6 +20,7 @@ const EditUserModal = () => {
 
     if (id === undefined) {
       setUserData(user);
+      setIsLoading(false);
     } else fetchUser();
     //eslint-disable-next-line
   }, []);
