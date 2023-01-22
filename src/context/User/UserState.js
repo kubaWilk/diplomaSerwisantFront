@@ -2,9 +2,9 @@ import React, { useContext, useReducer } from "react";
 import UserContext from "./UserContext";
 import UserReducer from "./UserReducer";
 import { LOG_IN_USER, USER_LOGOUT } from "../types";
-import { NO_ACCOUNT, WRONG_PASSWORD } from "../../errorCodes";
 import axios from "axios";
 import AlertContext from "../Alert/AlertContext";
+import { Config } from "../../config";
 
 const UserState = (props) => {
   const initialState = {
@@ -12,28 +12,38 @@ const UserState = (props) => {
   };
 
   const [state, dispatch] = useReducer(UserReducer, initialState);
-  const AlertContextObj = useContext(AlertContext);
+  const { setAlert } = useContext(AlertContext);
 
-  const logInAUser = (login, password) => {
-    fetchUser(login, password).then((a) => {
-      switch (a) {
-        case WRONG_PASSWORD:
-          AlertContextObj.setAlert("Nieprawidłowe hasło");
-          break;
-        case NO_ACCOUNT:
-          AlertContextObj.setAlert("Nieprawidłowe dane logowania");
-          break;
-        default:
-          //have no idea how to resolve it better
-          sessionStorage.setItem("user", JSON.stringify(a));
+  const logInAUser = async (login, password) => {
+    await axios
+      .post(`${Config.apiUrl}/api/auth/local`, {
+        identifier: login,
+        password: password,
+      })
+      .then((response) => {
+        const { data } = response;
 
-          dispatch({
-            type: LOG_IN_USER,
-            payload: a,
-          });
-          props.loginToggle(true);
-      }
-    });
+        const parsedUser = {
+          ...data.user,
+          role: data.user.inAppRole,
+          jwt: data.jwt,
+        };
+
+        sessionStorage.setItem("user", JSON.stringify(parsedUser));
+
+        dispatch({
+          type: LOG_IN_USER,
+          payload: parsedUser,
+        });
+
+        props.loginToggle(true);
+      })
+      .catch((error) => {
+        const errorName = error.response.data.error.name;
+        if (errorName === "ValidationError") {
+          setAlert("Błędne dane logowania.");
+        }
+      });
   };
 
   const checkSession = () => {
@@ -47,34 +57,12 @@ const UserState = (props) => {
     }
   };
 
-  const fetchUser = async (login, password) => {
-    //TODO: Refactor after API's done
-
-    //get all users
-    const res = axios.get("/users");
-    const users = (await res).data;
-
-    let isPasswordWrong = false;
-    let doesAccountExist = true;
-
-    for (let i = 0; i < users.length; i++) {
-      const user = users[i];
-
-      if (login === user.userName) {
-        if (password === user.password) {
-          isPasswordWrong = false;
-          doesAccountExist = true;
-          return user;
-        } else {
-          isPasswordWrong = true;
-        }
-      } else {
-        doesAccountExist = false;
-      }
-    }
-
-    if (isPasswordWrong) return WRONG_PASSWORD;
-    else if (!doesAccountExist) return NO_ACCOUNT;
+  const updateUserById = async (id) => {
+    const res = await axios.get(`/users/${id}`);
+    dispatch({
+      type: LOG_IN_USER,
+      payload: res.data,
+    });
   };
 
   const logout = () => {
@@ -106,6 +94,7 @@ const UserState = (props) => {
       value={{
         user: state.user,
         logInAUser,
+        updateUserById,
         checkSession,
         getRole,
         logout,

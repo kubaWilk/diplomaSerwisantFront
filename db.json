@@ -65,12 +65,11 @@
     {
       "id": 3,
       "status": "W trakcie",
-      "costAccepted": false,
       "device": {
         "id": 1,
         "manufacturer": "Lenovo",
         "model": "Thinkpad L420",
-        "stateAtArrival": "kremówka"
+        "stateAtArrival": "ślady zużycia"
       },
       "customer": {
         "id": 3,
@@ -90,12 +89,11 @@
     {
       "id": 4,
       "status": "W trakcie",
-      "costAccepted": false,
       "device": {
         "id": 1,
         "manufacturer": "Lenovo",
         "model": "Thinkpad L420",
-        "stateAtArrival": "uwalone kremówkami"
+        "stateAtArrival": "ślady zużycia"
       },
       "customer": {
         "id": 4,

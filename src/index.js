@@ -9,6 +9,11 @@ import AlertState from "./context/Alert/AlertState";
 import UsersState from "./context/Users/UsersState";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
+
+// if (module.hot) {
+//   module.hot.accept();
+// }
+
 root.render(
   <React.StrictMode>
     <BrowserRouter>

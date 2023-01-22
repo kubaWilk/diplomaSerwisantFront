@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import SectionName from "../../../layout/SectionName";
 
 const UserPanel = () => {
@@ -8,9 +8,14 @@ const UserPanel = () => {
       <SectionName text="Ustawienia konta" />
       <div className="w-full h-full flex items-center justify-center">
         <div className="flex space-x-5">
-          <Link className="button-lg">Zmień dane konta</Link>
-          <Link className="button-lg">Zmień hasło</Link>
+          <Link className="button-lg" to="/user/self/about/edit">
+            Zmień dane konta
+          </Link>
+          <Link className="button-lg" to="/user/self/about/password-change">
+            Zmień hasło
+          </Link>
         </div>
+        <Outlet />
       </div>
     </div>
   );
