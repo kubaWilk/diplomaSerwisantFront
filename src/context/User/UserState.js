@@ -1,10 +1,11 @@
 import React, { useContext, useReducer } from "react";
+import axios from "axios";
 import UserContext from "./UserContext";
 import UserReducer from "./UserReducer";
-import { LOG_IN_USER, USER_LOGOUT } from "../types";
-import axios from "axios";
 import AlertContext from "../Alert/AlertContext";
 import { Config } from "../../config";
+import { SUCCESS } from "../../statusCodes";
+import { LOG_IN_USER, USER_LOGOUT } from "../types";
 
 const UserState = (props) => {
   const initialState = {
@@ -21,21 +22,7 @@ const UserState = (props) => {
         password: password,
       })
       .then((response) => {
-        const { data } = response;
-
-        const parsedUser = {
-          ...data.user,
-          role: data.user.inAppRole,
-          jwt: data.jwt,
-        };
-
-        sessionStorage.setItem("user", JSON.stringify(parsedUser));
-
-        dispatch({
-          type: LOG_IN_USER,
-          payload: parsedUser,
-        });
-
+        setUser(response.data);
         props.loginToggle(true);
       })
       .catch((error) => {
@@ -44,6 +31,31 @@ const UserState = (props) => {
           setAlert("Błędne dane logowania.");
         }
       });
+  };
+
+  const setUser = (data, jwt) => {
+    const parsedUser = parseUserData(data, jwt);
+    sessionStorage.setItem("user", JSON.stringify(parsedUser));
+
+    dispatch({
+      type: LOG_IN_USER,
+      payload: parsedUser,
+    });
+  };
+
+  const parseUserData = (data, jwt) => {
+    if (jwt === undefined) {
+      return {
+        ...data.user,
+        role: data.user.inAppRole,
+        jwt: data.jwt,
+      };
+    } else
+      return {
+        ...data,
+        role: data.inAppRole,
+        jwt: jwt,
+      };
   };
 
   const checkSession = () => {
@@ -57,12 +69,21 @@ const UserState = (props) => {
     }
   };
 
-  const updateUserById = async (id) => {
-    const res = await axios.get(`/users/${id}`);
-    dispatch({
-      type: LOG_IN_USER,
-      payload: res.data,
-    });
+  const updateUser = async (userState, updateData) => {
+    const result = await axios
+      .put(`${Config.apiUrl}/api/users/${userState.id}`, updateData, {
+        headers: {
+          Authorization: `Bearer ${userState.jwt}`,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setUser(res.data, userState.jwt);
+        return SUCCESS;
+      })
+      .catch((e) => console.log(e));
+
+    return result;
   };
 
   const logout = () => {
@@ -94,7 +115,7 @@ const UserState = (props) => {
       value={{
         user: state.user,
         logInAUser,
-        updateUserById,
+        updateUser,
         checkSession,
         getRole,
         logout,

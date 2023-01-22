@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext, Fragment } from "react";
-import { useParams } from "react-router-dom";
+import React, { useState, useContext, Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import AlertContext from "../../../../context/Alert/AlertContext";
 import Alert from "../../../layout/Alert";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import UserContext from "../../../../context/User/UserContext";
+import { SUCCESS } from "../../../../statusCodes";
 
 const EditUserForm = ({ userData }) => {
   const [firstName, setFirstName] = useState(userData.firstName);
@@ -15,7 +14,7 @@ const EditUserForm = ({ userData }) => {
   const [city, setCity] = useState(userData.city);
 
   const { setAlert } = useContext(AlertContext);
-  const { updateUserById } = useContext(UserContext);
+  const { updateUser } = useContext(UserContext);
   // const { id } = useParams();
 
   const navigate = useNavigate();
@@ -50,9 +49,7 @@ const EditUserForm = ({ userData }) => {
     else if (!cityRegex.test(city) || city === "")
       setAlert("Nieprawidłowe miasto");
     else {
-      const postUser = {
-        ...userData,
-        id: Number.parseInt(userData.id),
+      const updateData = {
         firstName: firstName,
         lastName: lastName,
         phoneNumber: phoneNumber,
@@ -60,13 +57,12 @@ const EditUserForm = ({ userData }) => {
         city: city,
         postCode: postCode,
       };
-      axios
-        .put(`/users/${userData.id}`, postUser)
-        .catch((e) => console.log(e))
-        .finally(() => {
-          updateUserById(userData.id);
-          navigate(-1);
-        });
+
+      const doRequest = async () => {
+        if ((await updateUser(userData, updateData)) === SUCCESS) navigate(-1);
+      };
+
+      doRequest();
     }
   };
   return (
