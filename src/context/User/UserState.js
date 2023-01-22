@@ -65,14 +65,6 @@ const UserState = (props) => {
     });
   };
 
-  const updateUserById = async (id) => {
-    const res = await axios.get(`/users/${id}`);
-    dispatch({
-      type: LOG_IN_USER,
-      payload: res.data,
-    });
-  };
-
   const logout = () => {
     sessionStorage.removeItem("user");
     dispatch({
