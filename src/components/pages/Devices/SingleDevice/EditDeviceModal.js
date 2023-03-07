@@ -1,18 +1,30 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Loading from "../../../layout/Loading";
 import EditDeviceForm from "./EditDeviceForm";
+import UserContext from "../../../../context/User/UserContext";
+import { Config } from "../../../../config";
 
 const EditDeviceModal = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [deviceData, setDeviceData] = useState({});
 
   const { id } = useParams();
+  const {
+    user: { jwt: token },
+  } = useContext(UserContext);
 
   useEffect(() => {
     const fetchDevice = async () => {
-      const res = await axios.get(`/devices/${id}`);
+      const res = await axios.get(
+        `${Config.apiUrl}/api/devices/${id}?populate=*`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       setDeviceData(res.data);
       setIsLoading(false);
     };

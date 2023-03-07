@@ -6,7 +6,7 @@ import UserBar from "./UserBar";
 const SideMenu = () => {
   const { isCustomer, isAdmin } = useContext(UserContext);
   return (
-    <div className="min-w-[250px] md:h-screen flex flex-col justify-between border-r relative border-gray-400">
+    <div className="min-w-[250px] h-[100vh] sticky top-0 left-0 flex flex-col justify-between border-r relative border-gray-400">
       <div className="flex flex-col">
         <NavLink
           to="/"

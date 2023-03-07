@@ -6,7 +6,7 @@ import { BrowserRouter } from "react-router-dom";
 import RepairsState from "./context/Repairs/RepairsState";
 import SingleRepairState from "./context/SingleRepair/SingleRepairState";
 import AlertState from "./context/Alert/AlertState";
-import UsersState from "./context/Users/UsersState";
+import UserState from "./context/User/UserState";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -17,15 +17,15 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <UsersState>
-        <AlertState>
+      <AlertState>
+        <UserState>
           <RepairsState>
             <SingleRepairState>
               <App />
             </SingleRepairState>
           </RepairsState>
-        </AlertState>
-      </UsersState>
+        </UserState>
+      </AlertState>
     </BrowserRouter>
   </React.StrictMode>
 );

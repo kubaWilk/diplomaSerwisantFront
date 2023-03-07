@@ -1,23 +1,33 @@
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import UserContext from "../../../../context/User/UserContext";
 import Loading from "../../../layout/Loading";
 
 const UserSummary = () => {
   const { id } = useParams();
-  const [user, setUser] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [data, setData] = useState({
+    id: 0,
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    city: "",
+    street: "",
+    postCode: "",
+  });
+
+  const { getUserById } = useContext(UserContext);
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const res = await axios.get(`/users/${id}`);
+    const fetchData = async () => {
+      const result = await getUserById(id);
 
-      setUser(res.data);
-      setIsLoading(false);
-      console.log(id);
+      if (result !== false) {
+        setData(result);
+        setIsLoading(false);
+      }
     };
-
-    fetchUser();
+    fetchData();
   }, []);
 
   if (isLoading) return <Loading />;
@@ -27,34 +37,34 @@ const UserSummary = () => {
       <ul>
         <li>
           <strong>ID: </strong>
-          {user.id}
+          {data.id}
         </li>
         <li>
           <strong>Imię: </strong>
-          {user.firstName}
+          {data.firstName}
         </li>
         <li>
           <strong>Nazwisko: </strong>
-          {user.lastName}
+          {data.lastName}
         </li>
         <li>
           <strong>Nr kontaktowy: </strong>
-          {user.phoneNumber}
+          {data.phoneNumber}
         </li>
         <div className="border-b-2 border-gray-400 border-dotted mt-2">
           Adres:
         </div>
         <li>
           <strong>Ulica </strong>
-          {user.street}
+          {data.street}
         </li>
         <li>
           <strong>Miasto </strong>
-          {user.city}
+          {data.city}
         </li>
         <li>
           <strong>Kod Pocztowy </strong>
-          {user.postCode}
+          {data.postCode}
         </li>
       </ul>
     </div>

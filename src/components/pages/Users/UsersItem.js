@@ -9,7 +9,7 @@ const UsersItem = ({ item, displayCust }) => {
       className="odd:bg-gray-100 hover:bg-gray-300"
     >
       <td>{item.id}</td>
-      {!displayCust && <td>{item.role}</td>}
+      {!displayCust && <td>{item.inAppRole}</td>}
       <td>{item.firstName}</td>
       <td>{item.lastName}</td>
       <td>{item.city}</td>

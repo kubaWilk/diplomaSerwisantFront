@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SectionName from "../../../layout/SectionName";
@@ -8,6 +8,8 @@ import Loading from "../../../layout/Loading";
 import { Link } from "react-router-dom";
 import AddNoteModal from "./AddNoteModal";
 import AddButton from "../../../layout/AddButton";
+import { Config } from "../../../../config";
+import UserContext from "../../../../context/User/UserContext";
 
 const Notes = () => {
   const { id } = useParams();
@@ -15,10 +17,17 @@ const Notes = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [addNoteDialogToggle, setAddNoteDialogToggle] = useState(false);
   const navigate = useNavigate();
-  const apiCall = `/notes?repairID=${id}`;
+  const {
+    user: { jwt: token },
+  } = useContext(UserContext);
+  const apiCall = `${Config.apiUrl}/api/notes?filters[repairID][$eq]=${id}`;
 
   const getNotes = async () => {
-    const res = await axios.get(apiCall);
+    const res = await axios.get(apiCall, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     setNotes(res.data);
     setIsLoading(false);
@@ -35,7 +44,9 @@ const Notes = () => {
   }, [addNoteDialogToggle]);
 
   const removeNote = (note) => {
-    axios.delete(`/notes/${note.id}`);
+    axios.delete(`${Config.apiUrl}/api/notes/${note.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setNotes(notes.filter((e) => e !== note));
   };
 
@@ -57,7 +68,11 @@ const Notes = () => {
       </div>
       <AddButton onClick={() => setAddNoteDialogToggle(true)} />
       {addNoteDialogToggle && (
-        <AddNoteModal closeToggle={setAddNoteDialogToggle} />
+        <AddNoteModal
+          closeToggle={setAddNoteDialogToggle}
+          notes={notes}
+          notesSetter={setNotes}
+        />
       )}
     </div>
   );

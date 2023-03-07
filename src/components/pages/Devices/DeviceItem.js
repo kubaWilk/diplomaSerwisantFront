@@ -16,7 +16,6 @@ const DeviceItem = ({ item }) => {
       <td>{item.manufacturer}</td>
       <td>{item.model}</td>
       <td>{item.serialNumber}</td>
-      <td>{item.owner}</td>
     </tr>
   );
 };

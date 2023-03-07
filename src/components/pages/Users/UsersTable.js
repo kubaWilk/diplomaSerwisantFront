@@ -4,7 +4,7 @@ import UserSearchRow from "./UserSearchRow";
 import UsersItem from "./UsersItem";
 
 const UsersTable = () => {
-  const { users } = useContext(UsersContext);
+  const { users } = useContext(UserContext);
 
   return (
     <Fragment>

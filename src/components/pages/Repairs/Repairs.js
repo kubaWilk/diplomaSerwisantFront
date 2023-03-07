@@ -6,8 +6,10 @@ import SectionName from "../../layout/SectionName";
 import NavButtons from "./NavButtons";
 import RepairsSearchRow from "./RepairsSearchRow";
 import Loading from "../../layout/Loading";
+import UserContext from "../../../context/User/UserContext";
 
 const Repairs = ({ filterUserId, filterDeviceID }) => {
+  const { user } = useContext(UserContext);
   const { allRepairs, fetchRepairs, searchRepairs, isLoading } =
     useContext(RepairsContext);
   //that state is only to have a useEffect dependency
@@ -15,7 +17,7 @@ const Repairs = ({ filterUserId, filterDeviceID }) => {
 
   useEffect(() => {
     const test = async () => {
-      await fetchRepairs();
+      await fetchRepairs(user.jwt);
     };
 
     test();
@@ -105,9 +107,6 @@ const Repairs = ({ filterUserId, filterDeviceID }) => {
         </thead>
         <tbody>
           <RepairsSearchRow searchCall={prepareApiCall} />
-          {console.log(
-            `filterUserID: ${filterUserId} filterDeviceID: ${filterDeviceID} useCase: ${checkUseCase()}`
-          )}
           {renderUseCase()}
         </tbody>
       </table>

@@ -1,4 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AlertContext from "../../../context/Alert/AlertContext";
+import RepairsContext from "../../../context/Repairs/RepairsContext";
 import UserContext from "../../../context/User/UserContext";
 import Alert from "../../layout/Alert";
 
@@ -6,8 +9,9 @@ const LoginForm = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
-  const UserContextObj = useContext(UserContext);
-  const { checkSession } = UserContextObj;
+  const { setAlert } = useContext(AlertContext);
+  const { checkSession, postLogIn } = useContext(UserContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     checkSession();
@@ -15,7 +19,14 @@ const LoginForm = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    UserContextObj.logInAUser(login, password);
+
+    postLogIn(login, password).then((isLoggedIn) => {
+      if (isLoggedIn) {
+        navigate("/");
+      } else {
+        setAlert("Błędne dane logowania.");
+      }
+    });
   };
 
   return (

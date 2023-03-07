@@ -1,9 +1,10 @@
-import React, { useState, useContext, Fragment } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useContext, Fragment } from "react";
+import { useParams } from "react-router-dom";
 import AlertContext from "../../../../context/Alert/AlertContext";
 import Alert from "../../../layout/Alert";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import UserContext from "../../../../context/User/UserContext";
-import { SUCCESS } from "../../../../statusCodes";
 
 const EditUserForm = ({ userData }) => {
   const [firstName, setFirstName] = useState(userData.firstName);
@@ -14,8 +15,8 @@ const EditUserForm = ({ userData }) => {
   const [city, setCity] = useState(userData.city);
 
   const { setAlert } = useContext(AlertContext);
-  const { updateUser } = useContext(UserContext);
-  // const { id } = useParams();
+  const { putUserById, user: loggedInUser } = useContext(UserContext);
+  const { id } = useParams();
 
   const navigate = useNavigate();
 
@@ -38,7 +39,7 @@ const EditUserForm = ({ userData }) => {
 
     if (!nameRegex.test(firstName) || firstName === "")
       setAlert("Nieprawidłowe Imię");
-    else if (!nameRegex.test(lastName) || firstName === "")
+    else if (!nameRegex.test(lastName) || lastName === "")
       setAlert("Nieprawidłowe Nazwisko");
     else if (!phoneNumberRegex.test(phoneNumber) || phoneNumber === "")
       setAlert("Nieprawidłowy nr telefonu!");
@@ -49,7 +50,9 @@ const EditUserForm = ({ userData }) => {
     else if (!cityRegex.test(city) || city === "")
       setAlert("Nieprawidłowe miasto");
     else {
-      const updateData = {
+      // console.log(userData);
+      const updatedUserData = {
+        // ...userData,
         firstName: firstName,
         lastName: lastName,
         phoneNumber: phoneNumber,
@@ -58,13 +61,16 @@ const EditUserForm = ({ userData }) => {
         postCode: postCode,
       };
 
-      const doRequest = async () => {
-        if ((await updateUser(userData, updateData)) === SUCCESS) navigate(-1);
-      };
+      if (id !== undefined) {
+        putUserById(id, updatedUserData);
+      } else {
+        putUserById(loggedInUser.id, updatedUserData);
+      }
 
-      doRequest();
+      navigate(-1);
     }
   };
+
   return (
     <Fragment>
       <h2 className="uppercase text-center font-bold m-2 text-lg">Edytuj</h2>

@@ -10,15 +10,18 @@ import Dialog from "../../../../layout/Dialog";
 import { useContext } from "react";
 import SingleRepairContext from "../../../../../context/SingleRepair/SingleRepairContext";
 import UserContext from "../../../../../context/User/UserContext";
+import { Config } from "../../../../../config";
 
 const Cost = () => {
   const { id } = useParams();
-  const { repair, fetchRepairById, postCostAccept } =
-    useContext(SingleRepairContext);
+  const { repair, postCostAccept } = useContext(SingleRepairContext);
   const { costAccepted } = repair;
-  const apiCall = `/costs?repairID=${id}`;
+  const apiCall = `${Config.apiUrl}/api/costs?filters[repairID][$eq]=${id}`;
   const navigate = useNavigate();
-  const { isCustomer } = useContext(UserContext);
+  const {
+    isCustomer,
+    user: { jwt: token },
+  } = useContext(UserContext);
   //state
   const [costs, setCosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -27,14 +30,17 @@ const Cost = () => {
   const [approveCostModalToggle, setApproveCostModalToggle] = useState(false);
 
   const getCosts = async () => {
-    const res = await axios.get(apiCall);
+    const res = await axios.get(apiCall, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     setCosts(res.data);
     setIsLoading(false);
   };
 
   useEffect(() => {
-    fetchRepairById(id);
     getCosts();
   }, []);
 
@@ -52,7 +58,9 @@ const Cost = () => {
   }, [costs]);
 
   const removeCostItem = (cost) => {
-    axios.delete(`/costs/${cost.id}`);
+    axios.delete(`${Config.apiUrl}/api/costs/${cost.id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
     setCosts(costs.filter((e) => e !== cost));
   };
 
@@ -65,7 +73,13 @@ const Cost = () => {
 
   return (
     <div className="flex w-full flex-col items-center justify-start">
-      {addCostToggle && <AddCostModal closeToggle={setAddCostToggle} />}
+      {addCostToggle && (
+        <AddCostModal
+          closeToggle={setAddCostToggle}
+          costs={costs}
+          costSetter={setCosts}
+        />
+      )}
       <SectionName text={`Naprawa #${id}`} />
       <h2 className="uppercase text-xl">Kosztorys</h2>
       <div className="flex space-x-2">

@@ -1,24 +1,40 @@
-import React from "react";
+import React, { useContext } from "react";
 import { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import Loading from "../../layout/Loading";
 import DevicesSearchRow from "./DevicesSearchRow";
 import DeviceItem from "./DeviceItem";
 import { useParams } from "react-router-dom";
+import UserContext from "../../../context/User/UserContext";
+import { Config } from "../../../config";
 
 const DevicesTable = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [allDevices, setAllDevices] = useState([]);
   const { id } = useParams();
+  const {
+    user: { jwt: token },
+  } = useContext(UserContext);
 
   useEffect(() => {
     const getDevices = async () => {
       if (id === undefined) {
-        const res = await axios.get(`/devices`);
+        const res = await axios.get(`${Config.apiUrl}/api/devices?populate=*`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setAllDevices(res.data);
         setIsLoading(false);
       } else {
-        const res = await axios.get(`/devices?ownerID=${id}`);
+        const res = await axios.get(
+          `${Config.apiUrl}/api/devices?filters[owner][id][$eq]=${id}&populate=*`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setAllDevices(res.data);
         setIsLoading(false);
       }
@@ -41,7 +57,6 @@ const DevicesTable = () => {
             <th>Producent</th>
             <th>Model</th>
             <th>Nr seryjny:</th>
-            <th>Właściciel</th>
           </tr>
         </thead>
         <DevicesSearchRow />

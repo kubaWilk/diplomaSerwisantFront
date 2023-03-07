@@ -4,7 +4,7 @@ import UserContext from "../../../../context/User/UserContext";
 import Dialog from "../../../layout/Dialog";
 
 const NoteItem = ({ note, onDelete }) => {
-  const { message, createdAt, createdBy } = note;
+  const { message, createdAt, createdByy: createdBy } = note;
   const [deleteDialogToggle, setDeleteDialogToggle] = useState(false);
   const { isCustomer } = useContext(UserContext);
 
@@ -45,7 +45,7 @@ const NoteItem = ({ note, onDelete }) => {
       <div className="w-full border-b border-black border-dotted my-1"></div>
       <div className="flex justify-between">
         <p className="text-sm">
-          Dodana: {createdAt} przez {createdBy}{" "}
+          Dodana: {createdAt} przez {createdBy.firstName} {createdBy.lastName}{" "}
         </p>
         {!isNotePublic() && <p className="text-sm uppercase">wewnętrzna</p>}
       </div>

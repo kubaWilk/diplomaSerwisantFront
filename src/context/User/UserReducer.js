@@ -1,4 +1,4 @@
-import { LOG_IN_USER, USER_LOGOUT } from "../types";
+import { SET_USER, USER_LOGOUT, SET_USERS, SET_CUSTOMER } from "../types";
 
 const UserReducer = (state, action) => {
   switch (action.type) {
@@ -7,11 +7,17 @@ const UserReducer = (state, action) => {
         ...state,
         user: {},
       };
-    case LOG_IN_USER:
+    case SET_USER:
       return {
         ...state,
         user: action.payload,
       };
+    case SET_CUSTOMER: {
+      return { ...state, customer: action.payload };
+    }
+    case SET_USERS: {
+      return { ...state, isLoading: false, users: action.payload };
+    }
     default:
       return { ...state };
   }

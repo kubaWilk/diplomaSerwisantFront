@@ -1,8 +1,9 @@
 import React, { useReducer } from "react";
 import axios from "axios";
-import { SET_REPAIR } from "../types";
+import { SET_REPAIR, UPDATE_REPAIR } from "../types";
 import SingleRepairReducer from "./SingleRepairReducer";
 import SingleRepairContext from "./SingleRepairContext";
+import { Config } from "../../config";
 
 const SingleRepairState = (props) => {
   const initialState = {
@@ -12,35 +13,103 @@ const SingleRepairState = (props) => {
 
   const [state, dispatch] = useReducer(SingleRepairReducer, initialState);
 
-  const fetchRepairById = async (id) => {
-    const repair = await axios.get(`/repairs/${id}`);
-
-    dispatch({
-      type: SET_REPAIR,
-      payload: repair.data,
-    });
+  const fetchRepairById = async (id, token) => {
+    return await axios
+      .get(`${Config.apiUrl}/api/repairs/${id}?populate=*`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((res) =>
+        dispatch({
+          type: SET_REPAIR,
+          payload: res.data,
+        })
+      );
   };
 
-  const postRepair = (customer, device, user, status) => {
-    axios
-      .post(`/repairs`, {
-        status: status,
-        device: device,
-        customer: customer,
-        user: user,
-      })
-      .catch((e) => console.log(e));
+  const postRepair = (repair, token) => {
+    if (repair.photos !== null) {
+      return axios
+        .post(`${Config.apiUrl}/api/upload`, repair.photos, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        .then((e) => {
+          const fileIDs = [];
+          e.data.forEach((file) => fileIDs.push(file.id));
+
+          return axios.post(
+            `${Config.apiUrl}/api/repairs`,
+            {
+              data: { ...repair, photos: fileIDs },
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        })
+        .catch((e) => console.log(e));
+    }
+
+    return axios.post(
+      `${Config.apiUrl}/api/repairs`,
+      {
+        data: repair,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
   };
 
-  const putRepair = (id, customer, device, user, status) => {
+  const postDevice = async (device, token) => {
+    return axios
+      .post(
+        `${Config.apiUrl}/api/devices`,
+        {
+          data: {
+            ...device,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        return res;
+      });
+  };
+
+  const putRepair = (id, status, token) => {
     axios
-      .put(`/repairs/${id}`, {
-        id: id,
-        status: status,
-        device: device,
-        customer: customer,
-        user: user,
-      })
+      .put(
+        `${Config.apiUrl}/api/repairs/${id}`,
+        {
+          data: {
+            status: status,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) =>
+        dispatch({
+          type: UPDATE_REPAIR,
+          payload: res.data.data.attributes.status,
+        })
+      )
       .catch((e) => console.log(e));
   };
 
@@ -55,8 +124,12 @@ const SingleRepairState = (props) => {
       .finally(fetchRepairById(id));
   };
 
-  const removeRepair = (id) => {
-    axios.delete(`/repairs/${id}`).catch((e) => console.log(e));
+  const removeRepair = (id, token) => {
+    axios
+      .delete(`${Config.apiUrl}/api/repairs/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .catch((e) => console.log(e));
   };
 
   return (
@@ -65,6 +138,7 @@ const SingleRepairState = (props) => {
         repair: state.repair,
         isLoading: state.isLoading,
         postRepair,
+        postDevice,
         putRepair,
         fetchRepairById,
         postCostAccept,

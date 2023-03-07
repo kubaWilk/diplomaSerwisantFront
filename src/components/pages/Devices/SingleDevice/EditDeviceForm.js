@@ -2,7 +2,9 @@ import axios from "axios";
 import React, { Fragment, useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AlertContext from "../../../../context/Alert/AlertContext";
+import UserContext from "../../../../context/User/UserContext";
 import Alert from "../../../layout/Alert";
+import { Config } from "../../../../config";
 
 const EditDeviceForm = ({ deviceData }) => {
   const [manufacturer, setManufacturer] = useState(deviceData.manufacturer);
@@ -14,6 +16,9 @@ const EditDeviceForm = ({ deviceData }) => {
 
   const { setAlert } = useContext(AlertContext);
   const { id } = useParams();
+  const {
+    user: { jwt: token },
+  } = useContext(UserContext);
   const navigate = useNavigate();
 
   const inputStyle =
@@ -21,13 +26,23 @@ const EditDeviceForm = ({ deviceData }) => {
 
   const onSubmit = () => {
     axios
-      .put(`/devices/${id}`, {
-        ...deviceData,
-        manufacturer: manufacturer,
-        model: model,
-        serialNumber: serialNumber,
-        stateAtArrival: stateAtArrival,
-      })
+      .put(
+        `${Config.apiUrl}/api/devices/${id}`,
+        {
+          data: {
+            ...deviceData,
+            manufacturer: manufacturer,
+            model: model,
+            serialNumber: serialNumber,
+            stateAtArrival: stateAtArrival,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
       .then(() => navigate(-1))
       .catch((e) => {
         console.log(e);
@@ -66,7 +81,7 @@ const EditDeviceForm = ({ deviceData }) => {
             name="model"
             className={inputStyle}
             type="text"
-            placeholder="Nazwisko"
+            placeholder="Model"
             value={model}
             onChange={(e) => setModel(e.target.value)}
           />

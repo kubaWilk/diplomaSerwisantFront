@@ -11,9 +11,6 @@ const UserPanel = () => {
           <Link className="button-lg" to="/user/self/about/edit">
             Zmień dane konta
           </Link>
-          <Link className="button-lg" to="/user/self/about/password-change">
-            Zmień hasło
-          </Link>
         </div>
         <Outlet />
       </div>

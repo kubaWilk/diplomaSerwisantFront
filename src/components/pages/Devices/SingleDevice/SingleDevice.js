@@ -4,16 +4,23 @@ import { useContext } from "react";
 import { useParams, Link, Outlet, useNavigate } from "react-router-dom";
 import UserContext from "../../../../context/User/UserContext";
 import Dialog from "../../../layout/Dialog";
+import { Config } from "../../../../config";
 
 const SingleDevice = () => {
   const { id } = useParams();
-  const { isAdmin, isCustomer } = useContext(UserContext);
+  const {
+    isAdmin,
+    isCustomer,
+    user: { jwt: token },
+  } = useContext(UserContext);
   const navigate = useNavigate();
   const [deleteModalToggle, setDeleteModalToggle] = useState(false);
 
   const deleteDevice = async () => {
     axios
-      .delete(`/devices/${id}`)
+      .delete(`${Config.apiUrl}/api/devices/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
       .then(() => {
         setDeleteModalToggle(false);
         navigate("/devices");

@@ -7,7 +7,6 @@ const DevicesSearchRow = ({ searchCall }) => {
   const [manufacturer, setManufacturer] = useState("");
   const [model, setModel] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
-  const [owner, setOwner] = useState("");
 
   const onKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -17,7 +16,6 @@ const DevicesSearchRow = ({ searchCall }) => {
         model: model,
         serialNumber,
         serialNumber,
-        owner: owner,
       });
     }
   };
@@ -65,16 +63,6 @@ const DevicesSearchRow = ({ searchCall }) => {
           onChange={(e) => setSerialNumber(e.target.value)}
           className={inputStyle}
           placeholder="Nr seryjny"
-        />
-      </td>
-      <td className={tdStyle}>
-        <input
-          type="text"
-          onKeyDown={(e) => onKeyDown(e)}
-          value={owner}
-          onChange={(e) => setOwner(e.target.value)}
-          className={inputStyle}
-          placeholder="Właściciel"
         />
       </td>
     </tr>

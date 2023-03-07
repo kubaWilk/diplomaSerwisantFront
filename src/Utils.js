@@ -18,4 +18,26 @@ const translateCostTypes = (type, namesObj) => {
   }
 };
 
+export const parseUserData = (data, jwt) => {
+  if (jwt === undefined) {
+    return {
+      ...data.user,
+      role: data.user.inAppRole,
+      jwt: data.jwt,
+    };
+  } else
+    return {
+      ...data,
+      role: data.inAppRole,
+      jwt: jwt,
+    };
+};
+
+export const parseCustomerData = (data) => {
+  return {
+    ...data,
+    role: data.inAppRole,
+  };
+};
+
 export { getDateString, translateCostTypes };

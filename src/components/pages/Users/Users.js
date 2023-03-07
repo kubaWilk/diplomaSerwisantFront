@@ -1,16 +1,15 @@
 import React, { useContext, useEffect } from "react";
-import UsersContext from "../../../context/Users/UsersContext";
+import UserContext from "../../../context/User/UserContext";
 import Loading from "../../layout/Loading";
 import SectionName from "../../layout/SectionName";
 import UserSearchRow from "./UserSearchRow";
 import UsersItem from "./UsersItem";
 
 const Users = ({ displayOnlyCustomers }) => {
-  const { isLoading, users, fetchUsers, fetchCustomers } =
-    useContext(UsersContext);
+  const { isLoading, users, getUsers, getCustomers } = useContext(UserContext);
 
   useEffect(() => {
-    displayOnlyCustomers ? fetchCustomers() : fetchUsers();
+    displayOnlyCustomers ? getCustomers() : getUsers();
     //eslint-disable-next-line
   }, []);
 
@@ -35,8 +34,8 @@ const Users = ({ displayOnlyCustomers }) => {
             <th>Nr kontaktowy</th>
           </tr>
         </thead>
-        <UserSearchRow displayCust={displayOnlyCustomers} />
         <tbody>
+          <UserSearchRow displayCust={displayOnlyCustomers} />
           {users.map((e) => (
             <UsersItem key={e.id} displayCust={displayOnlyCustomers} item={e} />
           ))}

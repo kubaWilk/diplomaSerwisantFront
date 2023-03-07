@@ -6,18 +6,21 @@ import SectionName from "../../../layout/SectionName";
 import { Link } from "react-router-dom";
 import Dialog from "../../../layout/Dialog";
 import UserContext from "../../../../context/User/UserContext";
+import RepairStatus from "../../../layout/RepairStatus";
+import ReactImageGallery from "react-image-gallery";
 
 const Repair = () => {
+  const [deleteDialogToggle, setDeleteDialogToggle] = useState(false);
+
   const { id } = useParams();
   const { isLoading, repair, fetchRepairById, removeRepair } =
     useContext(SingleRepairContext);
-  const { isAdmin, isCustomer } = useContext(UserContext);
-  const { customer, user, device } = repair;
+  const { isAdmin, isCustomer, user } = useContext(UserContext);
+  const { customer, device } = repair;
   const navigate = useNavigate();
-  const [deleteDialogToggle, setDeleteDialogToggle] = useState(false);
 
   useEffect(() => {
-    fetchRepairById(id);
+    fetchRepairById(id, user.jwt);
   }, []);
 
   if (isLoading) return <Loading />;
@@ -28,7 +31,7 @@ const Repair = () => {
         <Dialog
           prompt={`Czy chcesz usunąć naprawę nr ${repair.id}`}
           onApprove={() => {
-            removeRepair(id);
+            removeRepair(id, user.jwt);
             navigate(-1);
           }}
           onCancel={() => setDeleteDialogToggle(false)}
@@ -39,16 +42,23 @@ const Repair = () => {
         {!isCustomer() && (
           <Link
             className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-            to={`/repairs/edit/${id}`}
+            to={`/user/${customer.id}/edit`}
           >
-            Edytuj
+            Edytuj klienta
+          </Link>
+        )}
+        {!isCustomer() && (
+          <Link
+            className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+            to={`/devices/${device.id}/edit`}
+          >
+            Edytuj urządzenie
           </Link>
         )}
         {isAdmin() && (
           <button
             className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-            onClick={(e) => {
-              // removeRepair(id);
+            onClick={() => {
               setDeleteDialogToggle(true);
             }}
           >
@@ -67,8 +77,15 @@ const Repair = () => {
         >
           Kosztorys
         </Link>
+        <Link
+          className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+          to={`/repairs/${id}/photos`}
+        >
+          Zdjęcia
+        </Link>
       </div>
       <div className="flex w-[90%] h-full flex-col ">
+        <RepairStatus />
         <div className="border-b-2 border-gray-200 border-dotted p-2">
           <ul>
             <li>
@@ -91,7 +108,7 @@ const Repair = () => {
               <strong>Model: </strong> {device.model}
             </li>
             <li>
-              <strong>Nr seryjny:</strong> {device.sn}
+              <strong>Nr seryjny:</strong> {device.serialNumber}
             </li>
             <li>
               <strong>Stan podczas przyjęcia:</strong> {device.stateAtArrival}

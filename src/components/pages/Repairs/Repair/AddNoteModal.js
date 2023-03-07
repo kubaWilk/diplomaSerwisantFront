@@ -4,8 +4,9 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { getDateString } from "../../../../Utils";
 import UserContext from "../../../../context/User/UserContext";
+import { Config } from "../../../../config";
 
-const AddNoteModal = ({ closeToggle }) => {
+const AddNoteModal = ({ closeToggle, notes, notesSetter }) => {
   const [noteMsg, setNoteMsg] = useState("");
   const [noteType, setNoteType] = useState("public");
   const { id } = useParams();
@@ -13,13 +14,35 @@ const AddNoteModal = ({ closeToggle }) => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    axios.post("/notes", {
-      repairID: Number(id),
-      message: noteMsg,
-      createdAt: getDateString(new Date()),
-      createdBy: `${user.firstName} ${user.lastName}`,
-      visibility: noteType,
-    });
+    axios
+      .post(
+        `${Config.apiUrl}/api/notes`,
+        {
+          data: {
+            repair: Number(id),
+            message: noteMsg,
+            createdAt: getDateString(new Date()),
+            createdByy: user.id,
+            visibility: noteType,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${user.jwt}`,
+          },
+        }
+      )
+      .then((res) => {
+        notes.push({
+          id: res.data.data.id,
+          message: res.data.data.attributes.message,
+          createdAt: res.data.data.attributes.createdAt,
+          visibility: res.data.data.attributes.visibility,
+          createdByy: user,
+        });
+        notesSetter(notes);
+      })
+      .catch((e) => console.log(e));
     closeToggle(false);
   };
 
@@ -49,7 +72,8 @@ const AddNoteModal = ({ closeToggle }) => {
                       type="radio"
                       value="public"
                       name="public"
-                      checked={noteType === "public"}
+                      defaultChecked
+                      onChange={() => setNoteType("public")}
                     />
                     Publiczna
                   </label>
@@ -58,7 +82,7 @@ const AddNoteModal = ({ closeToggle }) => {
                       type="radio"
                       value="private"
                       name="private"
-                      checked={noteType === "private"}
+                      onChange={() => setNoteType("private")}
                     />{" "}
                     Wewnętrzna
                   </label>

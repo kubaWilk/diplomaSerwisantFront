@@ -2,9 +2,14 @@ import axios from "axios";
 import React, { useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import AlertContext from "../../../../../context/Alert/AlertContext";
+import UserContext from "../../../../../context/User/UserContext";
 import Alert from "../../../../layout/Alert";
+import { Config } from "../../../../../config";
 
-const AddCostModal = ({ closeToggle }) => {
+const AddCostModal = ({ closeToggle, costs, costSetter }) => {
+  const {
+    user: { jwt: token },
+  } = useContext(UserContext);
   const { id } = useParams();
   const { setAlert } = useContext(AlertContext);
   const [costType, setCostType] = useState("service");
@@ -16,11 +21,25 @@ const AddCostModal = ({ closeToggle }) => {
 
     if (dataCheck()) {
       axios
-        .post("/costs", {
-          repairID: id,
-          type: costType,
-          name: costName,
-          price: costPrice,
+        .post(
+          `${Config.apiUrl}/api/costs`,
+          {
+            data: {
+              repair: id,
+              type: costType,
+              name: costName,
+              price: costPrice,
+            },
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        )
+        .then((res) => {
+          costs.push({
+            id: res.data.data.id,
+            ...res.data.data.attributes,
+          });
+
+          costSetter(costs);
         })
         .catch((e) => console.log(e));
       closeToggle(false);
@@ -28,20 +47,25 @@ const AddCostModal = ({ closeToggle }) => {
   };
 
   const dataCheck = () => {
-    // const priceRegex = new RegExp("^[0-9]*$");
     //prettier-ignore
     const priceRegex = new RegExp("(\[0-9]+(\.\[0-9]{1,2})?)");
 
     if ((costName === null) | (costName === "")) {
       setAlert("Nazwa nie może być pusta!");
       return false;
-    } else if ((costPrice === null) | (costPrice === "")) {
+    }
+
+    if ((costPrice === null) | (costPrice === "")) {
       setAlert("Cena nie może być pusta!");
       return false;
-    } else if (!priceRegex.test(costPrice)) {
+    }
+
+    if (!priceRegex.test(costPrice)) {
       setAlert("Nieprawidłowa cena!");
       return false;
-    } else return true;
+    }
+
+    return true;
   };
 
   return (

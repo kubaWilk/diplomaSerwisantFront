@@ -1,21 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
 import SectionName from "../../../layout/SectionName";
 import UploadFiles from "../../../layout/UploadFiles";
 import Loading from "../../../layout/Loading";
 import FormGroup from "../Add/FormGroup";
 import SingleRepairContext from "../../../../context/SingleRepair/SingleRepairContext";
+import UserContext from "../../../../context/User/UserContext";
+import { useNavigate, useParams } from "react-router-dom";
 
 const EditRepair = () => {
   const { id } = useParams();
+  const { user } = useContext(UserContext);
   const { isRepairLoading, repair, fetchRepairById, putRepair, removeRepair } =
     useContext(SingleRepairContext);
-  const { customer, user, device } = repair;
+  const { customer, device } = repair;
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchRepairById(id);
+    fetchRepairById(id, user.jwt);
 
     const fillForm = () => {
       if (!isRepairLoading) {
@@ -63,6 +65,7 @@ const EditRepair = () => {
   //End of Form State
 
   const onSubmit = (e) => {
+    console.log(user.jwt);
     e.preventDefault();
     putRepair(
       id,
@@ -82,8 +85,8 @@ const EditRepair = () => {
         serialNumber: serialNumber,
         stateAtArrival: stateAtArrival,
       },
-      user,
-      repairStatus
+      repairStatus,
+      user.jwt
     );
     navigate("/repairs");
   };

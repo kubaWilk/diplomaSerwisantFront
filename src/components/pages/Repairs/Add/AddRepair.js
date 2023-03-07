@@ -1,30 +1,63 @@
 import React from "react";
 import { useState, useContext } from "react";
+import Alert from "../../../layout/Alert";
 import SectionName from "../../../layout/SectionName";
 import UploadFiles from "../../../layout/UploadFiles";
 import FormGroup from "./FormGroup";
 import UserContext from "../../../../context/User/UserContext";
 import SingleRepairContext from "../../../../context/SingleRepair/SingleRepairContext";
 import { useNavigate } from "react-router-dom";
+import AlertContext from "../../../../context/Alert/AlertContext";
+import SearchTable from "./SearchTable";
+import axios from "axios";
+import { Config } from "../../../../config";
 
 const AddRepair = () => {
-  const { postRepair } = useContext(SingleRepairContext);
-  const { user } = useContext(UserContext);
+  const { postRepair, postDevice } = useContext(SingleRepairContext);
+  const { postUser } = useContext(UserContext);
   const navigate = useNavigate();
+  const { setAlert } = useContext(AlertContext);
+  const {
+    user: { jwt: token },
+  } = useContext(UserContext);
+
+  const [isNewCustomer, setIsNewCustomer] = useState(true);
+  const [isNewDevice, setIsNewDevice] = useState(true);
+  const [shouldShowCustomerTable, setShouldShowCustomerTable] = useState(false);
+  const [shouldShowDeviceTable, setShouldShowDeviceTable] = useState(false);
 
   // Customer state
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [phoneNumber, setPhoneNumber] = useState("");
-  const [street, setStreet] = useState("");
-  const [city, setCity] = useState("");
-  const [postCode, setPostCode] = useState("");
+  const [customer, setCustomer] = useState({
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
+    eMail: "",
+    street: "",
+    city: "",
+    postCode: "",
+  });
+
+  const onCustomerChange = (e) => {
+    setCustomer({ ...customer, [e.target.name]: e.target.value });
+  };
 
   // Device state
-  const [manufacturer, setManufacturer] = useState("");
-  const [model, setModel] = useState("");
-  const [serialNumber, setSerialNumber] = useState("");
-  const [stateAtArrival, setStateAtArrival] = useState("");
+  const [device, setDevice] = useState({
+    manufacturer: "",
+    model: "",
+    serialNumber: "",
+    stateAtArrival: "",
+  });
+
+  //Submit method state
+  const [customerId, setCustomerId] = useState();
+  const [deviceId, setDeviceId] = useState();
+  const [customerData, setCustomerData] = useState();
+  const [deviceData, setDeviceData] = useState();
+
+  const onDeviceChange = (e) => {
+    setDevice({ ...device, [e.target.name]: e.target.value });
+  };
 
   //Uploaded Files state
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -32,28 +65,202 @@ const AddRepair = () => {
   //Repair Status State
   const [repairStatus, setRepairStatus] = useState("W trakcie");
 
-  const onSubmit = (e) => {
+  const deviceTableProperties = {
+    manufacturer: "Producent",
+    serialNumber: "Numer Seryjny",
+    model: "Model",
+    stateAtArrival: "Stan przy przyjęciu",
+  };
+
+  const customerTableProperties = {
+    firstName: "Imię",
+    lastName: "Nazwisko",
+    phoneNumber: "Nr Telefonu",
+    email: "E - Mail",
+    street: "Ulica",
+    city: "Miasto",
+    postCode: "Kod Pocztowy",
+  };
+
+  const checkInput = () => {
+    if (customerId === undefined) {
+      //prettier-ignore
+      const phoneNumberRegex = new RegExp("^[\+]?([0-9]{2})?([0-9]{9,12})$");
+      //prettier-ignore
+      const nameRegex = new RegExp("^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]+$")
+      //prettier-ignore
+      const streetRegex = new RegExp("^[A-Źa-ź0-9 /]+$")
+      //prettier-ignore
+      const postCodeRegex = new RegExp("^[0-9]{2}[-][0-9]{3}$")
+      //prettier-ignore
+      const cityRegex = new RegExp("^[A-Źa-ź ]+$");
+
+      if (!nameRegex.test(customer.firstName) || customer.firstName === "") {
+        setAlert("Nieprawidłowe Imię");
+        return true;
+      }
+
+      if (!nameRegex.test(customer.lastName) || customer.lastName === "") {
+        setAlert("Nieprawidłowe Nazwisko");
+        return true;
+      }
+
+      if (
+        !phoneNumberRegex.test(customer.phoneNumber) ||
+        customer.phoneNumber === ""
+      ) {
+        setAlert("Nieprawidłowy nr telefonu!");
+        return true;
+      }
+
+      if (!streetRegex.test(customer.street) || customer.street === "") {
+        setAlert("Nieprawidłowa ulica");
+        return true;
+      }
+
+      if (!postCodeRegex.test(customer.postCode) || customer.postCode === "") {
+        setAlert("Nieprawidłowy kod pocztowy");
+        return true;
+      }
+
+      if (!cityRegex.test(customer.city) || customer.city === "") {
+        setAlert("Nieprawidłowe miasto");
+        return true;
+      }
+    }
+
+    if (deviceId === undefined) {
+      if (device.manufacturer === "") {
+        setAlert("Należy podać producenta urządzenia");
+        return true;
+      }
+
+      if (device.serialNumber === "") {
+        setAlert("Należy podać numer seryjny urządzenia");
+        return true;
+      }
+
+      if (device.model === "") {
+        setAlert("Należy podać model urządzenia");
+        return true;
+      }
+    }
+  };
+
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    postRepair(
-      {
-        firstName: firstName,
-        lastName: lastName,
-        phoneNumber: phoneNumber,
-        street: street,
-        city: city,
-        postCode: postCode,
-      },
-      {
-        manufacturer: manufacturer,
-        model: model,
-        serialNumber: serialNumber,
-        stateAtArrival: stateAtArrival,
-      },
-      user,
-      repairStatus
-    );
-    navigate("/repairs");
+    if (checkInput()) return;
+
+    try {
+      let newCustomerId = 0;
+      let newDeviceId = 0;
+
+      if (isNewCustomer) {
+        const response = await postUser(customer, "customer");
+        newCustomerId = response.data.id;
+      }
+
+      if (isNewDevice) {
+        const response = await postDevice(device, token);
+        newDeviceId = response.data.data.id;
+      }
+
+      let formData = new FormData();
+      uploadedFiles.forEach((file) => formData.append("files", file));
+
+      const repair = {
+        status: repairStatus,
+        customer: isNewCustomer ? newCustomerId : customerId,
+        device: isNewDevice ? newDeviceId : deviceId,
+        photos: uploadedFiles.length !== 0 ? formData : null,
+      };
+
+      postRepair(repair, token).then(navigate(-1));
+    } catch (error) {
+      let hasErrorOccured = false;
+      console.log(error);
+
+      if (
+        (error.response.data.error.details.errors[0].message =
+          "This attribute must be unique")
+      ) {
+        setAlert("Istnieje urządzenie ze wskazanym numerem seryjnym");
+        hasErrorOccured = true;
+      }
+
+      if (
+        (error.response.data.error.details.errors[0].message =
+          "email must be a valid email")
+      ) {
+        setAlert("Podano nieprawidłowy adres e-mail");
+        hasErrorOccured = true;
+      }
+
+      if (error.response.data.error.message === "Email already taken") {
+        setAlert("Użytkownik z takim adresem e-mail już istnieje");
+        hasErrorOccured = true;
+      }
+
+      if (!hasErrorOccured)
+        setAlert(
+          "Coś poszło nie tak. Sprawdź połaczenie internetowe lub skontaktuj się z administratorem aplikacji"
+        );
+    }
+  };
+
+  const onCustomerSearch = () => {
+    let searchApiCall = `${Config.apiUrl}/api/users?`;
+
+    const customerKeys = Object.keys(customer);
+    const customerValues = Object.values(customer);
+
+    for (let i = 0; i < customerKeys.length; i++) {
+      if (customerValues[i] !== "")
+        searchApiCall =
+          searchApiCall +
+          `&filters[${customerKeys[i]}][$contains]=${customerValues[i]}`;
+    }
+
+    axios
+      .get(searchApiCall, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => {
+        if (res.data.length > 0) setCustomerData(res.data);
+        setShouldShowCustomerTable(true);
+
+        if (res.data.length <= 0) {
+          setCustomerData();
+          setShouldShowCustomerTable(false);
+          setAlert("Nie znaleziono klientów");
+        }
+      });
+  };
+
+  const onDeviceSearch = () => {
+    let searchApiCall = `${Config.apiUrl}/api/devices?populate=*`;
+
+    const deviceKeys = Object.keys(device);
+    const deviceValues = Object.values(device);
+
+    for (let i = 0; i < deviceKeys.length; i++) {
+      if (deviceValues[i] !== "")
+        searchApiCall =
+          searchApiCall +
+          `&filters[${deviceKeys[i]}][$contains]=${deviceValues[i]}`;
+    }
+
+    axios
+      .get(searchApiCall, { headers: { Authorization: `Bearer ${token}` } })
+      .then((res) => {
+        if (res.data.length > 0) setDeviceData(res.data);
+        setShouldShowDeviceTable(true);
+
+        if (res.data.length <= 0) {
+          setDeviceData();
+          setShouldShowDeviceTable(false);
+          setAlert("Nie znaleziono urządzeń");
+        }
+      });
   };
 
   return (
@@ -68,98 +275,218 @@ const AddRepair = () => {
             value={repairStatus}
             onChange={(e) => setRepairStatus(e.target.value)}
           >
-            <option selected>W trakcie</option>
-            <option>Czeka na klienta</option>
+            <option>W trakcie</option>
+            <option>Oczekuje na decyzję klienta</option>
             <option>Oczekiwanie na dostawcę</option>
             <option>Zamknięta</option>
           </select>
         </div>
+
         <h3 className="text-lg text-center m-1 mb-4 w-80">Dane Klienta</h3>
+        <div className="flex space-x-2 justify-center">
+          <label htmlFor="newCustomer">
+            <input
+              type="radio"
+              id="newCustomer"
+              value="newCustomer"
+              name="customerType"
+              defaultChecked
+              onChange={() => {
+                setIsNewCustomer(true);
+                setShouldShowCustomerTable(false);
+              }}
+            />
+            Nowy
+          </label>
+          <label htmlFor="existingCustomer">
+            <input
+              id="existingCustomer"
+              type="radio"
+              value="existingCustomer"
+              name="customerType"
+              onChange={() => {
+                setIsNewCustomer(false);
+                customerData !== undefined && setShouldShowCustomerTable(true);
+              }}
+            />
+            Istniejący
+          </label>
+        </div>
         <div className="flex w-full justify-center">
           <div>
             <FormGroup
               htmlFor="firstName"
               label="Imię"
-              value={firstName}
+              value={customer.firstName}
               type="text"
-              onChange={(e) => setFirstName(e.target.value)}
+              name="firstName"
+              onChange={(e) => {
+                onCustomerChange(e);
+              }}
             />
             <FormGroup
               htmlFor="lastName"
               label="Nazwisko"
-              value={lastName}
+              value={customer.lastName}
               type="text"
-              onChange={(e) => setLastName(e.target.value)}
+              name="lastName"
+              onChange={(e) => onCustomerChange(e)}
             />
             <FormGroup
               htmlFor="phoneNumber"
               label="Nr telefonu"
-              value={phoneNumber}
+              value={customer.phoneNumber}
               type="text"
-              onChange={(e) => setPhoneNumber(e.target.value)}
+              name="phoneNumber"
+              onChange={(e) => onCustomerChange(e)}
+            />
+            <FormGroup
+              htmlFor="eMail"
+              label="E - Mail"
+              value={customer.eMail}
+              type="text"
+              name="eMail"
+              onChange={(e) => onCustomerChange(e)}
             />
           </div>
           <div>
             <FormGroup
               htmlFor="street"
               label="Ulica"
-              value={street}
+              value={customer.street}
               type="text"
-              onChange={(e) => setStreet(e.target.value)}
+              name="street"
+              onChange={(e) => onCustomerChange(e)}
             />
             <FormGroup
               htmlFor="city"
               label="Miasto"
-              value={city}
+              value={customer.city}
               type="text"
-              onChange={(e) => setCity(e.target.value)}
+              name="city"
+              onChange={(e) => onCustomerChange(e)}
             />
             <FormGroup
               htmlFor="postCode"
               label="Kod pocztowy"
-              value={postCode}
+              value={customer.postCode}
               type="text"
-              onChange={(e) => setPostCode(e.target.value)}
+              name="postCode"
+              onChange={(e) => onCustomerChange(e)}
             />
           </div>
         </div>
 
+        {shouldShowCustomerTable && (
+          <SearchTable
+            name="customerSearch"
+            tableProperties={customerTableProperties}
+            tableData={customerData}
+            idSetter={setCustomerId}
+          />
+        )}
+
+        {!isNewCustomer && (
+          <button
+            type="button"
+            onClick={() => onCustomerSearch()}
+            className="text-black text-sm border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200"
+          >
+            Znajdź klientów
+          </button>
+        )}
+
         <h3 className="text-lg text-center m-1 mb-4 w-80">Dane Sprzętu</h3>
+        <div className="flex space-x-2 justify-center">
+          <label htmlFor="newDevice">
+            <input
+              type="radio"
+              value="newDevice"
+              id="newDevice"
+              name="deviceType"
+              defaultChecked
+              onChange={() => {
+                setIsNewDevice(true);
+                setShouldShowDeviceTable(false);
+              }}
+            />
+            Nowy
+          </label>
+          <label htmlFor="existingDevice">
+            <input
+              type="radio"
+              id="existingDevice"
+              value="existingDevice"
+              name="deviceType"
+              onChange={() => {
+                setIsNewDevice(false);
+                deviceData !== undefined && setShouldShowDeviceTable(true);
+              }}
+            />
+            Istniejący
+          </label>
+        </div>
         <div className="flex w-full justify-center">
           <div>
             <FormGroup
               htmlFor="manufacturer"
               label="Producent"
-              value={manufacturer}
+              value={device.manufacturer}
               type="text"
-              onChange={(e) => setManufacturer(e.target.value)}
+              name="manufacturer"
+              onChange={(e) => onDeviceChange(e)}
             />
             <FormGroup
               htmlFor="model"
               label="Model"
-              value={model}
+              value={device.model}
               type="text"
-              onChange={(e) => setModel(e.target.value)}
+              name="model"
+              onChange={(e) => onDeviceChange(e)}
             />
           </div>
           <div>
             <FormGroup
               htmlFor="serialNumber"
               label="Nr seryjny"
-              value={serialNumber}
+              value={device.serialNumber}
               type="text"
-              onChange={(e) => setSerialNumber(e.target.value)}
+              name="serialNumber"
+              onChange={(e) => onDeviceChange(e)}
             />
             <FormGroup
               htmlFor="stateAtArrival"
               label="Stan przy przyjęciu"
-              value={stateAtArrival}
+              value={device.stateAtArrival}
               type="text"
-              onChange={(e) => setStateAtArrival(e.target.value)}
+              name="stateAtArrival"
+              onChange={(e) => onDeviceChange(e)}
             />
           </div>
         </div>
+
+        {!isNewDevice && (
+          <button
+            type="button"
+            onClick={() => onDeviceSearch()}
+            className="text-black text-sm border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200"
+          >
+            Znajdź urządzeniaa
+          </button>
+        )}
+
+        {shouldShowDeviceTable && (
+          <SearchTable
+            name="deviceSearch"
+            tableProperties={deviceTableProperties}
+            tableData={deviceData}
+            idSetter={setDeviceId}
+          />
+        )}
+
         <UploadFiles formState={{ uploadedFiles, setUploadedFiles }} />
+
+        <Alert />
         <button
           type="submit"
           className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 px-20"
