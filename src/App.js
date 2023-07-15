@@ -3,7 +3,13 @@ import "./index.css";
 import Navbar from "./components/layout/Navbar";
 import SideMenu from "./components/layout/SideMenu";
 import Repairs from "./components/pages/Repairs/Repairs";
-import { Routes, Route } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  useNavigate,
+  Outlet,
+  useLocation,
+} from "react-router-dom";
 import Users from "./components/pages/Users/Users";
 import Home from "./components/pages/Home/Home";
 import Devices from "./components/pages/Devices/Devices";
@@ -28,20 +34,33 @@ import { useContext, useEffect } from "react";
 import UserContext from "./context/User/UserContext";
 import LoginPage from "./components/pages/Login/LoginPage";
 import Photos from "./components/pages/Repairs/Repair/Photos";
+import Error from "./components/pages/Error";
+import PasswordReset from "./components/pages/Login/PasswordReset/PasswordReset";
+import NewPassword from "./components/pages/Login/PasswordReset/NewPassword";
 
 function App() {
   const { user } = useContext(UserContext);
+  const navigate = useNavigate();
+  const isUserEmpty = JSON.stringify(user) === "{}";
+  const location = useLocation();
 
-  if (JSON.stringify(user) === "{}") return <LoginPage />;
+  useEffect(() => {
+    if (isUserEmpty && location.pathname === "/") navigate("/login");
+  }, []);
 
   return (
     <div className="w-screen">
-      <Navbar />
+      {!isUserEmpty && <Navbar />}
       <div className="flex screen-height relative">
-        <SideMenu />
+        {!isUserEmpty && <SideMenu />}
         <Routes>
           {/* Main route */}
-          <Route index element={<Home />} />
+          <Route exact path="/home" element={<Home />} />
+
+          <Route exact path="/login" element={<LoginPage />} />
+          <Route exact path="/password-reset" element={<PasswordReset />} />
+          <Route exact path="/password-reset/new" element={<NewPassword />} />
+
           {/* Repairs Routes */}
           <Route exact path="/repairs" element={<Repairs />} />
           <Route exact path="/repairs/:id" element={<Repair />} />
@@ -70,7 +89,6 @@ function App() {
               element={<ChangePasswordModal />}
             />
           </Route>
-
           <Route exact path="/devices" element={<Devices />}>
             <Route exact path="/devices" element={<DevicesTable />} />
             <Route exact path="/devices/:id" element={<SingleDevice />}>
@@ -91,7 +109,6 @@ function App() {
               />
             </Route>
           </Route>
-
           <Route exact path="/admin-panel" element={<AdminPanel />}>
             <Route
               exact
@@ -99,6 +116,7 @@ function App() {
               element={<Users displayOnlyCustomers={false} />}
             />
           </Route>
+          <Route exact path="/error" element={<Error />} />
         </Routes>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 const DevicesSearchRow = ({ searchCall }) => {
-  const [devId, setDevId] = useState("");
+  const [deviceId, setDeviceId] = useState("");
   const [manufacturer, setManufacturer] = useState("");
   const [model, setModel] = useState("");
   const [serialNumber, setSerialNumber] = useState("");
@@ -11,11 +11,10 @@ const DevicesSearchRow = ({ searchCall }) => {
   const onKeyDown = (e) => {
     if (e.key === "Enter") {
       searchCall({
-        id: devId,
+        id: deviceId,
         manufacturer: manufacturer,
         model: model,
-        serialNumber,
-        serialNumber,
+        serialNumber: serialNumber,
       });
     }
   };
@@ -29,8 +28,8 @@ const DevicesSearchRow = ({ searchCall }) => {
         <input
           type="text"
           onKeyDown={(e) => onKeyDown(e)}
-          value={devId}
-          onChange={(e) => setDevId(e.target.value)}
+          value={deviceId}
+          onChange={(e) => setDeviceId(e.target.value)}
           className={inputStyle}
           placeholder="ID"
         />

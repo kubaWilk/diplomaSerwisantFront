@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AlertContext from "../../../context/Alert/AlertContext";
-import RepairsContext from "../../../context/Repairs/RepairsContext";
+import { Link } from "react-router-dom";
 import UserContext from "../../../context/User/UserContext";
 import Alert from "../../layout/Alert";
 
@@ -20,13 +20,20 @@ const LoginForm = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    postLogIn(login, password).then((isLoggedIn) => {
-      if (isLoggedIn) {
-        navigate("/");
-      } else {
-        setAlert("Błędne dane logowania.");
-      }
-    });
+    postLogIn(login, password)
+      .then((isLoggedIn) => {
+        if (isLoggedIn) {
+          navigate("/home");
+        } else {
+          setAlert("Błędne dane logowania.");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        setAlert(
+          "Coś poszło nie tak. Sprawdź połaczenie internetowe i spróbuj jeszcze raz."
+        );
+      });
   };
 
   return (
@@ -59,6 +66,14 @@ const LoginForm = () => {
         </div>
 
         <Alert />
+        <div className="w-full flex">
+          <Link
+            className="text-center text-sm font-bold w-full hover:underline"
+            to="/password-reset"
+          >
+            Zapomniałem hasła
+          </Link>
+        </div>
         <div className="mt-3">
           <button
             type="submit"

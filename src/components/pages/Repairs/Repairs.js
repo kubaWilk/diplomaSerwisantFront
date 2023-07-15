@@ -33,11 +33,11 @@ const Repairs = ({ filterUserId, filterDeviceID }) => {
     const objKeys = Object.keys(apiCall);
     const objVals = Object.values(apiCall);
 
-    objKeys.forEach((e, i) => {
-      if (objVals[i] !== "" && tempApiString === "?") {
-        tempApiString = tempApiString + `${e}=${objVals[i]}`;
-      } else if (objVals[i] !== "") {
-        tempApiString = tempApiString + `&${e}=${objVals[i]}`;
+    objKeys.forEach((item, index) => {
+      if (objVals[index] !== "" && tempApiString === "?") {
+        tempApiString = tempApiString + `${item}=${objVals[index]}`;
+      } else if (objVals[index] !== "") {
+        tempApiString = tempApiString + `&${item}=${objVals[index]}`;
       }
     });
 
@@ -91,9 +91,7 @@ const Repairs = ({ filterUserId, filterDeviceID }) => {
           <NavButtons />
         </Fragment>
       )}
-      <p className="text-xs">
-        Aby zobaczyć szczegóły naprawy kliknij podwójnie na pozycji w tabeli
-      </p>
+
       <table className="w-[90%] text-center repair-table">
         <thead>
           <tr>
@@ -106,7 +104,7 @@ const Repairs = ({ filterUserId, filterDeviceID }) => {
           </tr>
         </thead>
         <tbody>
-          <RepairsSearchRow searchCall={prepareApiCall} />
+          {/* <RepairsSearchRow searchCall={prepareApiCall} /> */}
           {renderUseCase()}
         </tbody>
       </table>

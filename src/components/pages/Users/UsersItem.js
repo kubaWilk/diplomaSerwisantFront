@@ -5,7 +5,7 @@ const UsersItem = ({ item, displayCust }) => {
   const navigate = useNavigate();
   return (
     <tr
-      onDoubleClick={() => navigate(`/user/${item.id}`)}
+      onClick={() => navigate(`/user/${item.id}`)}
       className="odd:bg-gray-100 hover:bg-gray-300"
     >
       <td>{item.id}</td>

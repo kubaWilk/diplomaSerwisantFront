@@ -18,10 +18,6 @@ const Users = ({ displayOnlyCustomers }) => {
   return (
     <div className="flex flex-col items-center justify-start w-full">
       {displayOnlyCustomers && <SectionName text="Klienci" />}
-
-      <p className="text-xs">
-        Aby zobaczyć szczegóły, kliknij podwójnie na wybranej pozycji w tabeli
-      </p>
       <table className="w-[90%] text-center repair-table">
         <thead>
           <tr>
@@ -35,7 +31,7 @@ const Users = ({ displayOnlyCustomers }) => {
           </tr>
         </thead>
         <tbody>
-          <UserSearchRow displayCust={displayOnlyCustomers} />
+          {/* <UserSearchRow displayCust={displayOnlyCustomers} /> */}
           {users.map((e) => (
             <UsersItem key={e.id} displayCust={displayOnlyCustomers} item={e} />
           ))}

@@ -13,9 +13,10 @@ const EditUserForm = ({ userData }) => {
   const [street, setStreet] = useState(userData.street);
   const [postCode, setPostCode] = useState(userData.postCode);
   const [city, setCity] = useState(userData.city);
+  const [role, setRole] = useState(userData.inAppRole);
 
   const { setAlert } = useContext(AlertContext);
-  const { putUserById, user: loggedInUser } = useContext(UserContext);
+  const { putUserById, user: loggedInUser, isAdmin } = useContext(UserContext);
   const { id } = useParams();
 
   const navigate = useNavigate();
@@ -50,15 +51,21 @@ const EditUserForm = ({ userData }) => {
     else if (!cityRegex.test(city) || city === "")
       setAlert("Nieprawidłowe miasto");
     else {
-      // console.log(userData);
+      const rolesMap = {
+        admin: 3,
+        user: 4,
+        customer: 5,
+      };
+
       const updatedUserData = {
-        // ...userData,
         firstName: firstName,
         lastName: lastName,
         phoneNumber: phoneNumber,
         street: street,
         city: city,
         postCode: postCode,
+        inAppRole: role,
+        role: rolesMap[role],
       };
 
       if (id !== undefined) {
@@ -166,6 +173,23 @@ const EditUserForm = ({ userData }) => {
             onChange={(e) => setCity(e.target.value)}
           />
         </div>
+        {isAdmin() && (
+          <div className="mt-2 space-x-2">
+            <label className="font-bold text-sm">
+              <p className="uppercase">Uprawnienia:</p>
+              <select
+                className="custom-select mx-1"
+                defaultValue={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                <option value="admin">Administrator</option>
+                <option value="user">Serwisant</option>
+                <option value="customer">Klient</option>
+              </select>
+            </label>
+          </div>
+        )}
+
         <Alert />
       </form>
       <div className="mt-2 flex space-x-2 w-full justify-center items-center">

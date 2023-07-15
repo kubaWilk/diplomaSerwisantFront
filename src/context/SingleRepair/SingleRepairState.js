@@ -1,6 +1,10 @@
 import React, { useReducer } from "react";
 import axios from "axios";
-import { SET_REPAIR, UPDATE_REPAIR } from "../types";
+import {
+  SET_REPAIR,
+  UPDATE_REPAIR_STATUS,
+  UPDATE_REPAIR_COST_ACCEPTED,
+} from "../types";
 import SingleRepairReducer from "./SingleRepairReducer";
 import SingleRepairContext from "./SingleRepairContext";
 import { Config } from "../../config";
@@ -89,7 +93,7 @@ const SingleRepairState = (props) => {
       });
   };
 
-  const putRepair = (id, status, token) => {
+  const changeRepairStatus = (id, status, token) => {
     axios
       .put(
         `${Config.apiUrl}/api/repairs/${id}`,
@@ -106,22 +110,34 @@ const SingleRepairState = (props) => {
       )
       .then((res) =>
         dispatch({
-          type: UPDATE_REPAIR,
+          type: UPDATE_REPAIR_STATUS,
           payload: res.data.data.attributes.status,
         })
       )
       .catch((e) => console.log(e));
   };
 
-  const postCostAccept = (id) => {
-    //TODO: Check if bug (no repair state after refresh) persists after API's implemented
-    axios
-      .put(`/repairs/${id}`, {
-        ...state.repair,
-        costAccepted: true,
-      })
-      .catch((e) => console.log(e))
-      .finally(fetchRepairById(id));
+  const postCostAccept = (id, isCostAccepted, token) => {
+    return axios
+      .put(
+        `${Config.apiUrl}/api/repairs/${id}`,
+        {
+          data: {
+            costAccepted: isCostAccepted,
+          },
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      )
+      .then((res) => {
+        dispatch({
+          type: UPDATE_REPAIR_COST_ACCEPTED,
+          payload: res.data.data.attributes.costAccepted,
+        });
+      });
   };
 
   const removeRepair = (id, token) => {
@@ -139,7 +155,7 @@ const SingleRepairState = (props) => {
         isLoading: state.isLoading,
         postRepair,
         postDevice,
-        putRepair,
+        putRepair: changeRepairStatus,
         fetchRepairById,
         postCostAccept,
         removeRepair,

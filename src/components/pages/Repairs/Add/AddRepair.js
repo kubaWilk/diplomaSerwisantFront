@@ -135,11 +135,6 @@ const AddRepair = () => {
         return true;
       }
 
-      if (device.serialNumber === "") {
-        setAlert("Należy podać numer seryjny urządzenia");
-        return true;
-      }
-
       if (device.model === "") {
         setAlert("Należy podać model urządzenia");
         return true;
@@ -176,7 +171,9 @@ const AddRepair = () => {
         photos: uploadedFiles.length !== 0 ? formData : null,
       };
 
-      postRepair(repair, token).then(navigate(-1));
+      postRepair(repair, token).then(() => {
+        navigate(-1);
+      });
     } catch (error) {
       let hasErrorOccured = false;
       console.log(error);
@@ -286,6 +283,7 @@ const AddRepair = () => {
         <div className="flex space-x-2 justify-center">
           <label htmlFor="newCustomer">
             <input
+              data-testid="newCustomerSelect"
               type="radio"
               id="newCustomer"
               value="newCustomer"
@@ -315,11 +313,11 @@ const AddRepair = () => {
         <div className="flex w-full justify-center">
           <div>
             <FormGroup
-              htmlFor="firstName"
               label="Imię"
               value={customer.firstName}
               type="text"
               name="firstName"
+              placeholder="Imię"
               onChange={(e) => {
                 onCustomerChange(e);
               }}
@@ -343,7 +341,7 @@ const AddRepair = () => {
             <FormGroup
               htmlFor="eMail"
               label="E - Mail"
-              value={customer.eMail}
+              value={customer.email}
               type="text"
               name="eMail"
               onChange={(e) => onCustomerChange(e)}
@@ -400,6 +398,7 @@ const AddRepair = () => {
         <div className="flex space-x-2 justify-center">
           <label htmlFor="newDevice">
             <input
+              data-testid="newDeviceSelect"
               type="radio"
               value="newDevice"
               id="newDevice"
@@ -414,6 +413,7 @@ const AddRepair = () => {
           </label>
           <label htmlFor="existingDevice">
             <input
+              data-testid="existingDeviceSelect"
               type="radio"
               id="existingDevice"
               value="existingDevice"

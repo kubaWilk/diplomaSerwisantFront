@@ -25,6 +25,7 @@ const EditDeviceForm = ({ deviceData }) => {
     "border-2 border-gray-400 outline-black rounded-md p-1 px-5";
 
   const onSubmit = () => {
+    if (checkInput()) return;
     axios
       .put(
         `${Config.apiUrl}/api/devices/${id}`,
@@ -50,74 +51,86 @@ const EditDeviceForm = ({ deviceData }) => {
       });
   };
 
+  const checkInput = () => {
+    if (manufacturer === "") {
+      setAlert("Producent sprzętu nie może być pusty.");
+      return true;
+    }
+
+    if (model === "") {
+      setAlert("Model sprzętu nie może być pusty.");
+      return true;
+    }
+
+    return false;
+  };
+
+  const labelStyle = "text-center uppercase flex flex-col";
+
   return (
     <Fragment>
       <h2 className="uppercase text-center font-bold m-2 text-lg">Edytuj</h2>
       <form
+        data-testid="EditDeviceForm"
         className="px-5 flex flex-col items-center justify-center"
         onSubmit={onSubmit}
       >
         <div className="flex flex-col space-y-1">
-          <label
-            htmlFor="manufacturer"
-            className="text-center font-bold uppercase"
-          >
-            Producent
+          <label htmlFor="manufacturer" className={labelStyle}>
+            <strong>Producent</strong>
+            <input
+              id="manufacturer"
+              name="manufacturer"
+              className={inputStyle}
+              type="text"
+              placeholder="Producent"
+              value={manufacturer}
+              onChange={(e) => setManufacturer(e.target.value)}
+            />
           </label>
-          <input
-            name="manufacturer"
-            className={inputStyle}
-            type="text"
-            placeholder="Producent"
-            value={manufacturer}
-            onChange={(e) => setManufacturer(e.target.value)}
-          />
         </div>
         <div className="flex flex-col space-y-1">
-          <label htmlFor="model" className="text-center font-bold uppercase">
-            Model
+          <label htmlFor="model" className={labelStyle}>
+            <strong>Model</strong>
+            <input
+              id="model"
+              name="model"
+              className={inputStyle}
+              type="text"
+              placeholder="Model"
+              value={model}
+              onChange={(e) => setModel(e.target.value)}
+            />
           </label>
-          <input
-            name="model"
-            className={inputStyle}
-            type="text"
-            placeholder="Model"
-            value={model}
-            onChange={(e) => setModel(e.target.value)}
-          />
         </div>
         <div className="flex flex-col space-y-1">
-          <label
-            htmlFor="serialNumber"
-            className="text-center font-bold uppercase"
-          >
-            Nr seryjny
+          <label htmlFor="serialNumber" className={labelStyle}>
+            <strong>Nr seryjny</strong>
+            <input
+              id="serialNumber"
+              name="serialNumber"
+              className={inputStyle}
+              type="text"
+              placeholder="Nr seryjny"
+              value={serialNumber}
+              onChange={(e) => setSerialNumber(e.target.value)}
+            />
           </label>
-          <input
-            name="serialNumber"
-            className={inputStyle}
-            type="text"
-            placeholder="S\N"
-            value={serialNumber}
-            onChange={(e) => setSerialNumber(e.target.value)}
-          />
         </div>
 
         <div className="flex flex-col space-y-1">
-          <label
-            htmlFor="stateAtArrival"
-            className="text-center font-bold uppercase"
-          >
-            Stan przy przyjęciu
+          <label htmlFor="stateAtArrival" className={labelStyle}>
+            <strong>Stan przy przyjęciu</strong>
+            <input
+              id="stateAtArrival"
+              name="stateAtArrival"
+              className={inputStyle}
+              type="text"
+              placeholder="Stan przy przyjęciu"
+              value={stateAtArrival}
+              onChange={(e) => setStateAtArrival(e.target.value)}
+            />
           </label>
-          <input
-            name="stateAtArrival"
-            className={inputStyle}
-            type="text"
-            placeholder="Nazwisko"
-            value={stateAtArrival}
-            onChange={(e) => setStateAtArrival(e.target.value)}
-          />
         </div>
         <Alert />
       </form>

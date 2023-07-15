@@ -1,18 +1,19 @@
-import React, { Fragment } from "react";
+import React from "react";
 
-const FormGroup = ({ htmlFor, label, value, type, onChange, name }) => {
+const FormGroup = ({ label, value, type, onChange, name, placeholder }) => {
   return (
     <div className="form-group">
-      <label className="self-start ml-2 mb-1" htmlFor={htmlFor}>
-        {label}:
+      <label className="self-start ml-2 mb-1">
+        <p>{label}</p>
+        <input
+          type={type}
+          value={value}
+          className="m-1 p-1 border self-stretch"
+          onChange={onChange}
+          name={name}
+          placeholder={placeholder}
+        />
       </label>
-      <input
-        type={type}
-        value={value}
-        className="m-1 p-1 border self-stretch"
-        onChange={onChange}
-        name={name}
-      />
     </div>
   );
 };

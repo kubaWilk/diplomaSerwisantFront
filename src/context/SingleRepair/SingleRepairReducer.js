@@ -1,4 +1,8 @@
-import { SET_REPAIR, UPDATE_REPAIR } from "../types";
+import {
+  SET_REPAIR,
+  UPDATE_REPAIR_STATUS,
+  UPDATE_REPAIR_COST_ACCEPTED,
+} from "../types";
 import { Config } from "../../config";
 
 const SingleRepairReducer = (state, action) => {
@@ -16,10 +20,15 @@ const SingleRepairReducer = (state, action) => {
         repair: { ...action.payload, photos: parsedPhotos },
         isLoading: false,
       };
-    case UPDATE_REPAIR:
+    case UPDATE_REPAIR_STATUS:
       return {
         ...state,
         repair: { ...state.repair, status: action.payload },
+      };
+    case UPDATE_REPAIR_COST_ACCEPTED:
+      return {
+        ...state,
+        repair: { ...state.repair, costAccepted: action.payload },
       };
     default:
       return { ...state };

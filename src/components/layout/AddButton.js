@@ -3,9 +3,10 @@ import PropTypes from "prop-types";
 
 const AddButton = ({ onClick }) => {
   return (
-    <div className="absolute bottom-10 right-10">
+    <div data-testid="addButton" className="absolute bottom-10 right-10">
       <i
         onClick={() => onClick()}
+        data-testid="addButtonIcon"
         className="fa-solid fa-circle-plus fa-2x cursor-pointer"
       ></i>
     </div>

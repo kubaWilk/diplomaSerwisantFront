@@ -8,7 +8,7 @@ const DeviceItem = ({ item }) => {
   return (
     <tr
       className="odd:bg-gray-100 hover:bg-gray-300"
-      onDoubleClick={() => {
+      onClick={() => {
         navigate(`/devices/${item.id}/summary`);
       }}
     >

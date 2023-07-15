@@ -1,15 +1,17 @@
 import axios from "axios";
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import AlertContext from "../../../../../context/Alert/AlertContext";
 import UserContext from "../../../../../context/User/UserContext";
 import Alert from "../../../../layout/Alert";
 import { Config } from "../../../../../config";
+import SingleRepairContext from "../../../../../context/SingleRepair/SingleRepairContext";
 
 const AddCostModal = ({ closeToggle, costs, costSetter }) => {
   const {
     user: { jwt: token },
   } = useContext(UserContext);
+  const { fetchRepairById } = useContext(SingleRepairContext);
   const { id } = useParams();
   const { setAlert } = useContext(AlertContext);
   const [costType, setCostType] = useState("service");
@@ -34,6 +36,7 @@ const AddCostModal = ({ closeToggle, costs, costSetter }) => {
           { headers: { Authorization: `Bearer ${token}` } }
         )
         .then((res) => {
+          fetchRepairById(id, token);
           costs.push({
             id: res.data.data.id,
             ...res.data.data.attributes,

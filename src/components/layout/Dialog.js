@@ -13,10 +13,13 @@ const Dialog = ({
     <div className="w-screen h-screen z-50 fixed top-0 right-0 bg-gray-200 bg-opacity-70">
       <div className="w-full h-full flex flex-col items-center justify-center">
         <div className="bg-white border-2 border-black p-2 rounded-md flex flex-col items-center justify-center">
-          <h2 className="uppercase text-center font-bold m-2 text-lg">
+          <h2
+            data-testid="heading"
+            className="uppercase text-center font-bold m-2 text-lg"
+          >
             {heading}
           </h2>
-          <p>{prompt}</p>
+          <p data-testid="paragraph">{prompt}</p>
           <div className="flex space-x-2">
             <button
               className="font-bold uppercase border-2 px-2 m-2 border-green-500 hover:bg-green-500 hover:text-white duration-200"

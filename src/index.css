@@ -57,3 +57,11 @@ td {
   bottom: 0;
   object-fit: cover;
 }
+
+.custom-select {
+  @apply text-sm border border-dotted border-black text-center bg-transparent font-bold backdrop:bg-black;
+}
+
+.form-label {
+  @apply text-center font-bold uppercase;
+}

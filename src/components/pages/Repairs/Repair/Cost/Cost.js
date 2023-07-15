@@ -11,6 +11,8 @@ import { useContext } from "react";
 import SingleRepairContext from "../../../../../context/SingleRepair/SingleRepairContext";
 import UserContext from "../../../../../context/User/UserContext";
 import { Config } from "../../../../../config";
+import AlertContext from "../../../../../context/Alert/AlertContext";
+import Alert from "../../../../layout/Alert";
 
 const Cost = () => {
   const { id } = useParams();
@@ -22,6 +24,8 @@ const Cost = () => {
     isCustomer,
     user: { jwt: token },
   } = useContext(UserContext);
+  const { setAlert } = useContext(AlertContext);
+  const { fetchRepairById } = useContext(SingleRepairContext);
   //state
   const [costs, setCosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -41,6 +45,7 @@ const Cost = () => {
   };
 
   useEffect(() => {
+    fetchRepairById(id, token);
     getCosts();
   }, []);
 
@@ -65,7 +70,10 @@ const Cost = () => {
   };
 
   const submitAcceptCost = () => {
-    postCostAccept(id);
+    postCostAccept(id, true, token).catch((error) => {
+      setAlert("Coś poszło nie tak. Sprawdź połączenie internetowe.");
+      console.log(error);
+    });
     setApproveCostModalToggle(false);
   };
 
@@ -101,6 +109,7 @@ const Cost = () => {
         <p className="text-2xl uppercase font-bold absolute bottom-10 left-10">
           Łącznie: {summedPrice} zł
         </p>
+        <Alert />
         {!costAccepted && isCustomer() && (
           <button
             onClick={() => setApproveCostModalToggle(true)}

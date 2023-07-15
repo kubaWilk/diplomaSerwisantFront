@@ -47,9 +47,6 @@ const DevicesTable = () => {
 
   return (
     <Fragment>
-      <p className="text-xs">
-        Aby zobaczyć szczegóły, kliknij podwójnie na wybranej pozycji w tabeli
-      </p>
       <table className="text-center repair-table w-[90%]">
         <thead>
           <tr>
@@ -59,7 +56,7 @@ const DevicesTable = () => {
             <th>Nr seryjny:</th>
           </tr>
         </thead>
-        <DevicesSearchRow />
+        {/* <DevicesSearchRow /> */}
         {allDevices.map((device) => (
           <DeviceItem item={device} />
         ))}

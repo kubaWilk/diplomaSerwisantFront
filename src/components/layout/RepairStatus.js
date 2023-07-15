@@ -4,7 +4,7 @@ import UserContext from "../../context/User/UserContext";
 import { useParams } from "react-router-dom";
 
 const RepairStatus = () => {
-  const [repairStatus, setRepairStatus] = useState();
+  const [inComponentRepairStatus, setInComponentRepairStatus] = useState();
 
   const { repair, putRepair } = useContext(SingleRepairContext);
   const {
@@ -13,28 +13,36 @@ const RepairStatus = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    if (repair.status !== repairStatus && repairStatus !== undefined)
-      putRepair(id, repairStatus, token);
-  }, [repairStatus]);
+    if (
+      repair.status !== inComponentRepairStatus &&
+      inComponentRepairStatus !== undefined
+    )
+      putRepair(id, inComponentRepairStatus, token);
+  }, [inComponentRepairStatus]);
 
   useEffect(() => {
-    setRepairStatus(repair.status);
+    setInComponentRepairStatus(repair.status);
   }, [repair.status]);
 
   return (
     <Fragment>
-      <div className="flex w-full justify-center align-center space-x-2">
-        <label className="font-bold text-lg mb-1">Status naprawy: </label>
-        <select
-          className="text-sm border border-dotted border-black text-center bg-transparent font-bold uppercase backdrop:bg-black"
-          value={repairStatus}
-          onChange={(e) => setRepairStatus(e.target.value)}
-        >
-          <option>W trakcie</option>
-          <option>Oczekuje na decyzję klienta</option>
-          <option>Oczekiwanie na dostawcę</option>
-          <option>Zamknięta</option>
-        </select>
+      <div
+        data-testid="repairStatusComponent"
+        className="flex w-full justify-center align-center space-x-2"
+      >
+        <label className="font-bold text-lg mb-1">
+          Status naprawy:
+          <select
+            className="custom-select uppercase"
+            value={inComponentRepairStatus}
+            onChange={(e) => setInComponentRepairStatus(e.target.value)}
+          >
+            <option>W trakcie</option>
+            <option>Oczekuje na decyzję klienta</option>
+            <option>Oczekiwanie na dostawcę</option>
+            <option>Zamknięta</option>
+          </select>
+        </label>
       </div>
     </Fragment>
   );

@@ -4,10 +4,12 @@ import { Config } from "../../../../config";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import UserContext from "../../../../context/User/UserContext";
+import AlertContext from "../../../../context/Alert/AlertContext";
 
 const DeviceSummary = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [device, setDevice] = useState({});
+  const { setAlert } = useContext(AlertContext);
 
   const { id } = useParams();
   const {
@@ -16,16 +18,23 @@ const DeviceSummary = () => {
 
   useEffect(() => {
     const getDevice = async () => {
-      const res = await axios.get(
-        `${Config.apiUrl}/api/devices/${id}?populate=*`,
-        {
+      axios
+        .get(`${Config.apiUrl}/api/devices/${id}?populate=*`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
-      );
-      setDevice(res.data);
-      setIsLoading(false);
+        })
+        .then((res) => {
+          setDevice(res.data);
+          setIsLoading(false);
+        })
+        .catch((e) => {
+          console.log("Something went wrong, here's debugging info:", e);
+
+          setAlert(
+            "Nastąpił błąd ładowania danych - sprawdź połączenie internetowe lub skontaktuj się z administratorem aplikacji"
+          );
+        });
     };
 
     getDevice();
@@ -36,7 +45,7 @@ const DeviceSummary = () => {
 
   return (
     <Fragment>
-      <ul>
+      <ul data-testid="DeviceSummaryMainUl">
         <li>
           <strong>ID: </strong>
           {device.id}

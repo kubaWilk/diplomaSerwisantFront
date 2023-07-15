@@ -17,7 +17,7 @@ const UserState = (props) => {
 
   const [state, dispatch] = useReducer(UserReducer, initialState);
 
-  const setUser = (data, jwt) => {
+  const parseAndDispatchUser = (data, jwt) => {
     const parsedUser = parseUserData(data, jwt);
     sessionStorage.setItem("user", JSON.stringify(parsedUser));
 
@@ -116,8 +116,7 @@ const UserState = (props) => {
   };
 
   const postLogIn = async (login, password) => {
-    let isSuccess = false;
-    await axios
+    return await axios
       .post(
         `${Config.apiUrl}/api/auth/local`,
         {
@@ -132,81 +131,41 @@ const UserState = (props) => {
         }
       )
       .then((response) => {
-        const tempUser = setUser(response.data);
+        const tempUser = parseAndDispatchUser(response.data);
         getCustomers(tempUser.jwt);
+        return true;
       })
       .catch((error) => {
         console.log(error);
         if (error.response.data.error.name === "ValidationError") {
-          isSuccess = false;
+          return false;
         } else {
           console.log(error);
         }
       });
-
-    return Promise.resolve(isSuccess);
   };
 
   const postUser = async (userData, role) => {
     const roles = {
-      super_admin: 3,
+      admin: 3,
       user: 4,
       customer: 5,
     };
 
-    let generatedUsername = await generateUsername("jakub.wilk");
-
     return axios
       .post(
-        `${Config.apiUrl}/api/users`,
+        `${Config.apiUrl}/api/custom-user/register`,
         {
           ...userData,
-          username: generatedUsername,
           email: userData.eMail,
-          password: "abcde!@#1A111111",
           inAppRole: role,
           role: roles[role],
-          confirmed: true,
+          provider: "local",
         },
         { headers: { Authorization: `Bearer ${state.user.jwt}` } }
       )
       .then((res) => {
         return res;
-      });
-  };
-
-  const generateUsername = (username) => {
-    const splitUsername = username.trim().split(" ");
-    let output = "";
-
-    splitUsername.forEach((element) => {
-      output = output + element;
-    });
-
-    return checkIfUserExist(splitUsername).then((doesUserExist) => {
-      if (doesUserExist) {
-        let tempUserName = output.split(".");
-
-        if (tempUserName.length < 3) {
-          return generateUsername(`${tempUserName[0]}.a.${tempUserName[1]}`);
-        }
-
-        return generateUsername(
-          `${tempUserName[0]}.${tempUserName[1] + "a"}.${tempUserName[2]}`
-        );
-      } else {
-        return output;
-      }
-    });
-  };
-
-  const checkIfUserExist = async (username) => {
-    return axios
-      .get(`${Config.apiUrl}/api/users?filters[username][$eq]=${username}`, {
-        headers: { Authorization: `Bearer ${state.user.jwt}` },
-      })
-      .then((e) => {
-        if (e.data.length > 0) return true;
       });
   };
 
@@ -224,11 +183,46 @@ const UserState = (props) => {
             payload: parseCustomerData(res.data),
           });
         } else {
-          setUser(res.data);
+          const { firstName, lastName, phoneNumber, street, postCode, city } =
+            res.data;
+
+          dispatch({
+            type: SET_USER,
+            payload: {
+              firstName,
+              lastName,
+              phoneNumber,
+              street,
+              postCode,
+              city,
+            },
+          });
         }
         return SUCCESS;
       })
       .catch((e) => console.log(e));
+  };
+
+  const changePassword = async (userCurrentPassword, userNewPassword) => {
+    return await axios.post(
+      `${Config.apiUrl}/api/auth/change-password`,
+      {
+        currentPassword: userCurrentPassword,
+        password: userNewPassword,
+        passwordConfirmation: userNewPassword,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${state.user.jwt}`,
+        },
+      }
+    );
+  };
+
+  const deleteUser = async (id) => {
+    return await axios.delete(`${Config.apiUrl}/api/custom-user/${id}`, {
+      headers: { Authorization: `Bearer ${state.user.jwt}` },
+    });
   };
 
   return (
@@ -248,6 +242,8 @@ const UserState = (props) => {
         postLogIn,
         postUser,
         putUserById,
+        changePassword,
+        deleteUser,
       }}
     >
       {props.children}

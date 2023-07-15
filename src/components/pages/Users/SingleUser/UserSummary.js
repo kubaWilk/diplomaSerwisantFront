@@ -51,6 +51,10 @@ const UserSummary = () => {
           <strong>Nr kontaktowy: </strong>
           {data.phoneNumber}
         </li>
+        <li>
+          <strong>E-Mail: </strong>
+          {data.email}
+        </li>
         <div className="border-b-2 border-gray-400 border-dotted mt-2">
           Adres:
         </div>

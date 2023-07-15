@@ -10,7 +10,7 @@ const UserReducer = (state, action) => {
     case SET_USER:
       return {
         ...state,
-        user: action.payload,
+        user: { ...state.user, ...action.payload },
       };
     case SET_CUSTOMER: {
       return { ...state, customer: action.payload };

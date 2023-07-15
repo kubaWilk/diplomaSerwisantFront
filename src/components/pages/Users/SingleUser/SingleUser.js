@@ -1,29 +1,52 @@
 import React, { useState, useContext } from "react";
-import { Link, Outlet, useNavigate } from "react-router-dom";
-import { useParams, useLocation } from "react-router-dom";
-import axios from "axios";
+import {
+  Link,
+  Outlet,
+  useNavigate,
+  useParams,
+  useLocation,
+} from "react-router-dom";
 import Dialog from "../../../layout/Dialog";
 import UserContext from "../../../../context/User/UserContext";
+import Alert from "../../../layout/Alert";
+import AlertContext from "../../../../context/Alert/AlertContext";
+import axios from "axios";
 import { Config } from "../../../../config";
 
 const SingleUser = () => {
   const { id } = useParams();
   const location = useLocation();
   const [deleteModalToggle, setDeleteModalToggle] = useState(false);
-  const {
-    user: { jwt: token },
-  } = useContext(UserContext);
+  const { deleteUser, isAdmin, user } = useContext(UserContext);
+  const { setAlert } = useContext(AlertContext);
   const navigate = useNavigate();
 
-  const { isAdmin } = useContext(UserContext);
-
-  const deleteUser = async () => {
-    axios
-      .delete(`${Config.apiUrl}/api/users/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+  const handleDelete = () => {
+    deleteUser(id)
+      .then(() => {
+        setDeleteModalToggle(false);
+        navigate(-1);
       })
-      .then(navigate(-1))
-      .catch((e) => console.log(e));
+      .catch((error) => {
+        setAlert("Coś poszło nie tak. Spróbuj jeszcze raz.");
+        console.log(error);
+      });
+  };
+
+  const handlePasswordReset = async () => {
+    axios
+      .post(`${Config.apiUrl}/api/auth/forgot-password`, {
+        email: user.email,
+      })
+      .then((response) => {
+        alert("E-mail z linkiem do resetu hasła wysłany!");
+      })
+      .catch((error) => {
+        console.log("An error occurred:", error.response);
+        setAlert(
+          "Coś poszło nie tak. Sprawdź połączenie internetowe i spróbuj ponownie"
+        );
+      });
   };
 
   return (
@@ -48,21 +71,30 @@ const SingleUser = () => {
           Edytuj
         </Link>
         {isAdmin() && (
-          <button
-            className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
-            onClick={() => {
-              setDeleteModalToggle(true);
-            }}
-          >
-            Usuń
-          </button>
+          <>
+            <button
+              className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+              onClick={() => {
+                handlePasswordReset();
+              }}
+            >
+              Zresetuj Hasło
+            </button>
+            <button
+              className="text-black border-2 p-2 border-black font-bold hover:text-white hover:bg-black uppercase duration-200 mt-4 mb-4"
+              onClick={() => {
+                setDeleteModalToggle(true);
+              }}
+            >
+              Usuń
+            </button>
+          </>
         )}
         {deleteModalToggle && (
           <Dialog
             prompt="Czy chcesz usunąć tego użytkownika? Spowoduje to usunięcie powiązanych napraw i urządzeń!"
             onApprove={() => {
-              deleteUser();
-              setDeleteModalToggle(false);
+              handleDelete();
             }}
             onCancel={() => {
               setDeleteModalToggle(false);
@@ -70,6 +102,7 @@ const SingleUser = () => {
           />
         )}
       </div>
+      <Alert />
       <Outlet key={location.pathname} />
     </div>
   );

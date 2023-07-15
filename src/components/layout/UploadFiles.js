@@ -25,7 +25,10 @@ const UploadFiles = (props) => {
   };
 
   return (
-    <div className="flex flex-col items-center border-2 p-3 border-dashed rounded-md">
+    <div
+      data-testid="uploadFilesComponent"
+      className="flex flex-col items-center border-2 p-3 border-dashed rounded-md"
+    >
       <label htmlFor="photos" className="p-2">
         Zdjęcia
       </label>
@@ -33,20 +36,21 @@ const UploadFiles = (props) => {
         <a className="block border-2 text-sm border-black p-1 font-bold uppercase text-black bg-white hover:bg-black hover:text-white duration-200 cursor-pointer">
           Dodaj
         </a>
+        <input
+          id="file-upload"
+          type="file"
+          multiple
+          accept=".png,.jpg,.jpeg,.bmp,.pdf"
+          className="hidden"
+          onChange={handleFileEvent}
+        />
       </label>
-      <input
-        id="file-upload"
-        type="file"
-        multiple
-        accept=".png,.jpg,.jpeg,.bmp,.pdf"
-        className="hidden"
-        onChange={handleFileEvent}
-      />
-      <ul>
+      <ul data-testid="ul">
         {uploadedFiles.length > 0 &&
-          uploadedFiles.map((file) => (
-            <li key={file.name}>
+          uploadedFiles.map((file, index) => (
+            <li data-testid={`addedFile${index}`} key={file.name}>
               <a
+                data-testid={`fileRemoveAnchor${index}`}
                 className="px-1 cursor-pointer text-red-600"
                 onClick={() => removeFile(file.name)}
               >
