@@ -3,6 +3,7 @@ export const USER_LOGOUT = "USER_LOGOUT";
 export const SET_USER = "SET_USER";
 export const SET_USERS = "SET_USERS";
 export const SET_CUSTOMER = "SET_CUSTOMER";
+export const SET_TOKEN = "SET_TOKEN";
 
 //Alarm
 export const SET_ALERT = "SET_ALERT";

@@ -1,23 +1,38 @@
-import React, { Fragment, useContext } from "react";
+import React, { Fragment, useContext, useEffect } from "react";
 import { Link } from "react-router-dom";
 import UserContext from "../../context/User/UserContext";
 
 const UserBar = () => {
-  const { user, getRole, logout } = useContext(UserContext);
+  const { user, logout } = useContext(UserContext);
+
+  const getInitials = () => {
+    let initials = "";
+
+    if (
+      user.userDetails.firstName.length <= 0 ||
+      user.userDetails.lastName.length <= 0
+    )
+      return "AA";
+
+    initials += user.userDetails.firstName[0].toUpperCase();
+    initials += user.userDetails.lastName[0].toUpperCase();
+
+    return initials;
+  };
+
   return (
     <Fragment>
       <div className="p-2 border-t border-blackmd:absolute bottom-0 left-0">
         <div className="flex justify-between flex-col md:flex-row">
           <div className="flex">
             <div className="flex justify-center items-center w-[40px] h-[40px] rounded-full border-2 border-black">
-              JW
+              {getInitials()}
             </div>
-            <div className="flex flex-col ml-2">
+            <div className="flex flex-col ml-2 justify-center">
               <Link
                 to="/user/self/about"
                 className="text-md"
-              >{`${user.firstName} ${user.lastName}`}</Link>
-              <p className="text-xs">{getRole()}</p>
+              >{`${user.userDetails.firstName} ${user.userDetails.lastName}`}</Link>
             </div>
           </div>
           <button

@@ -1,10 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { NavLink } from "react-router-dom";
 import UserContext from "../../context/User/UserContext";
 import UserBar from "./UserBar";
 
 const SideMenu = () => {
   const { isCustomer, isAdmin } = useContext(UserContext);
+
   return (
     <div className="min-w-[250px] h-[100vh] sticky top-0 left-0 flex flex-col justify-between border-r relative border-gray-400">
       <div className="flex flex-col">

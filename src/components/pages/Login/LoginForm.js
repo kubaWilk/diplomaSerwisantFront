@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AlertContext from "../../../context/Alert/AlertContext";
-import RepairsContext from "../../../context/Repairs/RepairsContext";
 import UserContext from "../../../context/User/UserContext";
 import Alert from "../../layout/Alert";
 
@@ -10,7 +9,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
 
   const { setAlert } = useContext(AlertContext);
-  const { checkSession, postLogIn } = useContext(UserContext);
+  const { checkSession, authenticateUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,13 +19,13 @@ const LoginForm = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    postLogIn(login, password).then((isLoggedIn) => {
-      if (isLoggedIn) {
-        navigate("/");
-      } else {
-        setAlert("Błędne dane logowania.");
-      }
-    });
+    authenticateUser(login, password)
+      .then(navigate("/"))
+      .catch((e) => {
+        if (e.code === "ERR_NETWORK") setAlert("Błąd połączenia");
+        if (e.response.status === 403)
+          setAlert("Nieprawidłowe dane logowania!");
+      });
   };
 
   return (
@@ -52,6 +51,7 @@ const LoginForm = () => {
           <input
             name="password"
             type="password"
+            autoComplete="password"
             className="border-2 rounded-md p-1 w-[20rem]"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
