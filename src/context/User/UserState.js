@@ -1,8 +1,6 @@
 import React, { useReducer } from "react";
-import axios from "axios";
 import UserContext from "./UserContext";
 import UserReducer from "./UserReducer";
-import { Config } from "../../config";
 import { SET_USER, USER_LOGOUT } from "../types";
 
 const UserState = (props) => {
@@ -18,17 +16,6 @@ const UserState = (props) => {
       type: SET_USER,
       payload: data,
     });
-  };
-
-  const authenticateUser = async (login, password) => {
-    await axios
-      .post(`${Config.apiUrl}/auth/login`, {
-        username: login,
-        password: password,
-      })
-      .then((response) => {
-        setUser(response.data);
-      });
   };
 
   const checkSession = () => {
@@ -75,8 +62,8 @@ const UserState = (props) => {
       value={{
         user: state.user,
         users: state.users,
+        setUser,
         checkSession,
-        authenticateUser,
         getRoles,
         logout,
         isCustomer,

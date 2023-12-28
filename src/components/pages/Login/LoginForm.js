@@ -4,22 +4,32 @@ import AlertContext from "../../../context/Alert/AlertContext";
 import UserContext from "../../../context/User/UserContext";
 import Alert from "../../layout/Alert";
 
+import axios from "axios";
+import { Config } from "../../../config";
+
 const LoginForm = () => {
   const [login, setLogin] = useState("");
   const [password, setPassword] = useState("");
 
   const { setAlert } = useContext(AlertContext);
-  const { checkSession, authenticateUser } = useContext(UserContext);
+  const { checkSession, setUser } = useContext(UserContext);
   const navigate = useNavigate();
 
   useEffect(() => {
     checkSession();
   }, []);
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    authenticateUser(login, password)
+    await axios
+      .post(`${Config.apiUrl}/auth/login`, {
+        username: login,
+        password: password,
+      })
+      .then((response) => {
+        setUser(response.data);
+      })
       .then(navigate("/"))
       .catch((e) => {
         if (e.code === "ERR_NETWORK") setAlert("Błąd połączenia");
