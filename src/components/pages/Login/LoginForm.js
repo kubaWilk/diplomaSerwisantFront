@@ -12,12 +12,8 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
 
   const { setAlert } = useContext(AlertContext);
-  const { checkSession, setUser } = useContext(UserContext);
+  const { setUser } = useContext(UserContext);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    checkSession();
-  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -32,6 +28,7 @@ const LoginForm = () => {
       })
       .then(navigate("/"))
       .catch((e) => {
+        console.log(e);
         if (e.code === "ERR_NETWORK") setAlert("Błąd połączenia");
         if (e.response.status === 403)
           setAlert("Nieprawidłowe dane logowania!");
@@ -72,9 +69,18 @@ const LoginForm = () => {
         <div className="mt-3">
           <button
             type="submit"
-            className="p-2 border-2 border-black font-bold hover:bg-black hover:text-white duration-100"
+            className="p-2 mr-1 border-2 border-black font-bold hover:bg-black hover:text-white duration-100"
           >
             Zaloguj
+          </button>
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              navigate("/reset-password");
+            }}
+            className="link-button"
+          >
+            Zapomniałem hasła
           </button>
         </div>
       </form>

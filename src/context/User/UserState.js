@@ -57,11 +57,16 @@ const UserState = (props) => {
     return isAdmin;
   };
 
+  const isLoggedIn = () => {
+    return Object.keys(state.user).length !== 0;
+  };
+
   return (
     <UserContext.Provider
       value={{
         user: state.user,
         users: state.users,
+        isLoggedIn,
         setUser,
         checkSession,
         getRoles,

@@ -8,6 +8,8 @@ const UserReducer = (state, action) => {
         user: {},
       };
     case SET_USER:
+      sessionStorage.setItem("user", JSON.stringify(action.payload.user));
+
       return {
         ...state,
         user: action.payload.user,

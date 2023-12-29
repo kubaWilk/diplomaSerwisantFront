@@ -5,7 +5,8 @@ const AlertReducer = (state, action) => {
     case SET_ALERT:
       return {
         ...state,
-        message: action.payload,
+        message: action.payload.message,
+        color: action.payload.color,
       };
     case REMOVE_ALERT:
       return {
