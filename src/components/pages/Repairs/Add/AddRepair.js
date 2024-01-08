@@ -179,7 +179,6 @@ const AddRepair = () => {
       postRepair(repair, token).then(navigate(-1));
     } catch (error) {
       let hasErrorOccured = false;
-      console.log(error);
 
       if (
         (error.response.data.error.details.errors[0].message =

@@ -50,9 +50,7 @@ const EditUserForm = ({ userData }) => {
     else if (!cityRegex.test(city) || city === "")
       setAlert("Nieprawidłowe miasto");
     else {
-      // console.log(userData);
       const updatedUserData = {
-        // ...userData,
         firstName: firstName,
         lastName: lastName,
         phoneNumber: phoneNumber,

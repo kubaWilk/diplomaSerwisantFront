@@ -12,8 +12,12 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
 
   const { setAlert } = useContext(AlertContext);
-  const { setUser } = useContext(UserContext);
+  const { setUser, isLoggedIn } = useContext(UserContext);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isLoggedIn()) navigate("/app/home");
+  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -25,10 +29,10 @@ const LoginForm = () => {
       })
       .then((response) => {
         setUser(response.data);
+        navigate("/app/home");
       })
       .then(navigate("/"))
       .catch((e) => {
-        console.log(e);
         if (e.code === "ERR_NETWORK") setAlert("Błąd połączenia");
         if (e.response.status === 403)
           setAlert("Nieprawidłowe dane logowania!");

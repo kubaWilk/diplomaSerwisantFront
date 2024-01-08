@@ -15,7 +15,7 @@ const SingleRepairState = (props) => {
 
   const fetchRepairById = async (id, token) => {
     return await axios
-      .get(`${Config.apiUrl}/api/repairs/${id}?populate=*`, {
+      .get(`${Config.apiUrl}/repair/${id}`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

@@ -24,7 +24,6 @@ const LoginForm = () => {
         navigate("/");
       })
       .catch((e) => {
-        console.log(e);
         if (e.code === "ERR_NETWORK") setAlert("Błąd połączenia");
         if (e.code === "ERR_BAD_REQUEST")
           setAlert("Nie znaleziono użytkownika z podanym adresem e-mail!");

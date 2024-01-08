@@ -45,7 +45,6 @@ const EditDeviceForm = ({ deviceData }) => {
       )
       .then(() => navigate(-1))
       .catch((e) => {
-        console.log(e);
         setAlert("Błąd połączenia. Prosimy spróbować ponownie");
       });
   };

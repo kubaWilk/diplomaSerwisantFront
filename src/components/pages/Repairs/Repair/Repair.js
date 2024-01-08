@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import Dialog from "../../../layout/Dialog";
 import UserContext from "../../../../context/User/UserContext";
 import RepairStatus from "../../../layout/RepairStatus";
-import ReactImageGallery from "react-image-gallery";
 
 const Repair = () => {
   const [deleteDialogToggle, setDeleteDialogToggle] = useState(false);
@@ -15,12 +14,12 @@ const Repair = () => {
   const { id } = useParams();
   const { isLoading, repair, fetchRepairById, removeRepair } =
     useContext(SingleRepairContext);
-  const { isAdmin, isCustomer, user } = useContext(UserContext);
+  const { isAdmin, isCustomer, user, authToken } = useContext(UserContext);
   const { customer, device } = repair;
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchRepairById(id, user.jwt);
+    fetchRepairById(id, authToken);
   }, []);
 
   if (isLoading) return <Loading />;
@@ -89,10 +88,7 @@ const Repair = () => {
         <div className="border-b-2 border-gray-200 border-dotted p-2">
           <ul>
             <li>
-              <strong>ID:</strong> {repair.id}
-            </li>
-            <li>
-              <strong>Status naprawy:</strong> {repair.status}
+              <strong>Opis usterki:</strong> {repair.description}
             </li>
           </ul>
         </div>
@@ -109,9 +105,6 @@ const Repair = () => {
             </li>
             <li>
               <strong>Nr seryjny:</strong> {device.serialNumber}
-            </li>
-            <li>
-              <strong>Stan podczas przyjęcia:</strong> {device.stateAtArrival}
             </li>
           </ul>
         </div>

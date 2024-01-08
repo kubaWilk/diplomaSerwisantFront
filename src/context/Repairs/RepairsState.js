@@ -14,20 +14,11 @@ const RepairsState = (props) => {
 
   const [state, dispatch] = useReducer(RepairsReducer, initialState);
 
-  const fetchRepairs = async (token) => {
-    await axios
-      .get(`${Config.apiUrl}/api/repairs?populate=*`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) => {
-        dispatch({
-          type: SET_REPAIRS,
-          payload: res.data,
-        });
-      })
-      .catch((error) => console.log("UserState/fetchCustomers", error));
+  const setRepairs = (data) => {
+    dispatch({
+      type: SET_REPAIRS,
+      payload: data,
+    });
   };
 
   const searchRepairs = async (apiString) => {
@@ -44,7 +35,8 @@ const RepairsState = (props) => {
       value={{
         allRepairs: state.allRepairs,
         isLoading: state.isLoading,
-        fetchRepairs,
+        // fetchRepairs,
+        setRepairs,
         searchRepairs,
       }}
     >

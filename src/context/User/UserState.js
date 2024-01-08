@@ -1,4 +1,4 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect, useState } from "react";
 import UserContext from "./UserContext";
 import UserReducer from "./UserReducer";
 import { SET_USER, USER_LOGOUT } from "../types";
@@ -9,7 +9,26 @@ const UserState = (props) => {
     user: {},
   };
 
-  const [state, dispatch] = useReducer(UserReducer, initialState);
+  const initializeDispatcher = () => {
+    const storageItem = JSON.parse(sessionStorage.getItem("user"));
+
+    console.log(storageItem);
+
+    if (localStorage !== null) {
+      return {
+        user: storageItem.user,
+        authToken: storageItem.authToken,
+      };
+    }
+
+    return initialState;
+  };
+
+  const [state, dispatch] = useReducer(
+    UserReducer,
+    initialState,
+    initializeDispatcher
+  );
 
   const setUser = (data) => {
     dispatch({
@@ -18,15 +37,12 @@ const UserState = (props) => {
     });
   };
 
-  const checkSession = () => {
-    const user = JSON.parse(sessionStorage.getItem("user"));
-    if (user !== null) {
-      setUser(user);
-    }
+  const isLoggedIn = () => {
+    return localStorage.getItem("user") != null;
   };
 
   const logout = () => {
-    sessionStorage.removeItem("user");
+    localStorage.removeItem("user");
     dispatch({
       type: USER_LOGOUT,
     });
@@ -57,10 +73,6 @@ const UserState = (props) => {
     return isAdmin;
   };
 
-  const isLoggedIn = () => {
-    return Object.keys(state.user).length !== 0;
-  };
-
   return (
     <UserContext.Provider
       value={{
@@ -68,7 +80,6 @@ const UserState = (props) => {
         users: state.users,
         isLoggedIn,
         setUser,
-        checkSession,
         getRoles,
         logout,
         isCustomer,

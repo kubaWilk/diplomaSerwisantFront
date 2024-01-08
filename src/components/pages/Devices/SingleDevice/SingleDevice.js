@@ -25,9 +25,7 @@ const SingleDevice = () => {
         setDeleteModalToggle(false);
         navigate("/devices");
       })
-      .catch((e) => {
-        console.log(e);
-      });
+      .catch((e) => {});
   };
 
   return (

@@ -1,9 +1,10 @@
 import React, { Fragment, useContext, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import UserContext from "../../context/User/UserContext";
 
 const UserBar = () => {
   const { user, logout } = useContext(UserContext);
+  const navigate = useNavigate();
 
   const getInitials = () => {
     let initials = "";
@@ -37,7 +38,10 @@ const UserBar = () => {
           </div>
           <button
             className="px-2 mt-2 md:m-0 py-[3px] border-2 border-black font-bold hover:text-white hover:bg-black duration-100"
-            onClick={logout}
+            onClick={() => {
+              logout();
+              navigate("/");
+            }}
           >
             Wyloguj
           </button>

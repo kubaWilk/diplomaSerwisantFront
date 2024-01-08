@@ -25,7 +25,6 @@ const Photos = () => {
     fetchRepairById(id, token)
       .then((e) => {
         setIsLoading(false);
-        console.log(e);
       })
       .catch((e) => console.log(e));
   }, []);

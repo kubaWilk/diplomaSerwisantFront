@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import LoginForm from "./LoginForm";
-import { useParams } from "react-router-dom";
+import UserContext from "../../../context/User/UserContext";
 
 const LoginPage = () => {
   return (

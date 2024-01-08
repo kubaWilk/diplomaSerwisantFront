@@ -65,7 +65,6 @@ const EditRepair = () => {
   //End of Form State
 
   const onSubmit = (e) => {
-    console.log(user.jwt);
     e.preventDefault();
     putRepair(
       id,
