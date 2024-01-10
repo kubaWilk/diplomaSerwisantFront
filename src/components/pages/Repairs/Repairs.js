@@ -1,10 +1,10 @@
-import React, { Fragment } from "react";
-import DashContainer from "../../DashContainer";
+import React, { Fragment, useEffect } from "react";
 import SectionName from "../../layout/SectionName";
-import NavButtons from "./NavButtons";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 const Repairs = () => {
+  const navigate = useNavigate();
+
   return (
     <Fragment>
       <SectionName text="Naprawy" />

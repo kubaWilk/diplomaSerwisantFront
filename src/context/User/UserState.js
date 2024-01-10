@@ -12,9 +12,7 @@ const UserState = (props) => {
   const initializeDispatcher = () => {
     const storageItem = JSON.parse(sessionStorage.getItem("user"));
 
-    console.log(storageItem);
-
-    if (localStorage !== null) {
+    if (storageItem !== null) {
       return {
         user: storageItem.user,
         authToken: storageItem.authToken,
@@ -38,7 +36,7 @@ const UserState = (props) => {
   };
 
   const isLoggedIn = () => {
-    return localStorage.getItem("user") != null;
+    return sessionStorage.getItem("user") != null;
   };
 
   const logout = () => {

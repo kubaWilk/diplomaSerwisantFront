@@ -1,16 +1,19 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import { useContext } from "react";
 import UserContext from "../../../../context/User/UserContext";
 import Dialog from "../../../layout/Dialog";
 
 const NoteItem = ({ note, onDelete }) => {
-  const { message, createdAt, createdByy: createdBy } = note;
+  const { message, author } = note;
+
   const [deleteDialogToggle, setDeleteDialogToggle] = useState(false);
   const { isCustomer } = useContext(UserContext);
 
   const isNotePublic = () => {
-    return note.visibility === "public";
+    return note.visibility === "PUBLIC";
   };
+
+  useEffect(() => {}, []);
 
   const publicStyles =
     "w-[80%] rounded-md min-height-[20px] p-2 border-2 border-black relative";
@@ -24,8 +27,8 @@ const NoteItem = ({ note, onDelete }) => {
       {deleteDialogToggle && (
         <Dialog
           prompt="Czy chcesz usunąć notatkę?"
-          onApprove={() => {
-            onDelete(note);
+          onApprove={async () => {
+            await onDelete(note);
             setDeleteDialogToggle(false);
           }}
           onCancel={() => setDeleteDialogToggle(false)}
@@ -45,7 +48,10 @@ const NoteItem = ({ note, onDelete }) => {
       <div className="w-full border-b border-black border-dotted my-1"></div>
       <div className="flex justify-between">
         <p className="text-sm">
-          Dodana: {createdAt} przez {createdBy.firstName} {createdBy.lastName}{" "}
+          Dodana przez{" "}
+          {author?.userDetails?.firstName && author?.userDetails?.lastName
+            ? `${author.userDetails.firstName} ${author.userDetails.lastName}`
+            : "Unknown User"}
         </p>
         {!isNotePublic() && <p className="text-sm uppercase">wewnętrzna</p>}
       </div>

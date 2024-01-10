@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect } from "react";
+import React, { useCallback, useContext, useEffect } from "react";
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SectionName from "../../../layout/SectionName";
@@ -10,6 +10,8 @@ import AddNoteModal from "./AddNoteModal";
 import AddButton from "../../../layout/AddButton";
 import { Config } from "../../../../config";
 import UserContext from "../../../../context/User/UserContext";
+import AlertContext from "../../../../context/Alert/AlertContext";
+import Alert from "../../../layout/Alert";
 
 const Notes = () => {
   const { id } = useParams();
@@ -20,34 +22,50 @@ const Notes = () => {
   const {
     user: { jwt: token },
   } = useContext(UserContext);
-  const apiCall = `${Config.apiUrl}/api/notes?filters[repairID][$eq]=${id}`;
 
-  const getNotes = async () => {
-    const res = await axios.get(apiCall, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const { setAlert } = useContext(AlertContext);
 
-    setNotes(res.data);
+  const getNotes = useCallback(async () => {
+    const res = await axios
+      .get(`${Config.apiUrl}/note/all?repairid=${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .catch((e) => {
+        if (e.code === "ERR_NETWORK") setAlert("Błąd połączenia z serwerem.");
+      });
+
     setIsLoading(false);
-  };
+    setNotes(res.data);
+  }, [token, setNotes, setIsLoading, setAlert]);
 
   useEffect(() => {
     getNotes();
     //eslint-disable-next-line
-  }, []);
+  }, [getNotes]);
 
   useEffect(() => {
-    getNotes();
+    if (addNoteDialogToggle === false) {
+      setIsLoading(true);
+      getNotes();
+    }
     //eslint-disable-next-line
   }, [addNoteDialogToggle]);
 
-  const removeNote = (note) => {
-    axios.delete(`${Config.apiUrl}/api/notes/${note.id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setNotes(notes.filter((e) => e !== note));
+  const removeNote = async (note) => {
+    await axios
+      .delete(`${Config.apiUrl}/note/${note.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((res) => {
+        if (res.status === 200) {
+          getNotes();
+        }
+      })
+      .catch((e) => {
+        if (e.code === "ERR_NETWORK") setAlert("Błąd połączenia z serwerem.");
+      });
   };
 
   if (isLoading) return <Loading />;
@@ -56,6 +74,7 @@ const Notes = () => {
     <div className="w-full h-full flex flex-col justify-between">
       <div className="flex w-full h-full flex-col items-center justify-start">
         <SectionName text={`Naprawa #${id}`} />
+        <Alert />
         <h2 className="uppercase text-xl">Notatki</h2>
         <Link className="text-sm" onClick={() => navigate(-1)}>
           Powrót
@@ -68,11 +87,7 @@ const Notes = () => {
       </div>
       <AddButton onClick={() => setAddNoteDialogToggle(true)} />
       {addNoteDialogToggle && (
-        <AddNoteModal
-          closeToggle={setAddNoteDialogToggle}
-          notes={notes}
-          notesSetter={setNotes}
-        />
+        <AddNoteModal closeToggle={setAddNoteDialogToggle} />
       )}
     </div>
   );

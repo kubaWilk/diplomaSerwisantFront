@@ -4,14 +4,13 @@ import UserContext from "../../context/User/UserContext";
 import UserBar from "./UserBar";
 
 const SideMenu = () => {
-  const { user, isCustomer, isAdmin, isLoggedIn, setUser } =
-    useContext(UserContext);
+  const { isCustomer, isAdmin } = useContext(UserContext);
 
   return (
     <div className="min-w-[250px] h-[100vh] sticky top-0 left-0 flex flex-col justify-between border-r relative border-gray-400">
       <div className="flex flex-col">
         <NavLink
-          to="/"
+          to="/app/home"
           className={({ isActive }) =>
             isActive ? "nav-link-active" : "nav-link"
           }
@@ -29,7 +28,7 @@ const SideMenu = () => {
         </NavLink>
         {!isCustomer() && (
           <NavLink
-            to="/users"
+            to="/app/users"
             className={({ isActive }) =>
               isActive ? "nav-link-active" : "nav-link"
             }

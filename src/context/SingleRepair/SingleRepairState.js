@@ -4,6 +4,7 @@ import { SET_REPAIR, UPDATE_REPAIR } from "../types";
 import SingleRepairReducer from "./SingleRepairReducer";
 import SingleRepairContext from "./SingleRepairContext";
 import { Config } from "../../config";
+import { useNavigate } from "react-router-dom";
 
 const SingleRepairState = (props) => {
   const initialState = {
@@ -12,6 +13,7 @@ const SingleRepairState = (props) => {
   };
 
   const [state, dispatch] = useReducer(SingleRepairReducer, initialState);
+  const navigate = useNavigate();
 
   const fetchRepairById = async (id, token) => {
     return await axios
@@ -125,11 +127,9 @@ const SingleRepairState = (props) => {
   };
 
   const removeRepair = (id, token) => {
-    axios
-      .delete(`${Config.apiUrl}/api/repairs/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .catch((e) => console.log(e));
+    return axios.delete(`${Config.apiUrl}/repair/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
   };
 
   return (

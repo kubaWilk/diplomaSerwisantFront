@@ -24,7 +24,9 @@ const RepairsList = ({}) => {
       .then((res) => {
         setRepairs(res.data);
       })
-      .catch((error) => console.log("UserState/fetchCustomers", error));
+      .catch((error) => {
+        if (error) console.log("UserState/fetchCustomers", error);
+      });
   }, [isLoading]);
 
   if (isLoading) return <Loading />;
