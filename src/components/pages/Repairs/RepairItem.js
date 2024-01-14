@@ -16,8 +16,8 @@ const RepairItem = ({ item }) => {
       <td>{item.repairStatus}</td>
       <td>{item.device.manufacturer}</td>
       <td>{item.device.model}</td>
-      <td>{item.issuer.userDetails.firstName}</td>
-      <td>{item.issuer.userDetails.lastName}</td>
+      <td>{item.issuer.userInfo.firstName}</td>
+      <td>{item.issuer.userInfo.lastName}</td>
     </tr>
   );
 };

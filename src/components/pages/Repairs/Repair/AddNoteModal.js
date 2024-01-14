@@ -10,7 +10,7 @@ const AddNoteModal = ({ closeToggle }) => {
   const [noteMsg, setNoteMsg] = useState("");
   const [noteType, setNoteType] = useState("public");
   const { id } = useParams();
-  const { user, isCustomer } = useContext(UserContext);
+  const { user, isCustomer, getToken } = useContext(UserContext);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ const AddNoteModal = ({ closeToggle }) => {
         },
         {
           headers: {
-            Authorization: `Bearer ${user.jwt}`,
+            Authorization: `Bearer ${getToken()}`,
           },
         }
       )

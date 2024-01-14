@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import SectionName from "../../../../layout/SectionName";
 import AddButton from "../../../../layout/AddButton";
@@ -16,12 +16,9 @@ const Cost = () => {
   const { id } = useParams();
   const { repair, postCostAccept } = useContext(SingleRepairContext);
   const { costAccepted } = repair;
-  const apiCall = `${Config.apiUrl}/api/costs?filters[repairID][$eq]=${id}`;
+  const apiCall = `${Config.apiUrl}/cost/repair?id=${id}`;
   const navigate = useNavigate();
-  const {
-    isCustomer,
-    user: { jwt: token },
-  } = useContext(UserContext);
+  const { isCustomer, getToken } = useContext(UserContext);
   //state
   const [costs, setCosts] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -29,23 +26,36 @@ const Cost = () => {
   const [addCostToggle, setAddCostToggle] = useState(false);
   const [approveCostModalToggle, setApproveCostModalToggle] = useState(false);
 
-  const getCosts = async () => {
-    const res = await axios.get(apiCall, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+  const getCosts = useCallback(async () => {
+    const res = await axios
+      .get(apiCall, {
+        headers: {
+          Authorization: `Bearer ${getToken()}`,
+        },
+      })
+      .catch((e) => {});
 
-    setCosts(res.data);
+    res && setCosts(res.data);
     setIsLoading(false);
-  };
+  }, [setCosts, setIsLoading]);
+
+  const removeCostItem = useCallback(async (cost) => {
+    await axios
+      .delete(`${Config.apiUrl}/cost/${cost.id}`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      })
+      .catch((e) => console.log(e));
+  });
 
   useEffect(() => {
     getCosts();
-  }, []);
+  }, [getCosts, removeCostItem]);
 
   useEffect(() => {
-    getCosts();
+    if (addCostToggle === false) {
+      setIsLoading(true);
+      getCosts();
+    }
   }, [addCostToggle]);
 
   useEffect(() => {
@@ -57,13 +67,6 @@ const Cost = () => {
     setSummedPrice(sum.toFixed(2));
   }, [costs]);
 
-  const removeCostItem = (cost) => {
-    axios.delete(`${Config.apiUrl}/api/costs/${cost.id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setCosts(costs.filter((e) => e !== cost));
-  };
-
   const submitAcceptCost = () => {
     postCostAccept(id);
     setApproveCostModalToggle(false);
@@ -72,7 +75,7 @@ const Cost = () => {
   if (isLoading) return <Loading />;
 
   return (
-    <div className="flex w-full flex-col items-center justify-start">
+    <div className="flex w-full h-full flex-col items-center justify-start">
       {addCostToggle && (
         <AddCostModal
           closeToggle={setAddCostToggle}
@@ -95,9 +98,11 @@ const Cost = () => {
         Powrót
       </Link>
       <div className="w-full h-full flex flex-col relative items-center">
-        {costs.map((item) => (
-          <CostItem key={item.id} cost={item} onRemove={removeCostItem} />
-        ))}
+        {costs
+          ? costs.map((item) => (
+              <CostItem key={item.id} cost={item} onRemove={removeCostItem} />
+            ))
+          : ""}
         <p className="text-2xl uppercase font-bold absolute bottom-10 left-10">
           Łącznie: {summedPrice} zł
         </p>

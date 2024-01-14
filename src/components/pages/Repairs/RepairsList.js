@@ -10,11 +10,12 @@ import axios from "axios";
 import { Config } from "../../../config";
 
 const RepairsList = ({}) => {
-  const { authToken } = useContext(UserContext);
+  const { getToken } = useContext(UserContext);
   const { allRepairs, setRepairs, isLoading } = useContext(RepairsContext);
-  //that state is only to have a useEffect dependency
 
   useEffect(() => {
+    const authToken = getToken();
+
     axios
       .get(`${Config.apiUrl}/repair/`, {
         headers: {
@@ -50,9 +51,9 @@ const RepairsList = ({}) => {
         </thead>
         <tbody>
           <RepairsSearchRow searchCall={() => {}} />
-          {allRepairs.map((item) => (
-            <RepairItem key={item.id} item={item} />
-          ))}
+          {allRepairs
+            ? allRepairs.map((item) => <RepairItem key={item.id} item={item} />)
+            : ""}
         </tbody>
       </table>
     </div>

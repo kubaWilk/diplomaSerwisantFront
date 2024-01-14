@@ -15,7 +15,7 @@ const UserState = (props) => {
     if (storageItem !== null) {
       return {
         user: storageItem.user,
-        authToken: storageItem.authToken,
+        authToken: storageItem.token,
       };
     }
 
@@ -71,11 +71,17 @@ const UserState = (props) => {
     return isAdmin;
   };
 
+  const getToken = () => {
+    const sessionItem = JSON.parse(sessionStorage.getItem("user"));
+    return sessionItem.token;
+  };
+
   return (
     <UserContext.Provider
       value={{
         user: state.user,
         users: state.users,
+        getToken,
         isLoggedIn,
         setUser,
         getRoles,

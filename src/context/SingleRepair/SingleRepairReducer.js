@@ -16,10 +16,11 @@ const SingleRepairReducer = (state, action) => {
         repair: {
           customer: {
             ...action.payload.issuer,
-            ...action.payload.issuer.userDetails,
+            ...action.payload.issuer.userInfo,
           },
           device: { ...action.payload.device },
           description: action.payload.description,
+          status: action.payload.repairStatus,
         },
         isLoading: false,
       };

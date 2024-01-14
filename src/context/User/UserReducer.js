@@ -3,6 +3,8 @@ import { SET_USER, USER_LOGOUT, SET_USERS, SET_CUSTOMER } from "../types";
 const UserReducer = (state, action) => {
   switch (action.type) {
     case USER_LOGOUT:
+      sessionStorage.removeItem("user");
+
       return {
         ...state,
         user: {},

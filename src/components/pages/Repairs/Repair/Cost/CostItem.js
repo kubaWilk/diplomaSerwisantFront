@@ -6,13 +6,6 @@ import Dialog from "../../../../layout/Dialog";
 
 const CostItem = ({ cost, onRemove }) => {
   const { isCustomer } = useContext(UserContext);
-
-  const costTypesToNames = {
-    service: "Usługa",
-    part: "Część",
-    servicePart: "Częśc + usługa",
-  };
-
   const [deleteCostToggle, setDeleteCostToggle] = useState(false);
 
   return (
@@ -20,8 +13,8 @@ const CostItem = ({ cost, onRemove }) => {
       {deleteCostToggle && (
         <Dialog
           prompt="Czy chcesz usunąć wskazany element?"
-          onApprove={() => {
-            onRemove(cost);
+          onApprove={async () => {
+            await onRemove(cost);
             setDeleteCostToggle(false);
           }}
           onCancel={() => setDeleteCostToggle(false)}
@@ -40,8 +33,9 @@ const CostItem = ({ cost, onRemove }) => {
             )}
             <div>
               <p>
-                <strong>Typ: </strong>
-                {translateCostTypes(cost.type, costTypesToNames)}
+                <strong>
+                  Typ: {cost.costType === "PART" ? "Część" : "Usługa"}
+                </strong>
               </p>
               <p>
                 <strong>Nazwa:</strong> {cost.name}

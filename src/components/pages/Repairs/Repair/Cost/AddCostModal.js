@@ -1,47 +1,36 @@
 import axios from "axios";
 import React, { useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AlertContext from "../../../../../context/Alert/AlertContext";
 import UserContext from "../../../../../context/User/UserContext";
 import Alert from "../../../../layout/Alert";
 import { Config } from "../../../../../config";
 
-const AddCostModal = ({ closeToggle, costs, costSetter }) => {
-  const {
-    user: { jwt: token },
-  } = useContext(UserContext);
+const AddCostModal = ({ closeToggle }) => {
+  const { getToken } = useContext(UserContext);
+  const token = getToken();
+  const navigate = useNavigate();
   const { id } = useParams();
   const { setAlert } = useContext(AlertContext);
-  const [costType, setCostType] = useState("service");
+  const [costType, setCostType] = useState("SERVICE");
   const [costPrice, setCostPrice] = useState("");
   const [costName, setCostName] = useState("");
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     if (dataCheck()) {
-      axios
+      await axios
         .post(
-          `${Config.apiUrl}/api/costs`,
+          `${Config.apiUrl}/cost/?repairid=${id}`,
           {
-            data: {
-              repair: id,
-              type: costType,
-              name: costName,
-              price: costPrice,
-            },
+            costType: costType,
+            name: costName,
+            price: costPrice,
           },
           { headers: { Authorization: `Bearer ${token}` } }
         )
-        .then((res) => {
-          costs.push({
-            id: res.data.data.id,
-            ...res.data.data.attributes,
-          });
-
-          costSetter(costs);
-        })
-        .catch((e) => console.log(e));
+        .catch((e) => navigate("/app/error"));
       closeToggle(false);
     }
   };
@@ -96,16 +85,14 @@ const AddCostModal = ({ closeToggle, costs, costSetter }) => {
               />
             </div>
 
-            <div
-              onChange={(e) => setCostType(e.target.value)}
-              className="flex w-full justify-center space-x-2 mt-1"
-            >
+            <div className="flex w-full justify-center space-x-2 mt-1">
               <label htmlFor="service">
                 <input
                   type="radio"
                   value="service"
                   name="service"
-                  checked={costType === "service"}
+                  checked={costType === "SERVICE"}
+                  onChange={() => setCostType("SERVICE")}
                 />{" "}
                 Usługa
               </label>
@@ -114,7 +101,8 @@ const AddCostModal = ({ closeToggle, costs, costSetter }) => {
                   type="radio"
                   value="part"
                   name="part"
-                  checked={costType === "part"}
+                  checked={costType === "PART"}
+                  onChange={() => setCostType("PART")}
                 />{" "}
                 Część
               </label>

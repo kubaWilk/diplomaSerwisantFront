@@ -43,6 +43,7 @@ function App() {
               element={<EditRepair />}
             />
             <Route exact path="/app/repairs/new" element={<AddRepair />} />
+            <Route exact path="/app/repairs/:id/costs" element={<Cost />} />
           </Route>
         </Route>
       </Routes>

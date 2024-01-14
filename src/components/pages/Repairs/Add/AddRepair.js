@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useState, useContext } from "react";
 import Alert from "../../../layout/Alert";
 import SectionName from "../../../layout/SectionName";
@@ -13,21 +13,22 @@ import axios from "axios";
 import { Config } from "../../../../config";
 
 const AddRepair = () => {
-  const { postRepair, postDevice } = useContext(SingleRepairContext);
-  const { postUser } = useContext(UserContext);
+  const { postRepair } = useContext(SingleRepairContext);
   const navigate = useNavigate();
   const { setAlert } = useContext(AlertContext);
-  const {
-    user: { jwt: token },
-  } = useContext(UserContext);
+  const { getToken } = useContext(UserContext);
+  const token = getToken();
 
   const [isNewCustomer, setIsNewCustomer] = useState(true);
   const [isNewDevice, setIsNewDevice] = useState(true);
   const [shouldShowCustomerTable, setShouldShowCustomerTable] = useState(false);
   const [shouldShowDeviceTable, setShouldShowDeviceTable] = useState(false);
+  const [repairDescription, setRepairDescription] = useState("");
+  const [estimatedCost, setEstimatedCost] = useState(0);
 
   // Customer state
   const [customer, setCustomer] = useState({
+    username: "",
     firstName: "",
     lastName: "",
     phoneNumber: "",
@@ -46,7 +47,6 @@ const AddRepair = () => {
     manufacturer: "",
     model: "",
     serialNumber: "",
-    stateAtArrival: "",
   });
 
   //Submit method state
@@ -61,9 +61,6 @@ const AddRepair = () => {
 
   //Uploaded Files state
   const [uploadedFiles, setUploadedFiles] = useState([]);
-
-  //Repair Status State
-  const [repairStatus, setRepairStatus] = useState("W trakcie");
 
   const deviceTableProperties = {
     manufacturer: "Producent",
@@ -80,6 +77,75 @@ const AddRepair = () => {
     street: "Ulica",
     city: "Miasto",
     postCode: "Kod Pocztowy",
+  };
+
+  const postUser = async (user) => {
+    const {
+      username,
+      city,
+      eMail,
+      firstName,
+      lastName,
+      phoneNumber,
+      postCode,
+      street,
+    } = user;
+
+    const datatoPost = {
+      username: username,
+      email: eMail,
+      userInfo: {
+        firstName: firstName,
+        lastName: lastName,
+        phoneNumber: phoneNumber,
+        postCode: postCode,
+        street: street,
+        city: city,
+      },
+    };
+
+    return await axios
+      .post(
+        `${Config.apiUrl}/user/`,
+        { ...datatoPost },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
+      .catch((error) => {
+        console.log(error);
+        if (
+          error.response.data.message ===
+          "User with given username already exists!"
+        ) {
+          setAlert("Istnieje użytkownik z podanym loginem");
+        }
+        if (
+          error.response.data.message ===
+          "User has to have a unique e-mail address!"
+        ) {
+          setAlert("Istnieje użytkownik z podanym adresem e-mail");
+        }
+      });
+  };
+
+  const postDevice = async (device) => {
+    return await axios
+      .post(
+        `${Config.apiUrl}/device/`,
+        { ...device },
+        { headers: { Authorization: `Bearer ${token}` } }
+      )
+      .catch((error) => {
+        console.log(error);
+        const message = error.response.data.message;
+
+        if (message === "Device with given serial number already exists!") {
+          setAlert(
+            "Urządzenie o wskazanym nr seryjnym już istnieje w systemie."
+          );
+        }
+      });
   };
 
   const checkInput = () => {
@@ -149,116 +215,121 @@ const AddRepair = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    // if (checkInput()) return;
 
-    if (checkInput()) return;
+    let newCustomerId = 0;
+    let newDeviceId = 0;
 
-    try {
-      let newCustomerId = 0;
-      let newDeviceId = 0;
-
-      if (isNewCustomer) {
-        const response = await postUser(customer, "customer");
-        newCustomerId = response.data.id;
+    if (isNewCustomer) {
+      if (customer.username === "") {
+        setCustomer({
+          ...customer,
+          username: `${customer.firstName}.${customer.lastName}`.toLowerCase(),
+        });
       }
 
-      if (isNewDevice) {
-        const response = await postDevice(device, token);
-        newDeviceId = response.data.data.id;
-      }
-
-      let formData = new FormData();
-      uploadedFiles.forEach((file) => formData.append("files", file));
-
-      const repair = {
-        status: repairStatus,
-        customer: isNewCustomer ? newCustomerId : customerId,
-        device: isNewDevice ? newDeviceId : deviceId,
-        photos: uploadedFiles.length !== 0 ? formData : null,
-      };
-
-      postRepair(repair, token).then(navigate(-1));
-    } catch (error) {
-      let hasErrorOccured = false;
-
-      if (
-        (error.response.data.error.details.errors[0].message =
-          "This attribute must be unique")
-      ) {
-        setAlert("Istnieje urządzenie ze wskazanym numerem seryjnym");
-        hasErrorOccured = true;
-      }
-
-      if (
-        (error.response.data.error.details.errors[0].message =
-          "email must be a valid email")
-      ) {
-        setAlert("Podano nieprawidłowy adres e-mail");
-        hasErrorOccured = true;
-      }
-
-      if (error.response.data.error.message === "Email already taken") {
-        setAlert("Użytkownik z takim adresem e-mail już istnieje");
-        hasErrorOccured = true;
-      }
-
-      if (!hasErrorOccured)
-        setAlert(
-          "Coś poszło nie tak. Sprawdź połaczenie internetowe lub skontaktuj się z administratorem aplikacji"
-        );
+      const response = await postUser(customer);
+      newCustomerId = response.data.id;
+      setIsNewCustomer(false);
     }
+
+    if (isNewDevice) {
+      const response = await postDevice(device, token);
+      newDeviceId = response.data.id;
+    }
+
+    let formData = new FormData();
+    uploadedFiles.forEach((file) => formData.append("files", file));
+
+    const repair = {
+      issuer: isNewCustomer ? newCustomerId : customerId,
+      device: isNewDevice ? newDeviceId : deviceId,
+      description: repairDescription,
+      estimatedCost: estimatedCost,
+      // photos: uploadedFiles.length !== 0 ? formData : null,
+    };
+
+    await postRepair(repair, token)
+      .then((res) => {
+        if (res.status === 200) navigate(-1);
+      })
+      .catch((e) => {
+        setAlert("Coś poszło nie tak!");
+        console.log(e);
+      });
   };
 
-  const onCustomerSearch = () => {
-    let searchApiCall = `${Config.apiUrl}/api/users?`;
+  const onCustomerSearch = async () => {
+    const dataSearch = {
+      username: customer.username !== "" ? customer.username : "",
+      eMail: customer.eMail !== "" ? customer.eMail : "",
+    };
 
-    const customerKeys = Object.keys(customer);
-    const customerValues = Object.values(customer);
-
-    for (let i = 0; i < customerKeys.length; i++) {
-      if (customerValues[i] !== "")
-        searchApiCall =
-          searchApiCall +
-          `&filters[${customerKeys[i]}][$contains]=${customerValues[i]}`;
-    }
-
-    axios
-      .get(searchApiCall, { headers: { Authorization: `Bearer ${token}` } })
+    await axios
+      .post(
+        `${Config.apiUrl}/user/search`,
+        { ...dataSearch },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => {
-        if (res.data.length > 0) setCustomerData(res.data);
-        setShouldShowCustomerTable(true);
+        if (res.data.length > 0) {
+          const result = res.data.map((user) => {
+            const userInfo = user.userInfo;
+
+            return {
+              id: user.id,
+              firstName: userInfo.firstName,
+              lastName: userInfo.lastName,
+              phoneNumber: userInfo.phoneNumber,
+              email: user.email,
+              street: userInfo.street,
+              city: userInfo.city,
+              postCode: userInfo.postCode,
+            };
+          });
+
+          setCustomerData(result);
+          setShouldShowCustomerTable(true);
+        }
 
         if (res.data.length <= 0) {
           setCustomerData();
           setShouldShowCustomerTable(false);
           setAlert("Nie znaleziono klientów");
         }
-      });
+      })
+      .catch((e) => console.log(e));
   };
 
-  const onDeviceSearch = () => {
-    let searchApiCall = `${Config.apiUrl}/api/devices?populate=*`;
-
-    const deviceKeys = Object.keys(device);
-    const deviceValues = Object.values(device);
-
-    for (let i = 0; i < deviceKeys.length; i++) {
-      if (deviceValues[i] !== "")
-        searchApiCall =
-          searchApiCall +
-          `&filters[${deviceKeys[i]}][$contains]=${deviceValues[i]}`;
-    }
-
-    axios
-      .get(searchApiCall, { headers: { Authorization: `Bearer ${token}` } })
+  const onDeviceSearch = async () => {
+    await axios
+      .post(
+        `${Config.apiUrl}/device/search`,
+        { serialNumber: device.serialNumber },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      )
       .then((res) => {
-        if (res.data.length > 0) setDeviceData(res.data);
-        setShouldShowDeviceTable(true);
+        if (res.data) {
+          setDeviceData(Array.of({ ...res.data }));
+          setShouldShowDeviceTable(true);
+        }
 
         if (res.data.length <= 0) {
-          setDeviceData();
-          setShouldShowDeviceTable(false);
           setAlert("Nie znaleziono urządzeń");
         }
+      })
+      .catch((error) => {
+        setDeviceData();
+        setShouldShowDeviceTable(false);
+        if (
+          error.response.data.message ===
+          "No device found with given serialNumber!"
+        )
+          setAlert("Nie znaleziono urządzeń!");
       });
   };
 
@@ -267,20 +338,6 @@ const AddRepair = () => {
       <SectionName text="Nowa naprawa" />
 
       <form className="flex w-full flex-col items-center" onSubmit={onSubmit}>
-        <div className="flex m-2 w-full justify-center space-x-2 items-center">
-          <label className="font-bold uppercase text-sm">Stauts naprawy:</label>
-          <select
-            className="text-sm border border-black text-center"
-            value={repairStatus}
-            onChange={(e) => setRepairStatus(e.target.value)}
-          >
-            <option>W trakcie</option>
-            <option>Oczekuje na decyzję klienta</option>
-            <option>Oczekiwanie na dostawcę</option>
-            <option>Zamknięta</option>
-          </select>
-        </div>
-
         <h3 className="text-lg text-center m-1 mb-4 w-80">Dane Klienta</h3>
         <div className="flex space-x-2 justify-center">
           <label htmlFor="newCustomer">
@@ -313,32 +370,36 @@ const AddRepair = () => {
         </div>
         <div className="flex w-full justify-center">
           <div>
-            <FormGroup
-              htmlFor="firstName"
-              label="Imię"
-              value={customer.firstName}
-              type="text"
-              name="firstName"
-              onChange={(e) => {
-                onCustomerChange(e);
-              }}
-            />
-            <FormGroup
-              htmlFor="lastName"
-              label="Nazwisko"
-              value={customer.lastName}
-              type="text"
-              name="lastName"
-              onChange={(e) => onCustomerChange(e)}
-            />
-            <FormGroup
-              htmlFor="phoneNumber"
-              label="Nr telefonu"
-              value={customer.phoneNumber}
-              type="text"
-              name="phoneNumber"
-              onChange={(e) => onCustomerChange(e)}
-            />
+            {isNewCustomer && (
+              <>
+                <FormGroup
+                  htmlFor="firstName"
+                  label="Imię"
+                  value={customer.firstName}
+                  type="text"
+                  name="firstName"
+                  onChange={(e) => {
+                    onCustomerChange(e);
+                  }}
+                />
+                <FormGroup
+                  htmlFor="lastName"
+                  label="Nazwisko"
+                  value={customer.lastName}
+                  type="text"
+                  name="lastName"
+                  onChange={(e) => onCustomerChange(e)}
+                />
+                <FormGroup
+                  htmlFor="phoneNumber"
+                  label="Nr telefonu"
+                  value={customer.phoneNumber}
+                  type="text"
+                  name="phoneNumber"
+                  onChange={(e) => onCustomerChange(e)}
+                />
+              </>
+            )}
             <FormGroup
               htmlFor="eMail"
               label="E - Mail"
@@ -349,28 +410,40 @@ const AddRepair = () => {
             />
           </div>
           <div>
+            {isNewCustomer && (
+              <>
+                <FormGroup
+                  htmlFor="street"
+                  label="Ulica"
+                  value={customer.street}
+                  type="text"
+                  name="street"
+                  onChange={(e) => onCustomerChange(e)}
+                />
+                <FormGroup
+                  htmlFor="city"
+                  label="Miasto"
+                  value={customer.city}
+                  type="text"
+                  name="city"
+                  onChange={(e) => onCustomerChange(e)}
+                />
+                <FormGroup
+                  htmlFor="postCode"
+                  label="Kod pocztowy"
+                  value={customer.postCode}
+                  type="text"
+                  name="postCode"
+                  onChange={(e) => onCustomerChange(e)}
+                />
+              </>
+            )}
             <FormGroup
-              htmlFor="street"
-              label="Ulica"
-              value={customer.street}
+              htmlFor="username"
+              label="Login"
+              value={customer.username}
               type="text"
-              name="street"
-              onChange={(e) => onCustomerChange(e)}
-            />
-            <FormGroup
-              htmlFor="city"
-              label="Miasto"
-              value={customer.city}
-              type="text"
-              name="city"
-              onChange={(e) => onCustomerChange(e)}
-            />
-            <FormGroup
-              htmlFor="postCode"
-              label="Kod pocztowy"
-              value={customer.postCode}
-              type="text"
-              name="postCode"
+              name="username"
               onChange={(e) => onCustomerChange(e)}
             />
           </div>
@@ -427,22 +500,26 @@ const AddRepair = () => {
         </div>
         <div className="flex w-full justify-center">
           <div>
-            <FormGroup
-              htmlFor="manufacturer"
-              label="Producent"
-              value={device.manufacturer}
-              type="text"
-              name="manufacturer"
-              onChange={(e) => onDeviceChange(e)}
-            />
-            <FormGroup
-              htmlFor="model"
-              label="Model"
-              value={device.model}
-              type="text"
-              name="model"
-              onChange={(e) => onDeviceChange(e)}
-            />
+            {isNewDevice && (
+              <>
+                <FormGroup
+                  htmlFor="manufacturer"
+                  label="Producent"
+                  value={device.manufacturer}
+                  type="text"
+                  name="manufacturer"
+                  onChange={(e) => onDeviceChange(e)}
+                />
+                <FormGroup
+                  htmlFor="model"
+                  label="Model"
+                  value={device.model}
+                  type="text"
+                  name="model"
+                  onChange={(e) => onDeviceChange(e)}
+                />
+              </>
+            )}
           </div>
           <div>
             <FormGroup
@@ -451,14 +528,6 @@ const AddRepair = () => {
               value={device.serialNumber}
               type="text"
               name="serialNumber"
-              onChange={(e) => onDeviceChange(e)}
-            />
-            <FormGroup
-              htmlFor="stateAtArrival"
-              label="Stan przy przyjęciu"
-              value={device.stateAtArrival}
-              type="text"
-              name="stateAtArrival"
               onChange={(e) => onDeviceChange(e)}
             />
           </div>
@@ -483,7 +552,34 @@ const AddRepair = () => {
           />
         )}
 
-        <UploadFiles formState={{ uploadedFiles, setUploadedFiles }} />
+        <div className="flex flex-col w-[55%]">
+          <div>
+            <label className="self-start ml-2 mb-1" htmlFor="">
+              Opis usterki
+            </label>
+          </div>
+          <div>
+            <textarea
+              id="repairDescription"
+              name="repairDescription"
+              rows="4"
+              className="border p-2 mt-2 w-full"
+              onChange={(e) => setRepairDescription(e.target.value)}
+            />
+            <FormGroup
+              htmlFor="estimatedCost"
+              label="Przewidywany koszt"
+              value={estimatedCost}
+              type="text"
+              name="estimatedCost"
+              onChange={(e) => {
+                setEstimatedCost(e.target.value);
+              }}
+            />
+          </div>
+        </div>
+
+        {/* <UploadFiles formState={{ uploadedFiles, setUploadedFiles }} /> */}
 
         <Alert />
         <button

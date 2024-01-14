@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import SingleRepairContext from "../../../../context/SingleRepair/SingleRepairContext";
 import Loading from "../../../layout/Loading";
@@ -8,20 +8,34 @@ import Dialog from "../../../layout/Dialog";
 import UserContext from "../../../../context/User/UserContext";
 import RepairStatus from "../../../layout/RepairStatus";
 import SingleRepairNavButtons from "./SingleRepairNavButtons";
+import axios from "axios";
+import { Config } from "../../../../config";
 
 const Repair = () => {
   const [deleteDialogToggle, setDeleteDialogToggle] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
   const { id } = useParams();
-  const { isLoading, repair, fetchRepairById, removeRepair } =
-    useContext(SingleRepairContext);
-  const { authToken } = useContext(UserContext);
+  const { repair, setRepair, removeRepair } = useContext(SingleRepairContext);
+  const { getToken } = useContext(UserContext);
+  const authToken = getToken();
   const { customer, device } = repair;
   const navigate = useNavigate();
 
+  const fetchData = useCallback(async () => {
+    const res = await axios.get(`${Config.apiUrl}/repair/${id}`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`,
+      },
+    });
+
+    setRepair(res.data);
+    setIsLoading(false);
+  }, [this]);
+
   useEffect(() => {
-    fetchRepairById(id, authToken);
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   if (isLoading) return <Loading />;
 
@@ -29,7 +43,7 @@ const Repair = () => {
     <div className="flex w-full flex-col items-center justify-start">
       {deleteDialogToggle && (
         <Dialog
-          prompt={`Czy chcesz usunąć naprawę nr ${repair.id}`}
+          prompt={`Czy chcesz usunąć naprawę nr ${id}`}
           onApprove={async () => {
             await removeRepair(id, authToken)
               .then(() => {

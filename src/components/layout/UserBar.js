@@ -10,13 +10,13 @@ const UserBar = () => {
     let initials = "";
 
     if (
-      user.userDetails.firstName.length <= 0 ||
-      user.userDetails.lastName.length <= 0
+      user.userInfo.firstName.length <= 0 ||
+      user.userInfo.lastName.length <= 0
     )
       return "AA";
 
-    initials += user.userDetails.firstName[0].toUpperCase();
-    initials += user.userDetails.lastName[0].toUpperCase();
+    initials += user.userInfo.firstName[0].toUpperCase();
+    initials += user.userInfo.lastName[0].toUpperCase();
 
     return initials;
   };
@@ -33,7 +33,7 @@ const UserBar = () => {
               <Link
                 to="/user/self/about"
                 className="text-md"
-              >{`${user.userDetails.firstName} ${user.userDetails.lastName}`}</Link>
+              >{`${user.userInfo.firstName} ${user.userInfo.lastName}`}</Link>
             </div>
           </div>
           <button

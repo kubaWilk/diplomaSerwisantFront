@@ -19,9 +19,7 @@ const Notes = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [addNoteDialogToggle, setAddNoteDialogToggle] = useState(false);
   const navigate = useNavigate();
-  const {
-    user: { jwt: token },
-  } = useContext(UserContext);
+  const { getToken } = useContext(UserContext);
 
   const { setAlert } = useContext(AlertContext);
 
@@ -29,7 +27,7 @@ const Notes = () => {
     const res = await axios
       .get(`${Config.apiUrl}/note/all?repairid=${id}`, {
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${getToken()}`,
         },
       })
       .catch((e) => {
@@ -38,7 +36,7 @@ const Notes = () => {
 
     setIsLoading(false);
     setNotes(res.data);
-  }, [token, setNotes, setIsLoading, setAlert]);
+  }, [getToken, setNotes, setIsLoading, setAlert]);
 
   useEffect(() => {
     getNotes();
@@ -56,7 +54,7 @@ const Notes = () => {
   const removeNote = async (note) => {
     await axios
       .delete(`${Config.apiUrl}/note/${note.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${getToken()}` },
       })
       .then((res) => {
         if (res.status === 200) {

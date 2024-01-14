@@ -49,8 +49,8 @@ const NoteItem = ({ note, onDelete }) => {
       <div className="flex justify-between">
         <p className="text-sm">
           Dodana przez{" "}
-          {author?.userDetails?.firstName && author?.userDetails?.lastName
-            ? `${author.userDetails.firstName} ${author.userDetails.lastName}`
+          {author?.userInfo?.firstName && author?.userInfo?.lastName
+            ? `${author.userInfo.firstName} ${author.userInfo.lastName}`
             : "Unknown User"}
         </p>
         {!isNotePublic() && <p className="text-sm uppercase">wewnętrzna</p>}

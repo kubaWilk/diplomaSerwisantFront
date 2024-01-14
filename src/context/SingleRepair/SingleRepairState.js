@@ -4,7 +4,6 @@ import { SET_REPAIR, UPDATE_REPAIR } from "../types";
 import SingleRepairReducer from "./SingleRepairReducer";
 import SingleRepairContext from "./SingleRepairContext";
 import { Config } from "../../config";
-import { useNavigate } from "react-router-dom";
 
 const SingleRepairState = (props) => {
   const initialState = {
@@ -13,61 +12,19 @@ const SingleRepairState = (props) => {
   };
 
   const [state, dispatch] = useReducer(SingleRepairReducer, initialState);
-  const navigate = useNavigate();
 
-  const fetchRepairById = async (id, token) => {
-    return await axios
-      .get(`${Config.apiUrl}/repair/${id}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((res) =>
-        dispatch({
-          type: SET_REPAIR,
-          payload: res.data,
-        })
-      );
+  const setRepair = (repair) => {
+    dispatch({
+      type: SET_REPAIR,
+      payload: repair,
+    });
   };
 
-  const postRepair = (repair, token) => {
-    if (repair.photos !== null) {
-      return axios
-        .post(`${Config.apiUrl}/api/upload`, repair.photos, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "multipart/form-data",
-          },
-        })
-        .then((e) => {
-          const fileIDs = [];
-          e.data.forEach((file) => fileIDs.push(file.id));
-
-          return axios.post(
-            `${Config.apiUrl}/api/repairs`,
-            {
-              data: { ...repair, photos: fileIDs },
-            },
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-        })
-        .catch((e) => console.log(e));
-    }
-
+  const postRepair = async (repair, token) => {
     return axios.post(
-      `${Config.apiUrl}/api/repairs`,
-      {
-        data: repair,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `${Config.apiUrl}/repair/`,
+      { ...repair },
+      { headers: { Authorization: `Bearer ${token}` } }
     );
   };
 
@@ -91,26 +48,19 @@ const SingleRepairState = (props) => {
       });
   };
 
-  const putRepair = (id, status, token) => {
-    axios
+  const changeRepairStatus = async (id, status, token) => {
+    await axios
       .put(
-        `${Config.apiUrl}/api/repairs/${id}`,
+        `${Config.apiUrl}/repair/status`,
         {
-          data: {
-            status: status,
-          },
+          id: id,
+          status: status,
         },
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
-      )
-      .then((res) =>
-        dispatch({
-          type: UPDATE_REPAIR,
-          payload: res.data.data.attributes.status,
-        })
       )
       .catch((e) => console.log(e));
   };
@@ -122,8 +72,8 @@ const SingleRepairState = (props) => {
         ...state.repair,
         costAccepted: true,
       })
-      .catch((e) => console.log(e))
-      .finally(fetchRepairById(id));
+      .catch((e) => console.log(e));
+    // .finally(fetchRepairById(id));
   };
 
   const removeRepair = (id, token) => {
@@ -137,10 +87,10 @@ const SingleRepairState = (props) => {
       value={{
         repair: state.repair,
         isLoading: state.isLoading,
+        setRepair,
         postRepair,
         postDevice,
-        putRepair,
-        fetchRepairById,
+        changeRepairStatus,
         postCostAccept,
         removeRepair,
       }}
