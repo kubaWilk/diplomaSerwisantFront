@@ -65,3 +65,7 @@ td {
 .link-button a {
   padding: 50px;
 }
+
+.option-button {
+  display: none;
+}

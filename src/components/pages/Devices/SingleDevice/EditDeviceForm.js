@@ -10,36 +10,28 @@ const EditDeviceForm = ({ deviceData }) => {
   const [manufacturer, setManufacturer] = useState(deviceData.manufacturer);
   const [model, setModel] = useState(deviceData.model);
   const [serialNumber, setSerialNumber] = useState(deviceData.serialNumber);
-  const [stateAtArrival, setStateAtArrival] = useState(
-    deviceData.stateAtArrival
-  );
 
   const { setAlert } = useContext(AlertContext);
   const { id } = useParams();
-  const {
-    user: { jwt: token },
-  } = useContext(UserContext);
+  const { getToken } = useContext(UserContext);
   const navigate = useNavigate();
 
   const inputStyle =
     "border-2 border-gray-400 outline-black rounded-md p-1 px-5";
 
-  const onSubmit = () => {
-    axios
+  const onSubmit = async () => {
+    await axios
       .put(
-        `${Config.apiUrl}/api/devices/${id}`,
+        `${Config.apiUrl}/device/${id}`,
         {
-          data: {
-            ...deviceData,
-            manufacturer: manufacturer,
-            model: model,
-            serialNumber: serialNumber,
-            stateAtArrival: stateAtArrival,
-          },
+          ...deviceData,
+          manufacturer: manufacturer,
+          model: model,
+          serialNumber: serialNumber,
         },
         {
           headers: {
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${getToken()}`,
           },
         }
       )
@@ -99,23 +91,6 @@ const EditDeviceForm = ({ deviceData }) => {
             placeholder="S\N"
             value={serialNumber}
             onChange={(e) => setSerialNumber(e.target.value)}
-          />
-        </div>
-
-        <div className="flex flex-col space-y-1">
-          <label
-            htmlFor="stateAtArrival"
-            className="text-center font-bold uppercase"
-          >
-            Stan przy przyjęciu
-          </label>
-          <input
-            name="stateAtArrival"
-            className={inputStyle}
-            type="text"
-            placeholder="Nazwisko"
-            value={stateAtArrival}
-            onChange={(e) => setStateAtArrival(e.target.value)}
           />
         </div>
         <Alert />

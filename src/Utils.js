@@ -40,4 +40,16 @@ export const parseCustomerData = (data) => {
   };
 };
 
+export const translateRepairStatus = (param) => {
+  const statuses = {
+    OPEN: "Otwarta",
+    WAITING_FOR_CUSTOMER: "Oczekuje na decyzję klienta",
+    WAITING_FOR_SUPLIER: "Oczekiwanie na dostawcę",
+    CANCELED: "Anulowana",
+    CLOSED: "Zamknięta",
+  };
+
+  return statuses[param];
+};
+
 export { getDateString, translateCostTypes };

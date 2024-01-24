@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import PropTypes from "prop-types";
 import { NavLink, useNavigate } from "react-router-dom";
+import { translateRepairStatus } from "../../../Utils";
 
 const RepairItem = ({ item }) => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const RepairItem = ({ item }) => {
       }}
     >
       <td>{item.id}</td>
-      <td>{item.repairStatus}</td>
+      <td>{translateRepairStatus(item.repairStatus)}</td>
       <td>{item.device.manufacturer}</td>
       <td>{item.device.model}</td>
       <td>{item.issuer.userInfo.firstName}</td>

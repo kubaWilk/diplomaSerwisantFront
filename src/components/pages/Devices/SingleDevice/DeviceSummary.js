@@ -1,4 +1,10 @@
-import React, { useEffect, useState, Fragment, useContext } from "react";
+import React, {
+  useEffect,
+  useState,
+  Fragment,
+  useContext,
+  useCallback,
+} from "react";
 import Loading from "../../../layout/Loading";
 import { Config } from "../../../../config";
 import axios from "axios";
@@ -10,27 +16,20 @@ const DeviceSummary = () => {
   const [device, setDevice] = useState({});
 
   const { id } = useParams();
-  const {
-    user: { jwt: token },
-  } = useContext(UserContext);
+  const { getToken } = useContext(UserContext);
+
+  const fetchData = useCallback(async () => {
+    const res = await axios.get(`${Config.apiUrl}/device/${id}`, {
+      headers: { Authorization: `Bearer ${getToken()}` },
+    });
+
+    setDevice(res.data);
+    setIsLoading(false);
+  }, [setDevice, setIsLoading]);
 
   useEffect(() => {
-    const getDevice = async () => {
-      const res = await axios.get(
-        `${Config.apiUrl}/api/devices/${id}?populate=*`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setDevice(res.data);
-      setIsLoading(false);
-    };
-
-    getDevice();
-    //eslint-disable-next-line
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   if (isLoading) return <Loading />;
 
@@ -52,10 +51,6 @@ const DeviceSummary = () => {
         <li>
           <strong>Nr seryjny: </strong>
           {device.serialNumber}
-        </li>
-        <li>
-          <strong>Stan przy przyjęciu: </strong>
-          {device.stateAtArrival}
         </li>
       </ul>
     </Fragment>

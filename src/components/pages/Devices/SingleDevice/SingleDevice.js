@@ -8,38 +8,35 @@ import { Config } from "../../../../config";
 
 const SingleDevice = () => {
   const { id } = useParams();
-  const {
-    isAdmin,
-    isCustomer,
-    user: { jwt: token },
-  } = useContext(UserContext);
+  const { isAdmin, isCustomer, getToken } = useContext(UserContext);
   const navigate = useNavigate();
   const [deleteModalToggle, setDeleteModalToggle] = useState(false);
 
   const deleteDevice = async () => {
-    axios
-      .delete(`${Config.apiUrl}/api/devices/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
+    await axios
+      .delete(`${Config.apiUrl}/device/${id}`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
       })
-      .then(() => {
-        setDeleteModalToggle(false);
-        navigate("/devices");
-      })
-      .catch((e) => {});
+      .catch((e) => {
+        console.log(e);
+      });
+
+    setDeleteModalToggle(false);
+    navigate("/app/devices");
   };
 
   return (
     <div className="flex flex-col items-center justify-start w-full">
       <div className="flex space-x-2">
-        <Link className="button" to={`/devices/${id}/summary`}>
+        <Link className="button" to={`/app/devices/${id}/summary`}>
           Podsumowanie
         </Link>
-        <Link className="button" to={`/devices/${id}/repairs`}>
+        <Link className="button" to={`/app/devices/${id}/repairs`}>
           Powiązane naprawy
         </Link>
         {!isCustomer() && (
           <button
-            onClick={(e) => navigate(`/devices/${id}/edit`)}
+            onClick={(e) => navigate(`/app/devices/${id}/edit`)}
             className="button"
           >
             Edytuj
@@ -53,8 +50,8 @@ const SingleDevice = () => {
         {deleteModalToggle && (
           <Dialog
             prompt="Czy chcesz usunąć urządzenie? Spowoduje to usuniecie powiązanych z nim napraw."
-            onApprove={() => {
-              deleteDevice();
+            onApprove={async () => {
+              await deleteDevice();
             }}
             onCancel={() => setDeleteModalToggle(false)}
           />

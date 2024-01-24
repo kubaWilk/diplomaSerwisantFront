@@ -2,6 +2,8 @@ import React, { useReducer, useEffect, useState } from "react";
 import UserContext from "./UserContext";
 import UserReducer from "./UserReducer";
 import { SET_USER, USER_LOGOUT } from "../types";
+import { Config } from "../../config";
+import axios from "axios";
 
 const UserState = (props) => {
   const initialState = {
@@ -76,12 +78,49 @@ const UserState = (props) => {
     return sessionItem.token;
   };
 
+  const updateUserData = async (userData) => {
+    const res = await axios.get(`${Config.apiUrl}/user/${userData.id}`, {
+      headers: { Authorization: `Bearer ${state.authToken}` },
+    });
+
+    const existingUser = Object.keys(res.data)
+      .filter((objKey) => objKey !== "roles")
+      .reduce((newObj, key) => {
+        newObj[key] = res.data[key];
+        return newObj;
+      }, {});
+
+    // console.log(existingUser);
+
+    const userDataForRequest = {
+      ...existingUser,
+      userInfo: {
+        id: userData.id,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        phoneNumber: userData.phoneNumber,
+        city: userData.city,
+        postCode: userData.postCode,
+        street: userData.street,
+      },
+    };
+
+    return axios.put(
+      `${Config.apiUrl}/user/${userData.id}`,
+      userDataForRequest,
+      {
+        headers: { Authorization: `Bearer ${state.authToken}` },
+      }
+    );
+  };
+
   return (
     <UserContext.Provider
       value={{
         user: state.user,
         users: state.users,
         getToken,
+        updateUserData,
         isLoggedIn,
         setUser,
         getRoles,

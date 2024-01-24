@@ -1,13 +1,15 @@
 import React, { Fragment, useEffect } from "react";
 import SectionName from "../../layout/SectionName";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useLocation } from "react-router-dom";
 
 const Repairs = () => {
-  const navigate = useNavigate();
+  const location = useLocation();
 
   return (
     <Fragment>
-      <SectionName text="Naprawy" />
+      {location.pathname === "/app/repairs/all" && (
+        <SectionName text="Naprawy" />
+      )}
       <Outlet />
     </Fragment>
   );

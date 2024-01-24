@@ -35,13 +35,6 @@ function DashRouter() {
           {/* Reset password route */}
 
           {/* Users Routes */}
-          <Route exact path="/users" element={<Users />} />
-          <Route exact path="/user" element={<SingleUser />}>
-            <Route exact path="/user/:id" element={<UserSummary />} />
-            <Route exact path="/user/:id/repairs" element={<UserRepairs />} />
-            <Route exact path="/user/:id/devices" element={<DevicesTable />} />
-            <Route exact path="/user/:id/edit" element={<EditUserModal />} />
-          </Route>
           <Route exact path="/user/self/about" element={<UserPanel />}>
             <Route
               exact
@@ -52,35 +45,6 @@ function DashRouter() {
               exact
               path="/user/self/about/password-change"
               element={<ChangePasswordModal />}
-            />
-          </Route>
-
-          <Route exact path="/devices" element={<Devices />}>
-            <Route exact path="/devices" element={<DevicesTable />} />
-            <Route exact path="/devices/:id" element={<SingleDevice />}>
-              <Route
-                exact
-                path="/devices/:id/summary"
-                element={<DeviceSummary />}
-              />
-              <Route
-                exact
-                path="/devices/:id/repairs"
-                element={<DeviceRepairs />}
-              />
-              <Route
-                exact
-                path="/devices/:id/edit"
-                element={<EditDeviceModal />}
-              />
-            </Route>
-          </Route>
-
-          <Route exact path="/admin-panel" element={<AdminPanel />}>
-            <Route
-              exact
-              path="/admin-panel/users"
-              element={<Users displayOnlyCustomers={false} />}
             />
           </Route>
         </Routes>

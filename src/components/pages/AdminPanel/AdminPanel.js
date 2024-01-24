@@ -7,10 +7,12 @@ const AdminPanel = () => {
     <div className="flex flex-col items-center justify-start w-full">
       <SectionName text="Panel administratora" />
       <div className="flex space-x-2">
-        <Link className="button" to="/admin-panel/users">
+        <Link className="button" to="/app/admin-panel/users">
           Zarządzaj użytkownikami
         </Link>
-        <Link className="button">Statystyki</Link>
+        <Link className="button" to="/app/admin-panel/statistics">
+          Statystyki
+        </Link>
       </div>
       <Outlet />
     </div>

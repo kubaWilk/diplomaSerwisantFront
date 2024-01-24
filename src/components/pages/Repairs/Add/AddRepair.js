@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useState, useContext } from "react";
 import Alert from "../../../layout/Alert";
 import SectionName from "../../../layout/SectionName";
@@ -213,52 +213,6 @@ const AddRepair = () => {
     }
   };
 
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    // if (checkInput()) return;
-
-    let newCustomerId = 0;
-    let newDeviceId = 0;
-
-    if (isNewCustomer) {
-      if (customer.username === "") {
-        setCustomer({
-          ...customer,
-          username: `${customer.firstName}.${customer.lastName}`.toLowerCase(),
-        });
-      }
-
-      const response = await postUser(customer);
-      newCustomerId = response.data.id;
-      setIsNewCustomer(false);
-    }
-
-    if (isNewDevice) {
-      const response = await postDevice(device, token);
-      newDeviceId = response.data.id;
-    }
-
-    let formData = new FormData();
-    uploadedFiles.forEach((file) => formData.append("files", file));
-
-    const repair = {
-      issuer: isNewCustomer ? newCustomerId : customerId,
-      device: isNewDevice ? newDeviceId : deviceId,
-      description: repairDescription,
-      estimatedCost: estimatedCost,
-      // photos: uploadedFiles.length !== 0 ? formData : null,
-    };
-
-    await postRepair(repair, token)
-      .then((res) => {
-        if (res.status === 200) navigate(-1);
-      })
-      .catch((e) => {
-        setAlert("Coś poszło nie tak!");
-        console.log(e);
-      });
-  };
-
   const onCustomerSearch = async () => {
     const dataSearch = {
       username: customer.username !== "" ? customer.username : "",
@@ -330,6 +284,70 @@ const AddRepair = () => {
           "No device found with given serialNumber!"
         )
           setAlert("Nie znaleziono urządzeń!");
+      });
+  };
+
+  const onSubmit = async (e) => {
+    e.preventDefault();
+
+    let newCustomerId = 0;
+    let newDeviceId = 0;
+
+    if (isNewCustomer) {
+      if (customer.username === "") {
+        setCustomer({
+          ...customer,
+          username: `${customer.firstName}.${customer.lastName}`.toLowerCase(),
+        });
+      }
+
+      const response = await postUser(customer);
+      newCustomerId = response.data.id;
+      setIsNewCustomer(false);
+    }
+
+    if (isNewDevice) {
+      const response = await postDevice(device, token);
+      newDeviceId = response.data.id;
+    }
+
+    let formData = new FormData();
+
+    uploadedFiles.forEach((file) => {
+      formData.append("files", file);
+    });
+
+    const repair = {
+      issuer: isNewCustomer ? newCustomerId : customerId,
+      device: isNewDevice ? newDeviceId : deviceId,
+      description: repairDescription,
+      estimatedCost: estimatedCost,
+    };
+
+    await postRepair(repair, token)
+      .then(async (res) => {
+        if (res.status === 200) {
+          const newRepairId = res.data.id;
+          await axios
+            .post(
+              `${Config.apiUrl}/repair/${newRepairId}/files/multiple`,
+              formData,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: `Bearer ${getToken()}`,
+                },
+              }
+            )
+            .catch((e) => {
+              setAlert("Coś poszło nie tak");
+            });
+        }
+        navigate(-1);
+      })
+      .catch((e) => {
+        setAlert("Coś poszło nie tak!");
+        console.log(e);
       });
   };
 
@@ -579,7 +597,7 @@ const AddRepair = () => {
           </div>
         </div>
 
-        {/* <UploadFiles formState={{ uploadedFiles, setUploadedFiles }} /> */}
+        <UploadFiles formState={{ uploadedFiles, setUploadedFiles }} />
 
         <Alert />
         <button

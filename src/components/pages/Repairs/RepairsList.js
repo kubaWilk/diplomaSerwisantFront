@@ -50,7 +50,7 @@ const RepairsList = ({}) => {
           </tr>
         </thead>
         <tbody>
-          <RepairsSearchRow searchCall={() => {}} />
+          {/* <RepairsSearchRow searchCall={() => {}} /> */}
           {allRepairs
             ? allRepairs.map((item) => <RepairItem key={item.id} item={item} />)
             : ""}

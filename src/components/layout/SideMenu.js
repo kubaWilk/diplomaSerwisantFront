@@ -28,7 +28,7 @@ const SideMenu = () => {
         </NavLink>
         {!isCustomer() && (
           <NavLink
-            to="/app/users"
+            to="/app/customers"
             className={({ isActive }) =>
               isActive ? "nav-link-active" : "nav-link"
             }
@@ -37,7 +37,7 @@ const SideMenu = () => {
           </NavLink>
         )}
         <NavLink
-          to="/devices"
+          to="/app/devices"
           className={({ isActive }) =>
             isActive ? "nav-link-active" : "nav-link"
           }
@@ -46,7 +46,7 @@ const SideMenu = () => {
         </NavLink>
         {isAdmin() && (
           <NavLink
-            to="/admin-panel"
+            to="/app/admin-panel"
             className={({ isActive }) =>
               isActive ? "nav-link-active" : "nav-link"
             }

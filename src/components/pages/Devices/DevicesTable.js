@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useCallback, useContext } from "react";
 import { useState, useEffect, Fragment } from "react";
 import axios from "axios";
 import Loading from "../../layout/Loading";
@@ -12,36 +12,22 @@ const DevicesTable = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [allDevices, setAllDevices] = useState([]);
   const { id } = useParams();
-  const {
-    user: { jwt: token },
-  } = useContext(UserContext);
+  const { getToken } = useContext(UserContext);
+
+  const fetchDevices = useCallback(async () => {
+    const res = await axios
+      .get(`${Config.apiUrl}/device/`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      })
+      .catch((e) => {});
+
+    setAllDevices(res.data);
+    setIsLoading(false);
+  }, [setAllDevices, setIsLoading]);
 
   useEffect(() => {
-    const getDevices = async () => {
-      if (id === undefined) {
-        const res = await axios.get(`${Config.apiUrl}/api/devices?populate=*`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setAllDevices(res.data);
-        setIsLoading(false);
-      } else {
-        const res = await axios.get(
-          `${Config.apiUrl}/api/devices?filters[owner][id][$eq]=${id}&populate=*`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setAllDevices(res.data);
-        setIsLoading(false);
-      }
-    };
-
-    getDevices();
-  }, []);
+    fetchDevices();
+  }, [fetchDevices]);
 
   if (isLoading) return <Loading />;
 
@@ -59,10 +45,11 @@ const DevicesTable = () => {
             <th>Nr seryjny:</th>
           </tr>
         </thead>
-        <DevicesSearchRow />
-        {allDevices.map((device) => (
-          <DeviceItem item={device} />
-        ))}
+        {/* <DevicesSearchRow /> */}
+        {allDevices &&
+          allDevices.map((device) => (
+            <DeviceItem key={device.id} item={device} />
+          ))}
       </table>
     </Fragment>
   );

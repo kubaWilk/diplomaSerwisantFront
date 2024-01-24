@@ -1,12 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import React, { useCallback, useContext, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import UserContext from "../../../../context/User/UserContext";
 import Loading from "../../../layout/Loading";
+import { Config } from "../../../../config";
+import axios from "axios";
 
 const UserSummary = () => {
   const { id } = useParams();
+  const { getToken, logout } = useContext(UserContext);
+  const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
-  const [data, setData] = useState({
+  const [userData, setUserData] = useState({
     id: 0,
     firstName: "",
     lastName: "",
@@ -16,55 +20,61 @@ const UserSummary = () => {
     postCode: "",
   });
 
-  const { getUserById } = useContext(UserContext);
+  const fetchUser = useCallback(async () => {
+    const res = await axios
+      .get(`${Config.apiUrl}/user/${id}`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      })
+      .catch((e) => {
+        if (e.response.status === 401) {
+          logout();
+          navigate("/");
+        }
+      });
+
+    setUserData(res.data);
+    setIsLoading(false);
+  }, [setUserData, setIsLoading]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await getUserById(id);
-
-      if (result !== false) {
-        setData(result);
-        setIsLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
+    fetchUser();
+  }, [fetchUser]);
 
   if (isLoading) return <Loading />;
 
   return (
-    <div className="p-2">
+    <div className="p-2 w-full">
       <ul>
         <li>
           <strong>ID: </strong>
-          {data.id}
+          {userData.id}
         </li>
         <li>
           <strong>Imię: </strong>
-          {data.firstName}
+          {userData.userInfo.firstName}
         </li>
         <li>
           <strong>Nazwisko: </strong>
-          {data.lastName}
+          {userData.userInfo.lastName}
         </li>
         <li>
           <strong>Nr kontaktowy: </strong>
-          {data.phoneNumber}
+          {userData.userInfo.phoneNumber}
         </li>
         <div className="border-b-2 border-gray-400 border-dotted mt-2">
           Adres:
         </div>
         <li>
           <strong>Ulica </strong>
-          {data.street}
+          {userData.userInfo.street}
         </li>
         <li>
           <strong>Miasto </strong>
-          {data.city}
+          {userData.userInfo.city}
         </li>
         <li>
           <strong>Kod Pocztowy </strong>
-          {data.postCode}
+          {userData.userInfo.postCode}
         </li>
       </ul>
     </div>

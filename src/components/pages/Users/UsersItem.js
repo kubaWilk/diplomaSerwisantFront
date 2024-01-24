@@ -1,20 +1,22 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const UsersItem = ({ item, displayCust }) => {
+  const { pathname } = useLocation();
   const navigate = useNavigate();
+  const { firstName, lastName, city, postCode, phoneNumber } = item.userInfo;
   return (
     <tr
-      onDoubleClick={() => navigate(`/user/${item.id}`)}
+      onClick={() => navigate(`${pathname}/${item.id}`)}
       className="odd:bg-gray-100 hover:bg-gray-300"
     >
       <td>{item.id}</td>
       {!displayCust && <td>{item.inAppRole}</td>}
-      <td>{item.firstName}</td>
-      <td>{item.lastName}</td>
-      <td>{item.city}</td>
-      <td>{item.postCode}</td>
-      <td>{item.phoneNumber}</td>
+      <td>{firstName}</td>
+      <td>{lastName}</td>
+      <td>{city ? city : "Brak"}</td>
+      <td>{postCode ? postCode : "Brak"}</td>
+      <td>{phoneNumber ? phoneNumber : "Brak"}</td>
     </tr>
   );
 };

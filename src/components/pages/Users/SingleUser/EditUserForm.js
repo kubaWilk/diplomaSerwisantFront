@@ -7,15 +7,15 @@ import axios from "axios";
 import UserContext from "../../../../context/User/UserContext";
 
 const EditUserForm = ({ userData }) => {
-  const [firstName, setFirstName] = useState(userData.firstName);
-  const [lastName, setLastName] = useState(userData.lastName);
-  const [phoneNumber, setPhoneNumber] = useState(userData.phoneNumber);
-  const [street, setStreet] = useState(userData.street);
-  const [postCode, setPostCode] = useState(userData.postCode);
-  const [city, setCity] = useState(userData.city);
+  const [firstName, setFirstName] = useState(userData.userInfo.firstName);
+  const [lastName, setLastName] = useState(userData.userInfo.lastName);
+  const [phoneNumber, setPhoneNumber] = useState(userData.userInfo.phoneNumber);
+  const [street, setStreet] = useState(userData.userInfo.street);
+  const [postCode, setPostCode] = useState(userData.userInfo.postCode);
+  const [city, setCity] = useState(userData.userInfo.city);
 
   const { setAlert } = useContext(AlertContext);
-  const { putUserById, user: loggedInUser } = useContext(UserContext);
+  const { updateUserData, user: loggedInUser } = useContext(UserContext);
   const { id } = useParams();
 
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const EditUserForm = ({ userData }) => {
   const inputStyle =
     "border-2 border-gray-400 outline-black rounded-md p-1 px-5";
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
     //prettier-ignore
@@ -51,6 +51,7 @@ const EditUserForm = ({ userData }) => {
       setAlert("Nieprawidłowe miasto");
     else {
       const updatedUserData = {
+        id: id !== undefined ? id : loggedInUser.id,
         firstName: firstName,
         lastName: lastName,
         phoneNumber: phoneNumber,
@@ -60,9 +61,11 @@ const EditUserForm = ({ userData }) => {
       };
 
       if (id !== undefined) {
-        putUserById(id, updatedUserData);
+        await updateUserData(updatedUserData).catch((e) => {
+          console.log(e);
+        });
       } else {
-        putUserById(loggedInUser.id, updatedUserData);
+        updateUserData(loggedInUser.id, updatedUserData);
       }
 
       navigate(-1);

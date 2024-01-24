@@ -7,7 +7,7 @@ import UserContext from "../../../../context/User/UserContext";
 import { Config } from "../../../../config";
 
 const EditUserModal = ({ sectionNameSetter }) => {
-  const { user } = useContext(UserContext);
+  const { user, getToken } = useContext(UserContext);
   const [isLoading, setIsLoading] = useState(true);
   const [userData, setUserData] = useState({});
   const { id } = useParams();
@@ -15,9 +15,9 @@ const EditUserModal = ({ sectionNameSetter }) => {
   useEffect(() => {
     const fetchUser = async () => {
       await axios
-        .get(`${Config.apiUrl}/api/users/${id}`, {
+        .get(`${Config.apiUrl}/user/${id}`, {
           headers: {
-            Authorization: `Bearer ${user.jwt}`,
+            Authorization: `Bearer ${getToken()}`,
           },
         })
         .then((res) => {
