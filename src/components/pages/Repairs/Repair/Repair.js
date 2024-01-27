@@ -3,8 +3,8 @@ import { useNavigate, useParams } from "react-router-dom";
 import SingleRepairContext from "../../../../context/SingleRepair/SingleRepairContext";
 import Loading from "../../../layout/Loading";
 import SectionName from "../../../layout/SectionName";
-import { Link } from "react-router-dom";
 import Dialog from "../../../layout/Dialog";
+import Alert from "../../../layout/Alert";
 import UserContext from "../../../../context/User/UserContext";
 import RepairStatus from "../../../layout/RepairStatus";
 import SingleRepairNavButtons from "./SingleRepairNavButtons";
@@ -63,6 +63,7 @@ const Repair = () => {
       />
       <div className="flex w-[90%] h-full flex-col ">
         <RepairStatus />
+        <Alert />
         <div className="border-b-2 border-gray-200 border-dotted p-2">
           <ul>
             <li>

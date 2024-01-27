@@ -1,4 +1,10 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, {
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import Chart from "./Chart";
 import "./fakeData";
 import {
@@ -15,7 +21,7 @@ import "react-datepicker/dist/react-datepicker.css";
 
 const StatsContainer = () => {
   const [dataType, setDataType] = useState("repair");
-  const [statType, setStatType] = useState("line");
+  const [statType, setStatType] = useState("bar");
   const [intervalType, setIntervalType] = useState("daily");
   const [chartData, setChartData] = useState();
   const [fromDate, setFromDate] = useState(new Date());
@@ -37,15 +43,31 @@ const StatsContainer = () => {
 
   const prepRepairStatData = (data) => {
     return {
-      labels: data.map((element) => element.date),
+      labels: data.map((element) => element.label),
       datasets: [
         {
           label: "Otwartych napraw",
-          data: data.map((element) => element.repairOpened),
+          data: data.map((element) => element.repairsOpened),
         },
         {
           label: "Zamkniętych napraw",
-          data: data.map((element) => element.repairClosed),
+          data: data.map((element) => element.repairsClosed),
+        },
+      ],
+    };
+  };
+
+  const prepCostStatData = (data) => {
+    return {
+      labels: data.map((element) => element.label),
+      datasets: [
+        {
+          label: "Część",
+          data: data.map((element) => element.costsPart),
+        },
+        {
+          label: "Usługa",
+          data: data.map((element) => element.costsService),
         },
       ],
     };
@@ -62,12 +84,31 @@ const StatsContainer = () => {
     );
 
     if (res.data.length === 0) {
-      setChartData(null);
+      setChartData({ labels: "Brak danych", datasets: [] });
       return;
     }
 
-    console.log("test");
-  });
+    switch (dataType) {
+      case "repair":
+        setChartData(prepRepairStatData(res.data));
+        break;
+      case "cost":
+        setChartData(prepCostStatData(res.data));
+        break;
+      default:
+        setChartData(null);
+        break;
+    }
+  }, [
+    dataType,
+    intervalType,
+    fromDate,
+    toDate,
+    getToken,
+    prepRepairStatData,
+    prepCostStatData,
+    setChartData,
+  ]);
 
   useEffect(() => {
     switch (intervalType) {
@@ -88,7 +129,7 @@ const StatsContainer = () => {
 
   useEffect(() => {
     fetchChartData();
-  }, [fromDate, toDate, dataType, statType, intervalType, fetchChartData]);
+  }, [fromDate, toDate, dataType, statType, intervalType]);
 
   return (
     <div className="p-2">
@@ -175,10 +216,10 @@ const StatsContainer = () => {
           </label>
         </div>
       </div>
-      {chartData !== null ? (
-        <Chart data={chartData} type={statType} />
-      ) : (
+      {chartData === undefined || chartData === null ? (
         <p className="text-center">Brak danych</p>
+      ) : (
+        <Chart data={chartData} type={statType} />
       )}
     </div>
   );

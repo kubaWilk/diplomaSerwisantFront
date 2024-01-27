@@ -25,6 +25,7 @@ const Cost = () => {
   const [summedPrice, setSummedPrice] = useState(0);
   const [addCostToggle, setAddCostToggle] = useState(false);
   const [approveCostModalToggle, setApproveCostModalToggle] = useState(false);
+  const [deleteCostToggle, setDeleteCostToggle] = useState(false);
 
   const getCosts = useCallback(async () => {
     const res = await axios
@@ -37,40 +38,34 @@ const Cost = () => {
 
     res && setCosts(res.data);
     setIsLoading(false);
-  }, [setCosts, setIsLoading]);
-
-  const removeCostItem = useCallback(async (cost) => {
-    await axios
-      .delete(`${Config.apiUrl}/cost/${cost.id}`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      })
-      .catch((e) => console.log(e));
-  });
+  }, [setCosts, setIsLoading, getToken, apiCall]);
 
   useEffect(() => {
     getCosts();
-  }, [getCosts, removeCostItem]);
-
-  useEffect(() => {
-    if (addCostToggle === false) {
-      setIsLoading(true);
-      getCosts();
-    }
-  }, [addCostToggle]);
+  }, [getCosts, addCostToggle, deleteCostToggle]);
 
   useEffect(() => {
     let sum = 0;
     for (let i = 0; i < costs.length; i++) {
       sum += Number(costs[i].price);
     }
-
     setSummedPrice(sum.toFixed(2));
   }, [costs]);
 
-  const submitAcceptCost = () => {
-    postCostAccept(id);
+  const sendCostAcceptToServer = useCallback(async () => {
+    await axios
+      .post(
+        `${Config.apiUrl}/repair/accept-cost/${id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${getToken()}` },
+        }
+      )
+      .catch((e) => console.log(e));
+
     setApproveCostModalToggle(false);
-  };
+    navigate(-1);
+  }, [getToken, setApproveCostModalToggle]);
 
   if (isLoading) return <Loading />;
 
@@ -100,7 +95,12 @@ const Cost = () => {
       <div className="w-full h-full flex flex-col relative items-center">
         {costs
           ? costs.map((item) => (
-              <CostItem key={item.id} cost={item} onRemove={removeCostItem} />
+              <CostItem
+                key={item.id}
+                cost={item}
+                toggle={deleteCostToggle}
+                toggleSetter={setDeleteCostToggle}
+              />
             ))
           : ""}
         <p className="text-2xl uppercase font-bold absolute bottom-10 left-10">
@@ -117,7 +117,7 @@ const Cost = () => {
         {approveCostModalToggle && (
           <Dialog
             prompt="Czy chcesz zaakceptować kosztorys naprawy? Decyzja jest nieodwracalna i zobowiązuje do zapłaty za naprawę."
-            onApprove={() => submitAcceptCost()}
+            onApprove={() => sendCostAcceptToServer()}
             onCancel={() => setApproveCostModalToggle(false)}
           />
         )}

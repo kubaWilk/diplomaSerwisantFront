@@ -2,10 +2,12 @@ import React, { Fragment, useContext, useEffect, useState } from "react";
 import SingleRepairContext from "../../context/SingleRepair/SingleRepairContext";
 import UserContext from "../../context/User/UserContext";
 import { useParams } from "react-router-dom";
+import AlertContext from "../../context/Alert/AlertContext";
 
 const RepairStatus = () => {
   const { repair, changeRepairStatus } = useContext(SingleRepairContext);
-  const { getToken } = useContext(UserContext);
+  const { getToken, isCustomer } = useContext(UserContext);
+  const { setAlert } = useContext(AlertContext);
   const { id } = useParams();
 
   const statuses = {
@@ -37,6 +39,7 @@ const RepairStatus = () => {
         <select
           className="text-sm border border-dotted border-black text-center bg-transparent font-bold uppercase backdrop:bg-black"
           defaultValue={repairStatus}
+          disabled={repair.status === "CLOSED" || isCustomer()}
           onChange={(e) => {
             setRepairStatus(e.target.value);
             onChange(e);

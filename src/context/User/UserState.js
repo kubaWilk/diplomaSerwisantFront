@@ -4,8 +4,10 @@ import UserReducer from "./UserReducer";
 import { SET_USER, USER_LOGOUT } from "../types";
 import { Config } from "../../config";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const UserState = (props) => {
+  const navigate = useNavigate();
   const initialState = {
     authToken: "",
     user: {},
@@ -89,8 +91,6 @@ const UserState = (props) => {
         newObj[key] = res.data[key];
         return newObj;
       }, {});
-
-    // console.log(existingUser);
 
     const userDataForRequest = {
       ...existingUser,

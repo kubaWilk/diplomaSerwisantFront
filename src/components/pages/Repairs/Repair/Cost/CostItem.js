@@ -1,23 +1,37 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useContext } from "react";
 import UserContext from "../../../../../context/User/UserContext";
 import { translateCostTypes } from "../../../../../Utils";
 import Dialog from "../../../../layout/Dialog";
+import axios from "axios";
+import { Config } from "../../../../../config";
 
-const CostItem = ({ cost, onRemove }) => {
+const CostItem = ({ cost, toggle, toggleSetter }) => {
   const { isCustomer } = useContext(UserContext);
-  const [deleteCostToggle, setDeleteCostToggle] = useState(false);
+
+  const { getToken } = useContext(UserContext);
+
+  const onRemove = useCallback(
+    async (cost) => {
+      await axios
+        .delete(`${Config.apiUrl}/cost/${cost.id}`, {
+          headers: { Authorization: `Bearer ${getToken()}` },
+        })
+        .catch((e) => console.log(e));
+    },
+    [getToken]
+  );
 
   return (
     <div className="flex flex-col w-[90%]">
-      {deleteCostToggle && (
+      {toggle && (
         <Dialog
           prompt="Czy chcesz usunąć wskazany element?"
           onApprove={async () => {
             await onRemove(cost);
-            setDeleteCostToggle(false);
+            toggleSetter(false);
           }}
-          onCancel={() => setDeleteCostToggle(false)}
+          onCancel={() => toggleSetter(false)}
         />
       )}
       <div className="flex flex-col items-start w-full">
@@ -26,7 +40,7 @@ const CostItem = ({ cost, onRemove }) => {
             {!isCustomer() && (
               <div className="absolute top-0 right-1">
                 <i
-                  onClick={() => setDeleteCostToggle(true)}
+                  onClick={() => toggleSetter(true)}
                   className="fa-regular fa-trash-can text-black cursor-pointer"
                 ></i>
               </div>

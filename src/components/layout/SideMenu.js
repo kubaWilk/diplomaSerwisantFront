@@ -36,14 +36,16 @@ const SideMenu = () => {
             Klienci
           </NavLink>
         )}
-        <NavLink
-          to="/app/devices"
-          className={({ isActive }) =>
-            isActive ? "nav-link-active" : "nav-link"
-          }
-        >
-          Urządzenia
-        </NavLink>
+        {!isCustomer() && (
+          <NavLink
+            to="/app/devices"
+            className={({ isActive }) =>
+              isActive ? "nav-link-active" : "nav-link"
+            }
+          >
+            Urządzenia
+          </NavLink>
+        )}
         {isAdmin() && (
           <NavLink
             to="/app/admin-panel"

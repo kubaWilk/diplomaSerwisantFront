@@ -44,7 +44,7 @@ export const translateRepairStatus = (param) => {
   const statuses = {
     OPEN: "Otwarta",
     WAITING_FOR_CUSTOMER: "Oczekuje na decyzję klienta",
-    WAITING_FOR_SUPLIER: "Oczekiwanie na dostawcę",
+    WAITING_FOR_SUPPLIER: "Oczekiwanie na dostawcę",
     CANCELED: "Anulowana",
     CLOSED: "Zamknięta",
   };
