@@ -30,6 +30,8 @@ import DeviceRepairs from "./components/pages/Devices/SingleDevice/DeviceRepairs
 import ProtocolModal from "./components/pages/Repairs/Repair/ProtocolModal";
 import AdminPanel from "./components/pages/AdminPanel/AdminPanel";
 import StatsContainer from "./components/pages/AdminPanel/StatsContainer";
+import AdminUsersList from "./components/pages/AdminPanel/AdminUsersList";
+import AdminPanelUserSummary from "./components/pages/AdminPanel/AdminPanelUserSummary";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -112,7 +114,12 @@ function App() {
             <Route
               exact
               path="/app/admin-panel/users"
-              element={<Users displayOnlyCustomers={false} />}
+              element={<AdminUsersList />}
+            />
+            <Route
+              exact
+              path="/app/admin-panel/users/:id"
+              element={<AdminPanelUserSummary />}
             />
             <Route
               exact

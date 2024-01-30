@@ -8,11 +8,7 @@ const Users = () => {
   return (
     <div className="flex flex-col items-center justify-start w-[90%]">
       <SectionName text="Klienci" />
-      {location.pathname === "/app/customers" ? (
-        <UsersList displayOnlyCustomers={true} />
-      ) : (
-        <Outlet />
-      )}
+      {location.pathname === "/app/customers" ? <UsersList /> : <Outlet />}
     </div>
   );
 };

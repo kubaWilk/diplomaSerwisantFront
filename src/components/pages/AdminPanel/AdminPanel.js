@@ -4,7 +4,7 @@ import SectionName from "../../layout/SectionName";
 
 const AdminPanel = () => {
   return (
-    <div className="flex flex-col items-center justify-start w-full">
+    <div className="flex flex-col items-center justify-center w-[90%]">
       <SectionName text="Panel administratora" />
       <div className="flex space-x-2">
         <Link className="button" to="/app/admin-panel/users">

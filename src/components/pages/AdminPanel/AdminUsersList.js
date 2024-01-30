@@ -1,11 +1,12 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import UserContext from "../../../../context/User/UserContext";
-import Loading from "../../../layout/Loading";
-import UsersItem from "../UsersItem";
+import UserContext from "../../../context/User/UserContext";
 import axios from "axios";
-import { Config } from "../../../../config";
+import { Config } from "../../../config";
+import Loading from "../../layout/Loading";
+import UsersItem from "../Users/UsersItem";
+import AdminUserItem from "./AdminUserItem";
 
-const UsersList = ({ displayOnlyCustomers }) => {
+const AdminUsersList = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [users, setUsers] = useState();
   const { getToken } = useContext(UserContext);
@@ -36,24 +37,17 @@ const UsersList = ({ displayOnlyCustomers }) => {
             <th>ID</th>
             <th>Imię</th>
             <th>Nazwisko</th>
-            <th>Miejscowość</th>
-            <th>Kod pocztowy</th>
-            <th>Nr kontaktowy</th>
+            <th>Nazwa użytkownika</th>
+            <th>E-Mail</th>
+            <th>Rola</th>
           </tr>
         </thead>
         <tbody>
-          {users &&
-            users.map((e) => (
-              <UsersItem
-                key={e.id}
-                displayCust={displayOnlyCustomers}
-                item={e}
-              />
-            ))}
+          {users && users.map((e) => <AdminUserItem key={e.id} item={e} />)}
         </tbody>
       </table>
     </>
   );
 };
 
-export default UsersList;
+export default AdminUsersList;
