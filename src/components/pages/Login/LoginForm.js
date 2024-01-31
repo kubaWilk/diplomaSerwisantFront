@@ -36,6 +36,8 @@ const LoginForm = () => {
         if (e.code === "ERR_NETWORK") setAlert("Błąd połączenia");
         if (e.response.status === 403)
           setAlert("Nieprawidłowe dane logowania!");
+        if (e.response.status === 400)
+          setAlert("Nieprawidłowe dane logowania!");
       });
   };
 

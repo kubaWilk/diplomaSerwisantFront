@@ -1,9 +1,8 @@
 import "./App.css";
 import "./index.css";
-import { useCallback, useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import UserContext from "./context/User/UserContext";
 import LoginPage from "./components/pages/Login/LoginPage";
-import DashRouter from "./components/DashRouter";
 import ResetPaswordPage from "./components/pages/Login/ResetPasswordPage";
 import { Routes, Route, useLocation, useHref } from "react-router-dom";
 import Repair from "./components/pages/Repairs/Repair/Repair";
@@ -32,6 +31,8 @@ import AdminPanel from "./components/pages/AdminPanel/AdminPanel";
 import StatsContainer from "./components/pages/AdminPanel/StatsContainer";
 import AdminUsersList from "./components/pages/AdminPanel/AdminUsersList";
 import AdminPanelUserSummary from "./components/pages/AdminPanel/AdminPanelUserSummary";
+import UserPanel from "./components/pages/Users/SingleUser/UserPanel";
+import ChangePasswordModal from "./components/pages/Users/SingleUser/ChangePasswordModal";
 
 function App() {
   const { isLoggedIn } = useContext(UserContext);
@@ -39,8 +40,16 @@ function App() {
   return (
     <>
       <Routes>
-        <Route exact path="/reset-password" element={<ResetPaswordPage />} />
-        <Route index element={isLoggedIn() ? <DashRouter /> : <LoginPage />} />
+        <Route exact path="/reset-password/" element={<ResetPaswordPage />} />
+        <Route
+          exact
+          path="/reset-password/:token"
+          element={<ResetPaswordPage />}
+        />
+        <Route
+          index
+          element={isLoggedIn() ? <DashContainer /> : <LoginPage />}
+        />
 
         {/* Repairs Routes */}
         <Route exact path="/app" element={<DashContainer />}>
@@ -125,6 +134,13 @@ function App() {
               exact
               path="/app/admin-panel/statistics"
               element={<StatsContainer />}
+            />
+          </Route>
+          <Route exact path="/app/user/self/about" element={<UserPanel />}>
+            <Route
+              exact
+              path="/app/user/self/about/password-change"
+              element={<ChangePasswordModal />}
             />
           </Route>
         </Route>

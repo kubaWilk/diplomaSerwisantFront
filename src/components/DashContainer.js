@@ -11,7 +11,6 @@ const DashContainer = (props) => {
       <div className="flex screen-height relative">
         <SideMenu />
         <div className="flex flex-col w-full flex-start items-center">
-          {/* {props.children} */}
           <Outlet />
         </div>
       </div>

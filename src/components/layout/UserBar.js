@@ -31,7 +31,7 @@ const UserBar = () => {
             </div>
             <div className="flex flex-col ml-2 justify-center">
               <Link
-                to="/user/self/about"
+                to="/app/user/self/about"
                 className="text-md"
               >{`${user.userInfo.firstName} ${user.userInfo.lastName}`}</Link>
             </div>

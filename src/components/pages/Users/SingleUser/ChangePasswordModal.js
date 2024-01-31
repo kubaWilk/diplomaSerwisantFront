@@ -5,7 +5,9 @@ import ButtonCancel from "../../../layout/DialogBase/ButtonCancel";
 import { useNavigate } from "react-router-dom";
 import AlertContext from "../../../../context/Alert/AlertContext";
 import Alert from "../../../layout/Alert";
-import userEvent from "@testing-library/user-event";
+import axios from "axios";
+import { Config } from "../../../../config";
+import UserContext from "../../../../context/User/UserContext";
 
 const ChangePasswordModal = () => {
   const [oldPasswordInput, setOldPassword] = useState("");
@@ -13,28 +15,42 @@ const ChangePasswordModal = () => {
   const [newPassword2Try, setNewPassword2Try] = useState("");
 
   const navigate = useNavigate();
+  const { getToken } = useContext(UserContext);
   const { setAlert } = useContext(AlertContext);
 
   const inputStyle =
     "border-2 border-gray-400 outline-black rounded-md p-1 px-5";
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
     e.preventDefault();
     if (newPassword1Try === "") {
       setAlert("Hasło nie może być puste!");
-    } else if (oldPasswordInput === "") {
-      //TODO: create method comapring hashes
-      setAlert("Podano nieprawidłowe stare hasło");
     } else if (newPassword1Try !== newPassword2Try) {
       setAlert("Hasła różnią się");
     } else if (!passwordRegex.test(newPassword1Try)) {
       setAlert("Podano za słabe hasło");
     } else if (passwordRegex.test(newPassword1Try)) {
-      alert("submit");
-      navigate(-1);
+      await axios
+        .put(
+          `${Config.apiUrl}/auth/change-password`,
+          { oldPassword: oldPasswordInput, newPassword: newPassword1Try },
+          {
+            headers: { Authorization: `Bearer ${getToken()}` },
+          }
+        )
+        .then((res) => {
+          if (res.status === 200) navigate(-1);
+        })
+        .catch((e) => {
+          if (
+            e.response.data.message ===
+            "Old password doesn't match the one in the database!"
+          )
+            setAlert("Podano nieprawidłowe stare hasło.");
+        });
     } else {
       setAlert("Coś poszło nie tak");
     }
@@ -56,7 +72,7 @@ const ChangePasswordModal = () => {
           <input
             name="oldPassword"
             className={inputStyle}
-            type="text"
+            type="password"
             placeholder="Stare hasło"
             value={oldPasswordInput}
             onChange={(e) => setOldPassword(e.target.value)}
@@ -72,7 +88,7 @@ const ChangePasswordModal = () => {
           <input
             name="newPassword1Try"
             className={inputStyle}
-            type="text"
+            type="password"
             placeholder="Nowe Hasło"
             value={newPassword1Try}
             onChange={(e) => setNewPassword1Try(e.target.value)}
@@ -88,7 +104,7 @@ const ChangePasswordModal = () => {
           <input
             name="newPassword1Try"
             className={inputStyle}
-            type="text"
+            type="password"
             placeholder="Nowe Hasło"
             value={newPassword2Try}
             onChange={(e) => setNewPassword2Try(e.target.value)}

@@ -8,8 +8,8 @@ const UserPanel = () => {
       <SectionName text="Ustawienia konta" />
       <div className="w-full h-full flex items-center justify-center">
         <div className="flex space-x-5">
-          <Link className="button-lg" to="/user/self/about/edit">
-            Zmień dane konta
+          <Link className="button-lg" to="/app/user/self/about/password-change">
+            Zmień hasło
           </Link>
         </div>
         <Outlet />
